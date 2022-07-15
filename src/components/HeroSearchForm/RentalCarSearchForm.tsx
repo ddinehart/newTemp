@@ -24,7 +24,7 @@ const RentalCarSearchForm: FC<RentalCarSearchFormProps> = ({
   haveDefaultValue,
 }) => {
   // DEFAULT DATA FOR ARCHIVE PAGE
-  const defaultPickUpInputValue = "Tokyo, Jappan";
+  const defaultPickUpInputValue = "St. George, Utah";
   const defaultDropOffInputValue = "Paris, France";
 
   // USE STATE

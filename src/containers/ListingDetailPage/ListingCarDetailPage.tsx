@@ -133,7 +133,7 @@ const ListingCarDetailPage: FC<ListingCarDetailPageProps> = ({
           <span>·</span>
           <span>
             <i className="las la-map-marker-alt"></i>
-            <span className="ml-1"> Tokyo, Jappan</span>
+            <span className="ml-1"> St. George, Utah</span>
           </span>
         </div>
 

@@ -2,7 +2,6 @@ import React, { FC } from "react";
 import { DEMO_EXPERIENCES_LISTINGS } from "data/listings";
 import { ExperiencesDataType, StayDataType } from "data/types";
 import Pagination from "shared/Pagination/Pagination";
-import TabFilters from "./TabFilters";
 import Heading2 from "components/Heading/Heading2";
 import ExperiencesCard from "components/ExperiencesCard/ExperiencesCard";
 
@@ -25,7 +24,7 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
       data-nc-id="SectionGridFilterCard"
     >
       <Heading2
-        heading="Experiences in Tokyo"
+        heading="Experiences in St. George"
         subHeading={
           <span className="block text-neutral-500 dark:text-neutral-400 mt-3">
             233 experiences
@@ -36,9 +35,9 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
         }
       />
 
-      <div className="mb-8 lg:mb-11">
+      {/* <div className="mb-8 lg:mb-11">
         <TabFilters />
-      </div>
+      </div> */}
       <div className="grid grid-cols-1 gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
         {data.map((stay) => (
           <ExperiencesCard key={stay.id} data={stay} />

@@ -1,11 +1,9 @@
 import React, { FC, useState } from "react";
 import { ArrowRightIcon } from "@heroicons/react/outline";
-import LocationMarker from "components/AnyReactComponent/LocationMarker";
 import CommentListing from "components/CommentListing/CommentListing";
 import FiveStartIconForRate from "components/FiveStartIconForRate/FiveStartIconForRate";
 import GuestsInput from "components/HeroSearchForm/GuestsInput";
 import StartRating from "components/StartRating/StartRating";
-import GoogleMapReact from "google-map-react";
 import useWindowSize from "hooks/useWindowResize";
 import moment from "moment";
 import { DayPickerSingleDateController } from "react-dates";
@@ -18,9 +16,7 @@ import Input from "shared/Input/Input";
 import NcImage from "shared/NcImage/NcImage";
 import LikeSaveBtns from "./LikeSaveBtns";
 import ModalPhotos from "./ModalPhotos";
-import BackgroundSection from "components/BackgroundSection/BackgroundSection";
-import SectionSliderNewCategories from "components/SectionSliderNewCategories/SectionSliderNewCategories";
-import SectionSubscribe2 from "components/SectionSubscribe2/SectionSubscribe2";
+
 import ExperiencesDateSingleInput from "components/HeroSearchForm/ExperiencesDateSingleInput";
 
 export interface ListingExperiencesDetailPageProps {
@@ -98,7 +94,7 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
           <span>·</span>
           <span>
             <i className="las la-map-marker-alt"></i>
-            <span className="ml-1"> Tokyo, Jappan</span>
+            <span className="ml-1"> St. George, Utah</span>
           </span>
         </div>
 
@@ -383,39 +379,39 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
     );
   };
 
-  const renderSection7 = () => {
-    return (
-      <div className="listingSection__wrap">
-        {/* HEADING */}
-        <div>
-          <h2 className="text-2xl font-semibold">Location</h2>
-          <span className="block mt-2 text-neutral-500 dark:text-neutral-400">
-            San Diego, CA, United States of America (SAN-San Diego Intl.)
-          </span>
-        </div>
-        <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
+  // const renderSection7 = () => {
+  //   return (
+  //     <div className="listingSection__wrap">
+  //       {/* HEADING */}
+  //       <div>
+  //         <h2 className="text-2xl font-semibold">Location</h2>
+  //         <span className="block mt-2 text-neutral-500 dark:text-neutral-400">
+  //           San Diego, CA, United States of America (SAN-San Diego Intl.)
+  //         </span>
+  //       </div>
+  //       <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
 
-        {/* MAP */}
-        <div className="aspect-w-5 aspect-h-5 sm:aspect-h-3">
-          <div className="rounded-xl overflow-hidden">
-            <GoogleMapReact
-              bootstrapURLKeys={{
-                key: "AIzaSyDxJaU8bLdx7sSJ8fcRdhYS1pLk8Jdvnx0",
-              }}
-              defaultZoom={15}
-              yesIWantToUseGoogleMapApiInternals
-              defaultCenter={{
-                lat: 55.9607277,
-                lng: 36.2172614,
-              }}
-            >
-              <LocationMarker lat={55.9607277} lng={36.2172614} />
-            </GoogleMapReact>
-          </div>
-        </div>
-      </div>
-    );
-  };
+  //       {/* MAP */}
+  //       <div className="aspect-w-5 aspect-h-5 sm:aspect-h-3">
+  //         <div className="rounded-xl overflow-hidden">
+  //           <GoogleMapReact
+  //             bootstrapURLKeys={{
+  //               key: "AIzaSyDxJaU8bLdx7sSJ8fcRdhYS1pLk8Jdvnx0",
+  //             }}
+  //             defaultZoom={15}
+  //             yesIWantToUseGoogleMapApiInternals
+  //             defaultCenter={{
+  //               lat: 55.9607277,
+  //               lng: 36.2172614,
+  //             }}
+  //           >
+  //             <LocationMarker lat={55.9607277} lng={36.2172614} />
+  //           </GoogleMapReact>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // };
 
   const renderSection8 = () => {
     return (
@@ -604,7 +600,7 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
           {renderSectionCheckIndate()}
           {renderSection5()}
           {renderSection6()}
-          {renderSection7()}
+          {/* {renderSection7()} */}
           {renderSection8()}
         </div>
 
@@ -631,9 +627,9 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
       {/* OTHER SECTION */}
       <div className="container py-24 lg:py-32">
         {/* SECTION 1 */}
-        <div className="relative py-16">
-          <BackgroundSection />
-          <SectionSliderNewCategories
+        {/* <div className="relative py-16"> */}
+          {/* <BackgroundSection /> */}
+          {/* <SectionSliderNewCategories
             heading="Explore by types of stays"
             subHeading="Explore houses based on 10 types of stays"
             categoryCardType="card5"
@@ -641,10 +637,10 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
             sliderStyle="style2"
             uniqueClassName="ListingExperiencesDetailPage"
           />
-        </div>
+        </div> */}
 
         {/* SECTION */}
-        <SectionSubscribe2 className="pt-24 lg:pt-32" />
+        {/* <SectionSubscribe2 className="pt-24 lg:pt-32" /> */}
       </div>
     </div>
   );

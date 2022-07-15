@@ -28,8 +28,8 @@ const ListingCarMapPage: FC<ListingCarMapPageProps> = ({ className = "" }) => {
       <div className="container pt-10 pb-24 lg:pt-16 lg:pb-32">
         <SectionHeroArchivePage
           rightImage={heroRightImage}
-          currentPage="Cars"
-          currentTab="Cars"
+          currentPage="Experiences"
+          currentTab="Experiences"
           listingType={
             <>
               <i className="text-2xl las la-car"></i>

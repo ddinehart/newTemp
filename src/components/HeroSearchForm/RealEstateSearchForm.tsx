@@ -10,7 +10,7 @@ export interface RealEstateSearchFormProps {
 }
 
 // DEFAULT DATA FOR ARCHIVE PAGE
-const defaultLocationValue = "Tokyo, Jappan";
+const defaultLocationValue = "St. George, Utah";
 
 const RealEstateSearchForm: FC<RealEstateSearchFormProps> = ({
   haveDefaultValue = false,

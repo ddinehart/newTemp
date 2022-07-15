@@ -7,7 +7,6 @@ import Checkbox from "shared/Checkbox/Checkbox";
 import Pagination from "shared/Pagination/Pagination";
 import TabFilters from "./TabFilters";
 import Heading2 from "components/Heading/Heading2";
-import CarCardH from "components/CarCardH/CarCardH";
 
 const DEMO_CARS = DEMO_CAR_LISTINGS.filter((_, i) => i < 12);
 
@@ -35,17 +34,7 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = () => {
           <div className="mb-8 lg:mb-11">
             <TabFilters />
           </div>
-          <div className="grid grid-cols-1 gap-8">
-            {DEMO_CARS.map((item) => (
-              <div
-                key={item.id}
-                onMouseEnter={() => setCurrentHoverID((_) => item.id)}
-                onMouseLeave={() => setCurrentHoverID((_) => -1)}
-              >
-                <CarCardH data={item} />
-              </div>
-            ))}
-          </div>
+         
           <div className="flex mt-16 justify-center items-center">
             <Pagination />
           </div>

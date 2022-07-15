@@ -1,5 +1,4 @@
 import { Tab } from "@headlessui/react";
-import CarCard from "components/CarCard/CarCard";
 import CommentListing from "components/CommentListing/CommentListing";
 import ExperiencesCard from "components/ExperiencesCard/ExperiencesCard";
 import StartRating from "components/StartRating/StartRating";
@@ -171,16 +170,7 @@ const AuthorPage: FC<AuthorPageProps> = ({ className = "" }) => {
                   <ButtonSecondary>Show me more</ButtonSecondary>
                 </div>
               </Tab.Panel>
-              <Tab.Panel className="">
-                <div className="mt-8 grid grid-cols-1 gap-6 md:gap-7 sm:grid-cols-2">
-                  {DEMO_CAR_LISTINGS.filter((_, i) => i < 4).map((stay) => (
-                    <CarCard key={stay.id} data={stay} />
-                  ))}
-                </div>
-                <div className="flex mt-11 justify-center items-center">
-                  <ButtonSecondary>Show me more</ButtonSecondary>
-                </div>
-              </Tab.Panel>
+              
             </Tab.Panels>
           </Tab.Group>
         </div>

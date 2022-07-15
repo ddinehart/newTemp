@@ -3,17 +3,16 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { Page } from "./types";
 import ScrollToTop from "./ScrollToTop";
 import Footer from "shared/Footer/Footer";
-import PageHome from "containers/PageHome/PageHome";
 import Page404 from "containers/Page404/Page404";
-import ListingStayPage from "containers/ListingStayPage/ListingStayPage";
-import ListingStayMapPage from "containers/ListingStayPage/ListingStayMapPage";
+// import ListingStayPage from "containers/ListingStayPage/ListingStayPage";
+// import ListingStayMapPage from "containers/ListingStayPage/ListingStayMapPage";
 import ListingExperiencesPage from "containers/ListingExperiencesPage/ListingExperiencesPage";
-import ListingExperiencesMapPage from "containers/ListingExperiencesPage/ListingExperiencesMapPage";
-import ListingStayDetailPage from "containers/ListingDetailPage/ListingStayDetailPage";
+// import ListingExperiencesMapPage from "containers/ListingExperiencesPage/ListingExperiencesMapPage";
+// import ListingStayDetailPage from "containers/ListingDetailPage/ListingStayDetailPage";
 import ListingExperiencesDetailPage from "containers/ListingDetailPage/ListingExperiencesDetailPage";
-import ListingCarPage from "containers/ListingCarPage/ListingCarPage";
-import ListingCarMapPage from "containers/ListingCarPage/ListingCarMapPage";
-import ListingCarDetailPage from "containers/ListingDetailPage/ListingCarDetailPage";
+// import ListingCarPage from "containers/ListingCarPage/ListingCarPage";
+// import ListingCarMapPage from "containers/ListingCarPage/ListingCarMapPage";
+// import ListingCarDetailPage from "containers/ListingDetailPage/ListingCarDetailPage";
 import CheckOutPage from "containers/CheckOutPage/CheckOutPage";
 import PayPage from "containers/PayPage/PayPage";
 import AuthorPage from "containers/AuthorPage/AuthorPage";
@@ -26,8 +25,8 @@ import PageAbout from "containers/PageAbout/PageAbout";
 import PageSignUp from "containers/PageSignUp/PageSignUp";
 import PageLogin from "containers/PageLogin/PageLogin";
 import PageSubcription from "containers/PageSubcription/PageSubcription";
-import BlogPage from "containers/BlogPage/BlogPage";
-import BlogSingle from "containers/BlogPage/BlogSingle";
+// import BlogPage from "containers/BlogPage/BlogPage";
+// import BlogSingle from "containers/BlogPage/BlogSingle";
 import PageAddListing1 from "containers/PageAddListing1/PageAddListing1";
 import PageAddListing2 from "containers/PageAddListing1/PageAddListing2";
 import PageAddListing3 from "containers/PageAddListing1/PageAddListing3";
@@ -38,43 +37,42 @@ import PageAddListing7 from "containers/PageAddListing1/PageAddListing7";
 import PageAddListing8 from "containers/PageAddListing1/PageAddListing8";
 import PageAddListing9 from "containers/PageAddListing1/PageAddListing9";
 import PageAddListing10 from "containers/PageAddListing1/PageAddListing10";
-import PageHome2 from "containers/PageHome/PageHome2";
-import ListingRealEstateMapPage from "containers/ListingRealEstatePage/ListingRealEstateMapPage";
-import ListingRealEstatePage from "containers/ListingRealEstatePage/ListingRealEstatePage";
+// import ListingRealEstateMapPage from "containers/ListingRealEstatePage/ListingRealEstateMapPage";
+// import ListingRealEstatePage from "containers/ListingRealEstatePage/ListingRealEstatePage";
 import SiteHeader from "containers/SiteHeader";
-import ListingFlightsPage from "containers/ListingFlightsPage/ListingFlightsPage";
+// import ListingFlightsPage from "containers/ListingFlightsPage/ListingFlightsPage";
 
 export const pages: Page[] = [
-  { path: "/", exact: true, component: PageHome },
-  { path: "/#", exact: true, component: PageHome },
-  { path: "/home-1-header-2", exact: true, component: PageHome },
-  { path: "/home-2", component: PageHome2 },
+  { path: "/", exact: true, component: ListingExperiencesPage },
+  { path: "/#", exact: true, component: ListingExperiencesPage },
+  // { path: "/home-1-header-2", exact: true, component: PageHome },
+  // { path: "/home-2", component: PageHome2 },
   //
-  { path: "/listing-stay", component: ListingStayPage },
-  { path: "/listing-stay-map", component: ListingStayMapPage },
-  { path: "/listing-stay-detail", component: ListingStayDetailPage },
+  // { path: "/listing-stay", component: ListingStayPage },
+  // { path: "/listing-stay-map", component: ListingStayMapPage },
+  // { path: "/listing-stay-detail", component: ListingStayDetailPage },
   //
   {
     path: "/listing-experiences",
     component: ListingExperiencesPage,
   },
-  {
-    path: "/listing-experiences-map",
-    component: ListingExperiencesMapPage,
-  },
+  // {
+  //   path: "/listing-experiences-map",
+  //   component: ListingExperiencesMapPage,
+  // },
   {
     path: "/listing-experiences-detail",
     component: ListingExperiencesDetailPage,
   },
   //
-  { path: "/listing-car", component: ListingCarPage },
-  { path: "/listing-car-map", component: ListingCarMapPage },
-  { path: "/listing-car-detail", component: ListingCarDetailPage },
-  //
-  { path: "/listing-real-estate-map", component: ListingRealEstateMapPage },
-  { path: "/listing-real-estate", component: ListingRealEstatePage },
-  //
-  { path: "/listing-flights", component: ListingFlightsPage },
+  // { path: "/listing-car", component: ListingCarPage },
+  // { path: "/listing-car-map", component: ListingCarMapPage },
+  // { path: "/listing-car-detail", component: ListingCarDetailPage },
+  // //
+  // { path: "/listing-real-estate-map", component: ListingRealEstateMapPage },
+  // { path: "/listing-real-estate", component: ListingRealEstatePage },
+  // //
+  // { path: "/listing-flights", component: ListingFlightsPage },
   //
   { path: "/checkout", component: CheckOutPage },
   { path: "/pay-done", component: PayPage },
@@ -85,8 +83,8 @@ export const pages: Page[] = [
   { path: "/account-savelists", component: AccountSavelists },
   { path: "/account-billing", component: AccountBilling },
   //
-  { path: "/blog", component: BlogPage },
-  { path: "/blog-single", component: BlogSingle },
+  // { path: "/blog", component: BlogPage },
+  // { path: "/blog-single", component: BlogSingle },
   //
   { path: "/add-listing-1", component: PageAddListing1 },
   { path: "/add-listing-2", component: PageAddListing2 },

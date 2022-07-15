@@ -45,7 +45,7 @@ const ExperiencesCard: FC<ExperiencesCardProps> = ({
           ratioClass={ratioClass}
           galleryImgs={galleryImgs}
         />
-        <BtnLikeIcon isLiked={like} className="absolute right-3 top-3" />
+        {/* <BtnLikeIcon isLiked={like} className="absolute right-3 top-3" /> */}
         {saleOff && <SaleOffBadge className="absolute left-3 top-3" />}
       </div>
     );
