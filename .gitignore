@@ -6,6 +6,7 @@
 !.vscode/extensions.json
 *.code-workspace
 # Local History for Visual Studio Code
+.history
 .history/
 
 # Common credential files
@@ -45,6 +46,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
+build
 build/
 develop-eggs/
 dist/
@@ -175,3 +177,6 @@ dmypy.json
 cython_debug/
 
 *.p_hi
+*.p_hi/
+*.dyn_hi
+*.history
