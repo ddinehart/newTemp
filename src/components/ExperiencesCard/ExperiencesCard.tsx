@@ -15,12 +15,41 @@ export interface ExperiencesCardProps {
   size?: "default" | "small";
 }
 
-const DEMO_DATA: ExperiencesDataType = DEMO_EXPERIENCES_LISTINGS[0];
+const data: ExperiencesDataType = fetch("http://localhost:5001/experience")
+  .then((response) => response.json())
+  .then((data) => console.log(data));
+  
+
+// const data = fetch(`http://swapi.co/api/people/1/`)
+//   .then((res) => res.json())
+//   .then((res: ExperiencesDataType) => {
+//     // res is now an Actor
+//   });
+
+
+  // const data: Promise<any> =  function {
+  //   return fetch("http://localhost:5001/experience")
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         throw new Error(response.statusText);
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       /* <-- data inferred as { data: T }*/
+  //       return Promise.resolve(data);
+  //     });
+  // }
+
+  console.log(data);
+
+// const DEMO_DATA: ExperiencesDataType = DEMO_EXPERIENCES_LISTINGS[0];
+// const DEMO_DATA: ExperiencesDataType = data;
 
 const ExperiencesCard: FC<ExperiencesCardProps> = ({
   size = "default",
   className = "",
-  data = DEMO_DATA,
+  data = data,
   ratioClass = "aspect-w-3 aspect-h-3",
 }) => {
   const {
@@ -28,7 +57,6 @@ const ExperiencesCard: FC<ExperiencesCardProps> = ({
     address,
     title,
     href,
-    like,
     saleOff,
     isAds,
     price,

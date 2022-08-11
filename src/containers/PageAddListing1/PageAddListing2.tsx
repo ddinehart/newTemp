@@ -19,24 +19,24 @@ const PageAddListing2: FC<PageAddListing2Props> = () => {
       backtHref="/add-listing-1"
     >
       <>
-        <h2 className="text-2xl font-semibold">Your place location</h2>
+        <h2 className="text-2xl font-semibold">Address of Experience</h2>
         <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
         {/* FORM */}
         <div className="space-y-8">
-          <ButtonSecondary>
+          {/* <ButtonSecondary>
             <LocationMarkerIcon className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
             <span className="ml-3">Use current location</span>
-          </ButtonSecondary>
+          </ButtonSecondary> */}
           {/* ITEM */}
           <FormItem label="Country/Region">
-            <Select>
-              <option value="Viet Nam">Viet Nam</option>
-              <option value="Thailand">Thailand</option>
+            <Select disabled>
+              <option value="United States">United States</option>
+              {/* <option value="Thailand">Thailand</option>
               <option value="France">France</option>
               <option value="Singapore">Singapore</option>
               <option value="Jappan">Jappan</option>
               <option value="Korea">Korea</option>
-              <option value="...">...</option>
+              <option value="...">...</option> */}
             </Select>
           </FormItem>
           <FormItem label="Street">
@@ -56,7 +56,7 @@ const PageAddListing2: FC<PageAddListing2Props> = () => {
               <Input />
             </FormItem>
           </div>
-          <div>
+          {/* <div>
             <Label>Detailed address</Label>
             <span className="block mt-1 text-sm text-neutral-500 dark:text-neutral-400">
               1110 Pennsylvania Avenue NW, Washington, DC 20230
@@ -80,7 +80,7 @@ const PageAddListing2: FC<PageAddListing2Props> = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </>
     </CommonLayout>

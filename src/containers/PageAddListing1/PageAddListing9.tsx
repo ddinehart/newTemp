@@ -36,18 +36,18 @@ const PageAddListing9: FC<PageAddListing9Props> = () => {
     >
       <>
         <div>
-          <h2 className="text-2xl font-semibold">How long can guests stay?</h2>
-          <span className="block mt-2 text-neutral-500 dark:text-neutral-400">
+          <h2 className="text-2xl font-semibold">How long is your experience?</h2>
+          {/* <span className="block mt-2 text-neutral-500 dark:text-neutral-400">
             Shorter trips can mean more reservations, but you'll turn over your
             space more often.
-          </span>
+          </span> */}
         </div>
         <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
         {/* FORM */}
         <div className="space-y-7">
           {/* ITEM */}
-          <NcInputNumber label="Nights min" defaultValue={1} />
-          <NcInputNumber label="Nights max" defaultValue={99} />
+          <NcInputNumber label="Hours min" defaultValue={1} />
+          <NcInputNumber label="Hours max" defaultValue={99} />
         </div>
 
         {/*  */}
@@ -55,7 +55,7 @@ const PageAddListing9: FC<PageAddListing9Props> = () => {
           <h2 className="text-2xl font-semibold">Set your availability</h2>
           <span className="block mt-2 text-neutral-500 dark:text-neutral-400">
             Editing your calendar is easy—just select a date to block or unblock
-            it. You can always make changes after you publish.
+            it. You can always make changes after you publish. You are responsible for notifying guests if a date gets block after they have booked. 
           </span>
         </div>
 

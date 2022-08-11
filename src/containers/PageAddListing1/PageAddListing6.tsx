@@ -17,9 +17,9 @@ const PageAddListing6: FC<PageAddListing6Props> = () => {
             Your place description for client
           </h2>
           <span className="block mt-2 text-neutral-500 dark:text-neutral-400">
-            Mention the best features of your accommodation, any special
-            amenities like fast Wi-Fi or parking, as well as things you like
-            about the neighborhood.
+            Mention the best features of your experience, any special
+            amenities like free breath mints or awesome parking, as well as things you like
+            about the experience.
           </span>
         </div>
 

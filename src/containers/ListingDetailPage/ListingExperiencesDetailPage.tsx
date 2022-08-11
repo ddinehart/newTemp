@@ -24,15 +24,11 @@ export interface ListingExperiencesDetailPageProps {
 }
 
 const PHOTOS: string[] = [
-  "https://images.pexels.com/photos/3225531/pexels-photo-3225531.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
-  "https://images.pexels.com/photos/1154638/pexels-photo-1154638.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
-  "https://images.pexels.com/photos/3851949/pexels-photo-3851949.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-  "https://images.pexels.com/photos/3019019/pexels-photo-3019019.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
-  "https://images.pexels.com/photos/6438752/pexels-photo-6438752.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-  "https://images.pexels.com/photos/1320686/pexels-photo-1320686.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-  "https://images.pexels.com/photos/261394/pexels-photo-261394.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-  "https://images.pexels.com/photos/2861361/pexels-photo-2861361.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-  "https://images.pexels.com/photos/2677398/pexels-photo-2677398.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+  "https://www.zionwildflower.com/wp-content/uploads/2020/06/King-Bungalow-Suite.jpg",
+  "https://www.zionwildflower.com/wp-content/uploads/2020/06/King-Bungalow-Suite.jpg",
+  "https://www.zionwildflower.com/wp-content/uploads/2020/06/King-Bungalow-Suite.jpg",
+
+  "https://www.zionwildflower.com/wp-content/uploads/2020/06/King-Bungalow-Suite.jpg",
 ];
 
 const includes_demo = [
@@ -72,6 +68,10 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
     setOpenFocusIndex(index);
   };
 
+  const handleSave = () => {
+    console.log('saving')
+  }
+
   const handleCloseModal = () => setIsOpen(false);
 
   const renderSection1 = () => {
@@ -85,7 +85,7 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
 
         {/* 2 */}
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold">
-          Trang An Boat Tour & Mua Cave
+          Experience Wildflower near Zion National Park
         </h2>
 
         {/* 3 */}
@@ -104,7 +104,7 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
           <span className="ml-2.5 text-neutral-500 dark:text-neutral-400">
             Hosted by{" "}
             <span className="text-neutral-900 dark:text-neutral-200 font-medium">
-              Kevin Francis
+             Dylan Dinehart
             </span>
           </span>
         </div>
@@ -120,7 +120,7 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
           </div>
           <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 text-center sm:text-left sm:space-x-3 ">
             <i className="las la-user-friends text-2xl"></i>
-            <span className="">Up to 10 people</span>
+            <span className="">Up to 8 people</span>
           </div>
           <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 text-center sm:text-left sm:space-x-3 ">
             <i className="las la-language text-2xl"></i>
@@ -138,15 +138,13 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
         <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
         <div className="text-neutral-6000 dark:text-neutral-300">
           <p>
-            TRANG AN BOAT TOUR & MUA CAVE CLIMBING TOUR FROM HANOI
-            <br />
+            Enjoy Glamping atits finest.
             <br />
             07:30 – 08:00 – Our guide will meet you at your hotel/stay and start
-            a 120km comfortable Limousine bus journey through the verdant
-            landscape. Stopover for a rest on the way.
+            a wonderful morning hike up the hill
             <br />
             <br />
-            BAI DINH PAGODA EXPLORER.
+            Campfire in the morning and evening
             <br />
             <br />
             10:30 – Arrive Bai Dinh pagoda complex, get on electric cars to
@@ -160,25 +158,7 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
             TRANG AN TOUR ON BOAT.
             <br />
             <br />
-            13:30 – Visit Trang An Grottoes, get on a rowing boat traveling
-            along the river with scenic mountain and green fields landscape.
-            <br />
-            <br />
-            MUA CAVE HIKING. TAKE PICTURE
-            <br />
-            <br />
-            15:45 – Arrive at Mua Cave and start an amazing trek up to the top
-            of Ngoa Long mountain.
-            <br />
-            <br />
-            17:30 – 20:00 – Return to our Limousine bus and then come back to
-            Hanoi. Drop you off at your hotel/stay. Other things to note
-            <br />
-            <br />
-            It is one full day tour. Start from 07.30 AM and finish at 20.00. We
-            just put one hour and default departure time because we have many
-            other tours. IF you need any further details
-          </p>
+            </p>
         </div>
       </div>
     );
@@ -510,7 +490,7 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
         </div>
 
         {/* SUBMIT */}
-        <ButtonPrimary>Reserve</ButtonPrimary>
+        <ButtonPrimary onClick={handleSave()}>Reserve</ButtonPrimary>
       </div>
     );
   };
@@ -598,7 +578,7 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
           {renderSection2()}
           {renderSection3()}
           {renderSectionCheckIndate()}
-          {renderSection5()}
+          {/* {renderSection5()} */}
           {renderSection6()}
           {/* {renderSection7()} */}
           {renderSection8()}

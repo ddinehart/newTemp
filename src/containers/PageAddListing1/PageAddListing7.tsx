@@ -65,7 +65,7 @@ const PageAddListing7: FC<PageAddListing7Props> = () => {
           </div>
           {/* ----------------- */}
           <div>
-            <span className="text-lg font-semibold">Pictures of the place</span>
+            <span className="text-lg font-semibold">Up to 4 pictures of the place</span>
             <div className="mt-5 ">
               <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-neutral-300 dark:border-neutral-6000 border-dashed rounded-md">
                 <div className="space-y-1 text-center">
