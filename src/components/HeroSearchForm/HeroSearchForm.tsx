@@ -1,9 +1,7 @@
 import React, { FC, useState } from "react";
 import "react-dates/initialize";
 import ExperiencesSearchForm from "./ExperiencesSearchForm";
-import StaySearchForm from "./StaySearchForm";
-import RentalCarSearchForm from "./RentalCarSearchForm";
-import FlightSearchForm from "./FlightSearchForm";
+
 
 export type SearchTab = "Experiences";
 

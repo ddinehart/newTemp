@@ -2,11 +2,8 @@ import { Tab } from "@headlessui/react";
 import CommentListing from "components/CommentListing/CommentListing";
 import ExperiencesCard from "components/ExperiencesCard/ExperiencesCard";
 import StartRating from "components/StartRating/StartRating";
-import StayCard from "components/StayCard/StayCard";
 import {
-  DEMO_CAR_LISTINGS,
   DEMO_EXPERIENCES_LISTINGS,
-  DEMO_STAY_LISTINGS,
 } from "data/listings";
 import React, { FC, Fragment, useState } from "react";
 import Avatar from "shared/Avatar/Avatar";
@@ -148,16 +145,6 @@ const AuthorPage: FC<AuthorPageProps> = ({ className = "" }) => {
               ))}
             </Tab.List>
             <Tab.Panels>
-              <Tab.Panel className="">
-                <div className="mt-8 grid grid-cols-1 gap-6 md:gap-7 sm:grid-cols-2">
-                  {DEMO_STAY_LISTINGS.filter((_, i) => i < 4).map((stay) => (
-                    <StayCard key={stay.id} data={stay} />
-                  ))}
-                </div>
-                <div className="flex mt-11 justify-center items-center">
-                  <ButtonSecondary>Show me more</ButtonSecondary>
-                </div>
-              </Tab.Panel>
               <Tab.Panel className="">
                 <div className="mt-8 grid grid-cols-1 gap-6 md:gap-7 sm:grid-cols-2">
                   {DEMO_EXPERIENCES_LISTINGS.filter((_, i) => i < 4).map(

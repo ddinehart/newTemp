@@ -1,15 +1,12 @@
 import { Transition } from "@headlessui/react";
 import ExperiencesCard from "components/ExperiencesCard/ExperiencesCard";
-import StayCard from "components/StayCard/StayCard";
-import { CarDataType, ExperiencesDataType, StayDataType } from "data/types";
+import { ExperiencesDataType } from "data/types";
 import React, { FC, Fragment } from "react";
 import { useState } from "react";
 
 export interface AnyReactComponentProps {
   className?: string;
-  listing?: StayDataType;
   experiences?: ExperiencesDataType;
-  car?: CarDataType;
   isSelected?: boolean;
   lat: number;
   lng: number;
@@ -17,8 +14,6 @@ export interface AnyReactComponentProps {
 
 const AnyReactComponent: FC<AnyReactComponentProps> = ({
   className = "",
-  listing,
-  car,
   experiences,
   isSelected,
 }) => {
@@ -38,7 +33,7 @@ const AnyReactComponent: FC<AnyReactComponentProps> = ({
             : ""
         }`}
       >
-        {listing?.price || experiences?.price || car?.price}
+        { experiences?.price }
       </span>
       <Transition
         show={isOpen}
@@ -51,9 +46,6 @@ const AnyReactComponent: FC<AnyReactComponentProps> = ({
         leaveTo="opacity-0"
       >
         <div className="absolute z-50 bottom-full pb-3 -left-12 w-[260px] aspect-w-1">
-          {listing && (
-            <StayCard size="small" data={listing} className="shadow-2xl" />
-          )}
           {experiences && (
             <ExperiencesCard
               size="small"

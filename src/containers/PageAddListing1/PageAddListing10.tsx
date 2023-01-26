@@ -1,5 +1,3 @@
-import StayCard from "components/StayCard/StayCard";
-import { DEMO_STAY_LISTINGS } from "data/listings";
 import React, { FC } from "react";
 import ButtonPrimary from "shared/Button/ButtonPrimary";
 import ButtonSecondary from "shared/Button/ButtonSecondary";
@@ -27,12 +25,6 @@ const PageAddListing10: FC<PageAddListing10Props> = () => {
         {/* FORM */}
         <div>
           <h3 className="text-lg font-semibold">This is your listing</h3>
-          <div className="max-w-xs">
-            <StayCard
-              className="mt-8"
-              data={{ ...DEMO_STAY_LISTINGS[0], reviewStart: 0 }}
-            />
-          </div>
           <div className="flex items-center space-x-5 mt-8">
             <ButtonSecondary href="/add-listing-1">
               <svg
