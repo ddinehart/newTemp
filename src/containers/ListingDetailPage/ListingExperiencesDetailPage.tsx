@@ -69,8 +69,8 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
   };
 
   const handleSave = () => {
-    console.log('saving')
-  }
+    console.log("saving");
+  };
 
   const handleCloseModal = () => setIsOpen(false);
 
@@ -104,7 +104,7 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
           <span className="ml-2.5 text-neutral-500 dark:text-neutral-400">
             Hosted by{" "}
             <span className="text-neutral-900 dark:text-neutral-200 font-medium">
-             Dylan Dinehart
+              Dylan Dinehart
             </span>
           </span>
         </div>
@@ -158,7 +158,7 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
             TRANG AN TOUR ON BOAT.
             <br />
             <br />
-            </p>
+          </p>
         </div>
       </div>
     );
@@ -490,7 +490,7 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
         </div>
 
         {/* SUBMIT */}
-        <ButtonPrimary onClick={handleSave()}>Reserve</ButtonPrimary>
+        <ButtonPrimary>Reserve</ButtonPrimary>
       </div>
     );
   };
@@ -608,8 +608,8 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
       <div className="container py-24 lg:py-32">
         {/* SECTION 1 */}
         {/* <div className="relative py-16"> */}
-          {/* <BackgroundSection /> */}
-          {/* <SectionSliderNewCategories
+        {/* <BackgroundSection /> */}
+        {/* <SectionSliderNewCategories
             heading="Explore by types of stays"
             subHeading="Explore houses based on 10 types of stays"
             categoryCardType="card5"

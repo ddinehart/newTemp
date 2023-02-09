@@ -10,10 +10,10 @@ import Heading2 from "components/Heading/Heading2";
 import ExperiencesCardH from "components/ExperiencesCardH/ExperiencesCardH";
 import { ExperiencesDataType } from "data/types";
 
-// const DEMO_EXPERIENCES = DEMO_EXPERIENCES_LISTINGS.filter((_, i) => i < 12);
-const await data = fetch("http://localhost:5001/experience")
-  .then((response) => response.json())
-  .then((data) => console.log(data));
+const DEMO_EXPERIENCES = DEMO_EXPERIENCES_LISTINGS.filter((_, i) => i < 12);
+// const await data = fetch("http://localhost:5001/experience")
+//   .then((response) => response.json())
+//   .then((data) => console.log(data));
 
 export interface SectionGridHasMapProps {}
 
@@ -41,8 +41,7 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = () => {
             <TabFilters />
           </div>
           <div className="grid grid-cols-1 gap-8">
-            {\ data && 
-            {data.map((item: ExperiencesDataType | undefined) => (
+            {DEMO_EXPERIENCES.map((item) => (
               <div
                 key={item.id}
                 onMouseEnter={() => setCurrentHoverID((_) => item.id)}
@@ -50,8 +49,8 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = () => {
               >
                 <ExperiencesCardH data={item} />
               </div>
-            ))}c
-            }
+            ))}
+            c
           </div>
           <div className="flex mt-16 justify-center items-center">
             <Pagination />

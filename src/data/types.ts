@@ -106,10 +106,10 @@ export interface ExperiencesDataType {
   maxGuests: number;
   saleOff?: string | null;
   isAds: boolean | null;
-  // map: {
-  //   lat: number;
-  //   lng: number;
-  // };
+  map: {
+    lat: number;
+    lng: number;
+  };
 }
 
 //

@@ -1,10 +1,7 @@
 import __experiencesListing from "./jsons/__experiencesListing.json";
-import {
-  DEMO_EXPERIENCES_CATEGORIES,
-} from "./taxonomies";
+import { DEMO_EXPERIENCES_CATEGORIES } from "./taxonomies";
 import { ExperiencesDataType } from "./types";
 import { DEMO_AUTHORS } from "./authors";
-
 
 function getExperiences(url: string): Promise<ExperiencesDataType> {
   return fetch(url).then((response) => {
@@ -15,9 +12,8 @@ function getExperiences(url: string): Promise<ExperiencesDataType> {
   });
 }
 
-const data = getExperiences('http://localhost:5001/experience') || [];
-
-const DEMO_EXPERIENCES_LISTINGS = data.map(
+// const data = getExperiences('http://localhost:5001/experience') || [];
+const DEMO_EXPERIENCES_LISTINGS = __experiencesListing.map(
   (post, index): ExperiencesDataType => {
     //  ##########  GET CATEGORY BY CAT ID ######## //
     const category = DEMO_EXPERIENCES_CATEGORIES.filter(
@@ -35,7 +31,6 @@ const DEMO_EXPERIENCES_LISTINGS = data.map(
   }
 );
 
-// const REAL_EXPERIENC = 
+// const REAL_EXPERIENC =
 
-
-export {DEMO_EXPERIENCES_LISTINGS };
+export { DEMO_EXPERIENCES_LISTINGS };
