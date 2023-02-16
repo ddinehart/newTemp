@@ -1,17 +1,36 @@
 import BgGlassmorphism from "components/BgGlassmorphism/BgGlassmorphism";
 import SectionHeroArchivePage from "components/SectionHeroArchivePage/SectionHeroArchivePage";
+import { DEMO_EXPERIENCES_LISTINGS } from "data/listings";
+import { ExperiencesDataType, StayDataType } from "data/types";
 import { FC } from "react";
 import SectionGridFilterCard from "./SectionGridFilterCard";
 import { Helmet } from "react-helmet";
+import { useState, useEffect } from 'react';
+
+const DEMO_DATA: ExperiencesDataType[] = DEMO_EXPERIENCES_LISTINGS.filter(
+  (_, i) => i < 8
+);
 
 export interface ListingExperiencesPageProps {
   className?: string;
 }
 
-
 const ListingExperiencesPage: FC<ListingExperiencesPageProps> = ({
   className = "",
 }) => {
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    //RANDOM8
+    setData(DEMO_DATA);
+  }, [])
+  
+  const submitQuery = (dateValue, locationInputValue, guestValue) => {
+    //FILTERRESULTS
+    console.log(dateValue, locationInputValue, guestValue);
+  }
+
   return (
     <div
       className={`nc-ListingExperiencesPage relative overflow-hidden ${className}`}
@@ -27,6 +46,7 @@ const ListingExperiencesPage: FC<ListingExperiencesPageProps> = ({
         <SectionHeroArchivePage
           currentPage="Experiences"
           currentTab="Experiences"
+          submitQuery={submitQuery}
           listingType={
             <>
               <i className="text-2xl las la-umbrella-beach"></i>
@@ -37,7 +57,7 @@ const ListingExperiencesPage: FC<ListingExperiencesPageProps> = ({
         />
 
         {/* SECTION */}
-        <SectionGridFilterCard className="pb-24 lg:pb-32" />
+        <SectionGridFilterCard data={data} className="pb-24 lg:pb-32" />
 
         {/* SECTION 1 */}
         {/* <div className="relative py-16">

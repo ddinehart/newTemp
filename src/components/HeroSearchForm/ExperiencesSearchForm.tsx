@@ -17,23 +17,23 @@ const defaultGuestValue: GuestsInputProps["defaultValue"] = {
 
 export interface ExperiencesSearchFormProps {
   haveDefaultValue?: boolean;
+  submitQuery: Function;
 }
 
 const ExperiencesSearchForm: FC<ExperiencesSearchFormProps> = ({
   haveDefaultValue,
+  submitQuery
 }) => {
-  const [dateValue, setdateValue] = useState<moment.Moment | null>(null);
-  const [locationInputValue, setLocationInputValue] = useState("");
-  const [guestValue, setGuestValue] = useState({});
-
   const [dateFocused, setDateFocused] = useState<boolean>(false);
-  //
+  const [date, setDate] = useState<moment.Moment | null>(null);
+  const [inputValue, setInputValue] = useState("");
+  const [guest, setGuest] = useState({});
 
   useEffect(() => {
     if (haveDefaultValue) {
-      setdateValue(defaultDate);
-      setLocationInputValue(defaultLocationValue);
-      setGuestValue(defaultGuestValue);
+      setDate(defaultDate);
+      setInputValue(defaultLocationValue);
+      setGuest(defaultGuestValue);
     }
   }, []);
 
@@ -43,14 +43,14 @@ const ExperiencesSearchForm: FC<ExperiencesSearchFormProps> = ({
     return (
       <form className="w-full relative mt-8 flex flex-col md:flex-row  rounded-3xl md:rounded-full shadow-xl dark:shadow-2xl bg-white dark:bg-neutral-800 divide-y divide-neutral-200 dark:divide-neutral-700  md:divide-y-0">
         <LocationInput
-          defaultValue={locationInputValue}
-          onChange={(e) => setLocationInputValue(e)}
+          defaultValue={inputValue}
+          onChange={(e) => setInputValue(e)}
           onInputDone={() => setDateFocused(true)}
         />
 
         <ExperiencesDateSingleInput
-          defaultValue={dateValue}
-          onChange={(date) => setdateValue(date)}
+          defaultValue={date}
+          onChange={(date) => setDate(date)}
           defaultFocus={dateFocused}
           onFocusChange={(focus: boolean) => {
             setDateFocused(focus);
@@ -58,11 +58,11 @@ const ExperiencesSearchForm: FC<ExperiencesSearchFormProps> = ({
         />
 
         <GuestsInput
-          defaultValue={guestValue}
-          onChange={(data) => setGuestValue(data)}
+          defaultValue={guest}
+          onChange={(data) => setGuest(data)}
         />
         {/* BUTTON SUBMIT OF FORM */}
-        <div className="px-4 py-4 lg:py-0 flex items-center justify-center">
+        <div onClick={() => submitQuery(date, inputValue, guest)} className="px-4 py-4 lg:py-0 flex items-center justify-center">
           <ButtonSubmit />
         </div>
       </form>

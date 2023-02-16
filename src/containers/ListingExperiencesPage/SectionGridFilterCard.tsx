@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { DEMO_EXPERIENCES_LISTINGS } from "data/listings";
 import { ExperiencesDataType, StayDataType } from "data/types";
 import Pagination from "shared/Pagination/Pagination";
@@ -16,8 +16,9 @@ const DEMO_DATA: ExperiencesDataType[] = DEMO_EXPERIENCES_LISTINGS.filter(
 
 const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
   className = "",
-  data = DEMO_DATA,
+  data
 }) => {
+
   return (
     <div
       className={`nc-SectionGridFilterCard ${className}`}

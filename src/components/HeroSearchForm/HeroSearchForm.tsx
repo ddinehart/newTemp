@@ -8,12 +8,14 @@ export type SearchTab = "Experiences";
 export interface HeroSearchFormProps {
   className?: string;
   currentTab?: SearchTab;
+  submitQuery?: Function;
   currentPage?: "Experiences";
 }
 
 const HeroSearchForm: FC<HeroSearchFormProps> = ({
   className = "",
   currentTab = "Experiences",
+  submitQuery,
   currentPage,
 }) => {
   const tabs: SearchTab[] = [ "Experiences"];
@@ -50,7 +52,7 @@ const HeroSearchForm: FC<HeroSearchFormProps> = ({
     switch (tabActive) {
      
       case "Experiences":
-        return <ExperiencesSearchForm haveDefaultValue={isArchivePage} />;
+        return <ExperiencesSearchForm submitQuery={submitQuery} haveDefaultValue={isArchivePage} />;
      
 
       default:

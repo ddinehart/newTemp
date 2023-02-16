@@ -9,6 +9,7 @@ export interface SectionHeroArchivePageProps {
   listingType?: ReactNode;
   currentPage: "Experiences";
   currentTab: SearchTab;
+  submitQuery?: Function;
   rightImage?: string;
 }
 
@@ -17,6 +18,7 @@ const SectionHeroArchivePage: FC<SectionHeroArchivePageProps> = ({
   listingType,
   currentPage,
   currentTab,
+  submitQuery,
   rightImage = imagePng,
 }) => {
   return (
@@ -50,7 +52,7 @@ const SectionHeroArchivePage: FC<SectionHeroArchivePageProps> = ({
 
       <div className="flow-root w-full">
         <div className="z-10 lg:-mt-40 xl:-mt-56 w-full">
-          <HeroSearchForm currentPage={currentPage} currentTab={currentTab} />
+          <HeroSearchForm submitQuery={submitQuery} currentTab={currentTab} />
         </div>
       </div>
     </div>
