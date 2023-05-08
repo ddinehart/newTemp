@@ -2,3 +2,31 @@
 .absolute {
   position: absolute;
 }
+
+.googleAuth {
+  cursor: pointer;
+}
+
+.link {
+  cursor: pointer;
+}
+
+.edit:hover {
+  opacity: 50%;
+  content: "Edit";
+}
+
+.add-new {
+ display: flex;
+ justify-content: center;
+ align-items: center;
+}
+.add-new a button{
+  padding: 77px 68px;
+  font-size: 60px;
+  border-radius: 50%;
+}
+
+.float-right {
+  float: right;
+}

@@ -15,6 +15,7 @@ export interface LocationStates {
   "/listing-experiences"?: {};
   "/listing-experiences-map"?: {};
   "/listing-experiences-detail"?: {};
+  "/listing-experiences-detail-edit"?: {};
   //
   "/listing-real-estate"?: {};
   "/listing-real-estate-map"?: {};

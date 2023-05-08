@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Page } from "./types";
 import ScrollToTop from "./ScrollToTop";
 import Footer from "shared/Footer/Footer";
@@ -10,6 +11,7 @@ import ListingExperiencesPage from "containers/ListingExperiencesPage/ListingExp
 // import ListingExperiencesMapPage from "containers/ListingExperiencesPage/ListingExperiencesMapPage";
 // import ListingStayDetailPage from "containers/ListingDetailPage/ListingStayDetailPage";
 import ListingExperiencesDetailPage from "containers/ListingDetailPage/ListingExperiencesDetailPage";
+import ListingExperiencesDetailPageEdit from "containers/ListingDetailPage/ListingExperiencesDetailPageEdit";
 // import ListingCarPage from "containers/ListingCarPage/ListingCarPage";
 // import ListingCarMapPage from "containers/ListingCarPage/ListingCarMapPage";
 // import ListingCarDetailPage from "containers/ListingDetailPage/ListingCarDetailPage";
@@ -64,6 +66,10 @@ export const pages: Page[] = [
     path: "/listing-experiences-detail",
     component: ListingExperiencesDetailPage,
   },
+  {
+    path: "/listing-experiences-detail-edit",
+    component: ListingExperiencesDetailPageEdit,
+  },
   //
   // { path: "/listing-car", component: ListingCarPage },
   // { path: "/listing-car-map", component: ListingCarMapPage },
@@ -106,11 +112,12 @@ export const pages: Page[] = [
 ];
 
 const Routes = () => {
+  console.log(process.env.REACT_APP_CLIENT_ID)
   return (
     <BrowserRouter basename="/dylan">
       <ScrollToTop />
       <SiteHeader />
-
+      <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENT_ID}>
       <Switch>
         {pages.map(({ component, path, exact }) => {
           return (
@@ -124,6 +131,7 @@ const Routes = () => {
         })}
         <Route component={Page404} />
       </Switch>
+      </GoogleOAuthProvider>
       <Footer />
     </BrowserRouter>
   );

@@ -1,6 +1,5 @@
-import React, { FC, useEffect, useState } from "react";
-import { DEMO_EXPERIENCES_LISTINGS } from "data/listings";
-import { ExperiencesDataType, StayDataType } from "data/types";
+import { FC } from "react";
+import { StayDataType } from "data/types";
 import Pagination from "shared/Pagination/Pagination";
 import Heading2 from "components/Heading/Heading2";
 import ExperiencesCard from "components/ExperiencesCard/ExperiencesCard";
@@ -10,9 +9,6 @@ export interface SectionGridFilterCardProps {
   data?: StayDataType[];
 }
 
-const DEMO_DATA: ExperiencesDataType[] = DEMO_EXPERIENCES_LISTINGS.filter(
-  (_, i) => i < 8
-);
 
 const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({
   className = "",

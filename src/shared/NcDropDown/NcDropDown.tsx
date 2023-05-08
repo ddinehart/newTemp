@@ -58,29 +58,23 @@ const NcDropDown: FC<NcDropDownProps> = ({
         >
           <div className="px-1 py-3 text-sm text-neutral-6000 dark:text-neutral-300">
             {data.map((item) => (
-              <Menu.Item
-                key={item.id}
-                onClick={() => onClick(item)}
-                data-menu-item-id={item.id}
-              >
-                {() =>
-                  renderItem && typeof renderItem(item) !== "undefined" ? (
-                    renderItem(item)
-                  ) : (
-                    <button
-                      className={
-                        "flex items-center rounded-md w-full px-3 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100 truncate " +
-                        twFocusClass()
-                      }
-                    >
-                      {!!item.icon && (
-                        <i className={`${item.icon} mr-1 w-7 text-base`}></i>
-                      )}
-                      <span className="truncate">{item.name}</span>
-                    </button>
-                  )
-                }
-              </Menu.Item>
+             <Menu.Item key={item.id}>
+             {({ active }) => (
+               <button
+                 className={
+                   "flex items-center rounded-md w-full px-3 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100 truncate " +
+                   twFocusClass()
+                 }
+                 onClick={() => onClick(item)}
+                 data-menu-item-id={item.id}
+               >
+                 {!!item.icon && (
+                   <i className={`${item.icon} mr-1 w-7 text-base`}></i>
+                 )}
+                 <span className="truncate">{item.name}</span>
+               </button>
+             )}
+           </Menu.Item>
             ))}
           </div>
         </Menu.Items>

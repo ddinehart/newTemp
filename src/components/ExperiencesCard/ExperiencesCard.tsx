@@ -1,10 +1,9 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import GallerySlider from "components/GallerySlider/GallerySlider";
 import { DEMO_EXPERIENCES_LISTINGS } from "data/listings";
 import { ExperiencesDataType } from "data/types";
 import StartRating from "components/StartRating/StartRating";
 import { Link } from "react-router-dom";
-import BtnLikeIcon from "components/BtnLikeIcon/BtnLikeIcon";
 import SaleOffBadge from "components/SaleOffBadge/SaleOffBadge";
 import Badge from "shared/Badge/Badge";
 
@@ -13,6 +12,7 @@ export interface ExperiencesCardProps {
   ratioClass?: string;
   data?: ExperiencesDataType;
   size?: "default" | "small";
+  editing?: boolean;
 }
 
 // const data: ExperiencesDataType = fetch("http://localhost:5001/experience")
@@ -49,18 +49,19 @@ const ExperiencesCard: FC<ExperiencesCardProps> = ({
   className = "",
   data = DEMO_DATA,
   ratioClass = "aspect-w-3 aspect-h-3",
+  editing
 }) => {
   const {
     galleryImgs,
     address,
     title,
-    href,
     saleOff,
     isAds,
     price,
     reviewStart,
     reviewCount,
     id,
+    featuredImage
   } = data;
 
   const renderSliderGallery = () => {
@@ -69,7 +70,7 @@ const ExperiencesCard: FC<ExperiencesCardProps> = ({
         <GallerySlider
           uniqueID={`ExperiencesCard_${id}`}
           ratioClass={ratioClass}
-          galleryImgs={galleryImgs}
+          galleryImgs={[...galleryImgs, featuredImage]}
         />
         {/* <BtnLikeIcon isLiked={like} className="absolute right-3 top-3" /> */}
         {saleOff && <SaleOffBadge className="absolute left-3 top-3" />}
@@ -121,7 +122,7 @@ const ExperiencesCard: FC<ExperiencesCardProps> = ({
         <div className="border-b border-neutral-100 dark:border-neutral-800"></div>
         <div className="flex justify-between items-center">
           <span className="text-base font-semibold">
-            {price}
+            ${price}
             {` `}
             {size === "default" && (
               <span className="text-sm text-neutral-500 dark:text-neutral-400 font-normal">
@@ -134,16 +135,18 @@ const ExperiencesCard: FC<ExperiencesCardProps> = ({
       </div>
     );
   };
-
   return (
     <div
       className={`nc-ExperiencesCard group relative ${className}`}
       data-nc-id="ExperiencesCard"
     >
-      <Link to={href}>
+      {editing ? <Link to={{pathname: '/listing-experiences-detail-edit', state: {id:data.id}}}>
         {renderSliderGallery()}
         {renderContent()}
-      </Link>
+      </Link> : <Link to={{pathname: '/listing-experiences-detail', state: {id:data.id}}}>
+        {renderSliderGallery()}
+        {renderContent()}
+      </Link>}
     </div>
   );
 };

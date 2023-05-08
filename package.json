@@ -3,10 +3,12 @@
   "version": "1.2.0",
   "private": true,
   "homepage": ".",
+  "proxy": "http://localhost:8080",
   "dependencies": {
     "@glidejs/glide": "^3.4.1",
     "@headlessui/react": "^1.5.0",
     "@heroicons/react": "^1.0.5",
+    "@react-oauth/google": "^0.11.0",
     "@tailwindcss/aspect-ratio": "^0.4.0",
     "@tailwindcss/forms": "^0.4.0",
     "@tailwindcss/line-clamp": "^0.3.0",
@@ -18,7 +20,12 @@
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "axios": "^1.4.0",
+    "bcrypt": "^5.1.0",
     "component": "^1.1.0",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.0.3",
+    "env-cmd": "^10.1.0",
     "google-map-react": "^2.1.10",
     "moment": "^2.29.1",
     "mongodb": "^4.8.1",
@@ -35,8 +42,8 @@
     "web-vitals": "^2.1.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "env-cmd -f .env.local react-scripts start",
+    "build": "env-cmd -f .env.local react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "component": " npx generate-react-cli component"

@@ -1,16 +1,32 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Logo from "shared/Logo/Logo";
 import Navigation from "shared/Navigation/Navigation";
 import SearchDropdown from "./SearchDropdown";
 import ButtonPrimary from "shared/Button/ButtonPrimary";
 import MenuBar from "shared/MenuBar/MenuBar";
 import SwitchDarkMode from "shared/SwitchDarkMode/SwitchDarkMode";
+import axios from 'axios';
+import { Link } from "react-router-dom";
 
 export interface MainNav1Props {
   isTop: boolean;
 }
 
 const MainNav1: FC<MainNav1Props> = ({ isTop }) => {
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userID, setUserId] = useState("");
+
+  useEffect(() => {
+    axios.get('/api/loggedIn')
+    .then((res) => {
+      setIsLoggedIn(res.data.loggedIn);
+      setUserId(res.data.id);
+      console.log(res);
+    })
+    .catch((err) => console.log(err));
+  }, []);
+
   return (
     <div
       className={`nc-MainNav1 relative z-10 ${
@@ -27,7 +43,7 @@ const MainNav1: FC<MainNav1Props> = ({ isTop }) => {
             <SwitchDarkMode />
             <SearchDropdown />
             <div className="px-1" />
-            <ButtonPrimary href="/login">Sign up</ButtonPrimary>
+            {!isLoggedIn ? <ButtonPrimary href="/login">Login</ButtonPrimary> : <Link to={{pathname: '/add-listing-1', state: {id:userID}}}><ButtonPrimary>My Experiences</ButtonPrimary></Link>}
           </div>
           <div className="flex items-center xl:hidden">
             <SwitchDarkMode />

@@ -22,8 +22,10 @@ const ListingExperiencesPage: FC<ListingExperiencesPageProps> = ({
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    //RANDOM8
-    setData(DEMO_DATA);
+    fetch('/api/experiences/all/8')
+    .then(response => response.json())
+    .then(data => setData(data))
+    .catch(error => console.error(error));
   }, [])
   
   const submitQuery = (dateValue, locationInputValue, guestValue) => {

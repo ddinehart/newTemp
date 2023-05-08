@@ -85,7 +85,13 @@ export interface StayDataType {
     lng: number;
   };
 }
-
+export interface LocationType {
+  hash: string;
+  key: string;
+  pathname: string;
+  search: string;
+  state: StayDataType;
+}
 //
 export interface ExperiencesDataType {
   id: string | number;

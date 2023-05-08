@@ -3,15 +3,20 @@ import Input from "shared/Input/Input";
 // import Select from "shared/Select/Select";
 import CommonLayout from "./CommonLayout";
 import FormItem from "./FormItem";
+import { LocationType } from "data/types";
 
-export interface PageAddListing1Props {}
+export interface PageAddListing1Props {
+  location?: LocationType;
+}
 
-const PageAddListing1: FC<PageAddListing1Props> = () => {
+const PageAddListing1: FC<PageAddListing1Props> = ({location}) => {
+  console.log(location);
   return (
     <CommonLayout
       index="01"
       backtHref="/add-listing-1"
       nextHref="/add-listing-2"
+      location={location}
     >
       <>
         <h2 className="text-2xl font-semibold">Choosing listing name or title</h2>
