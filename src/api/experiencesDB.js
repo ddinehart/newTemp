@@ -14,6 +14,10 @@ async function addExperience(experience) {
   await experienceCollection.insertOne(experience);
 }
 
+async function updateExperience(experience) {
+  await experienceCollection.replaceOne({_id: new ObjectId(experience._id)}, {})
+}
+
 function getExperiences(limit) {
   const query = { };
   const options = {
