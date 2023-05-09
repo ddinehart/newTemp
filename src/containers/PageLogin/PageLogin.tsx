@@ -61,7 +61,8 @@ const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
     if (signUp) {
       axios.post('/api/register', {email, password})
       .then((res) => {
-      history.push('/add-listing-1');
+        history.push('/');
+        history.go(0);
       }).catch((err) => {
         inputElement.setCustomValidity("Account already created with this email");
         inputElement.reportValidity();
@@ -70,7 +71,8 @@ const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
     else {
       axios.post('/api/login', {email, password})
       .then((res) => {
-        history.push('/add-listing-1');
+        history.push('/');
+        history.go(0);
         }).catch((err) => {
           inputElement.setCustomValidity("Invalid Email or Password");
           inputElement.reportValidity();
@@ -99,7 +101,8 @@ const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
                 .then((res) => {
                     axios.get(`/api/oAuth/${res.data.email}`)
                     .then((res) => {
-                      history.push('/add-listing-1');
+                      history.push('/');
+                      history.go(0);
                     })
                 })
                 .catch((err) => console.log(err));
@@ -108,7 +111,7 @@ const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
     [ user ]
 );
 
-    console.log(signUp);
+  
   return (
     <div className={`nc-PageLogin ${className}`} data-nc-id="PageLogin">
       <Helmet>

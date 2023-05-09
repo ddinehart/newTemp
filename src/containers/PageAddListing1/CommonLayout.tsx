@@ -7,6 +7,7 @@ import Pagination from "shared/Pagination/Pagination";
 import Heading2 from "components/Heading/Heading2";
 import { Link } from "react-router-dom";
 import { LocationType } from "data/types";
+import axios from 'axios';
 
 export interface CommonLayoutProps {
   index: string;
@@ -35,6 +36,12 @@ const CommonLayout: FC<CommonLayoutProps> = ({
       }
     }, [])
 
+    function deleteExperience (id) {
+      axios.delete('/api/experience/' + id).then((res) =>{
+        setData(data.filter((item) => item._id !== id));
+      })
+    }
+
   return (
     <div
       className={`nc-PageAddListing1 px-4 max-w-3xl mx-auto pb-24 pt-14 sm:py-24 lg:pb-32`}
@@ -50,16 +57,19 @@ const CommonLayout: FC<CommonLayoutProps> = ({
         }
       />
       <div className="grid grid-cols-1 gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
-        <div className="edit add-new" onClick={() => console.log("EDITING")}>
-          <Link to={{pathname: '/listing-experiences-detail-edit', state: {id:location.state.id}}}>
+        <div className="edit add-new" onClick={() => console.log({id:location.state.id, editing:true})}>
+          <Link to={{pathname: '/listing-experiences-detail-edit', state: {id:location.state.id, editing:true}}}>
           <ButtonPrimary>
               +
           </ButtonPrimary>
           </Link>
           </div>
         {data.map((stay) => (
-          <div className="edit" onClick={() => console.log("EDITING")}>
-            <ExperiencesCard key={stay.id} editing={true} data={stay} />
+          <div className="edit" onClick={() => console.log({id:stay._id, editing:true})}>
+            <button onClick={() => deleteExperience(stay._id)} className='deleteButton'>x</button>
+            <Link to={{pathname: '/listing-experiences-detail-edit', state: {id:stay._id, editing:true}}}>
+              <ExperiencesCard key={stay._id} editing={true} data={stay} />
+            </Link>
           </div>
         ))}
       </div>

@@ -79,6 +79,7 @@ export interface StayDataType {
   bedrooms: number;
   bathrooms: number;
   saleOff?: string | null;
+  editing?: boolean;
   isAds: boolean | null;
   map: {
     lat: number;

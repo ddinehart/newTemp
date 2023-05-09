@@ -11,9 +11,12 @@
   cursor: pointer;
 }
 
+.edit {
+  position: relative;
+}
+
 .edit:hover {
   opacity: 50%;
-  content: "Edit";
 }
 
 .add-new {
@@ -29,4 +32,22 @@
 
 .float-right {
   float: right;
+}
+
+.deleteButton {
+  background: lightgrey;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    z-index: 1;
+    left: calc(100% - 30px);
+    top: 10px;
+    cursor: pointer;
+}
+.deleteButton:hover {
+  background: grey;
 }

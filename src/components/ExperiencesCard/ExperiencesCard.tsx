@@ -140,10 +140,8 @@ const ExperiencesCard: FC<ExperiencesCardProps> = ({
       className={`nc-ExperiencesCard group relative ${className}`}
       data-nc-id="ExperiencesCard"
     >
-      {editing ? <Link to={{pathname: '/listing-experiences-detail-edit', state: {id:data.id}}}>
-        {renderSliderGallery()}
-        {renderContent()}
-      </Link> : <Link to={{pathname: '/listing-experiences-detail', state: {id:data.id}}}>
+      {editing ? <>{renderSliderGallery()}
+        {renderContent()}</> : <Link to={{pathname: '/listing-experiences-detail', state: {id:data.id}}}>
         {renderSliderGallery()}
         {renderContent()}
       </Link>}

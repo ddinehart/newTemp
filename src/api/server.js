@@ -33,6 +33,15 @@ apiRouter.get('/experiences/:id', async (req, res) => {
   res.send(experiences);
 })
 
+apiRouter.get('/experience/:id', async (req, res) => {
+  const experiences = await DB.getExperience(req.params.id);
+  res.send(experiences);
+})
+
+apiRouter.put('/experience/:id', async (req, res) => {
+  DB.updateExpereince(req.body);
+})
+
 // SubmitScore
 apiRouter.post('/experience', async (req, res) => {
   DB.addExperience(req.body);
@@ -45,7 +54,6 @@ apiRouter.delete('/experience/:id', async (req, res) => {
 })
 
 apiRouter.get('/loggedIn', async (req, res) => {
-  console.log(req.cookies);
   const token = req?.cookies._id
   if (token) res.send({loggedIn: true, id:req.cookies._id});
   else res.send({loggedIn: false});
@@ -53,7 +61,6 @@ apiRouter.get('/loggedIn', async (req, res) => {
 
 apiRouter.get('/oAuth/:email', async (req, res) => {
   const user = await DB.getUser(req.params.email);
-  console.log(user._id.toString());
   if (user) {
     setAuthCookie(res, user._id);
     res.send({ id: user._id });

@@ -22,15 +22,17 @@ function getExperiences(limit) {
   const cursor = experienceCollection.find(query, options);
   return cursor.toArray();
 }
+function getExperience(id) {
+  return experienceCollection.findOne({_id: new ObjectId(id)});
+}
 function getUserExperiences(id) {
-  console.log("USER ID", id);
   const query = { userId: id };
   const cursor = experienceCollection.find(query);
   return cursor.toArray();
 }
 
 async function deleteExperience(id) {
-    await experienceCollection.deleteOne({_id: id});
+  await experienceCollection.deleteOne({_id: new ObjectId(id)});
 }
 
 function getUser(email) {
@@ -51,4 +53,4 @@ function getUserByToken(token) {
   return userCollection.findOne({ token: token });
 }
 
-module.exports = { addExperience, getExperiences, deleteExperience, getUser, createUser, getUserByToken, getUserExperiences };
+module.exports = { addExperience, getExperiences, deleteExperience, getUser, createUser, getUserByToken, getUserExperiences, getExperience };

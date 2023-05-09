@@ -15,6 +15,7 @@ import ButtonSecondary from "shared/Button/ButtonSecondary";
 import Input from "shared/Input/Input";
 import NcImage from "shared/NcImage/NcImage";
 import LikeSaveBtns from "./LikeSaveBtns";
+import { useHistory } from 'react-router-dom';
 import ModalPhotos from "./ModalPhotos";
 
 import ExperiencesDateSingleInput from "components/HeroSearchForm/ExperiencesDateSingleInput";
@@ -50,7 +51,7 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
   className = "",
   location
 }) => {
-  console.log(location);
+  let history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
   const [isNew, setIsNew] = useState(false);
   const [openFocusIndex, setOpenFocusIndex] = useState(0);
@@ -73,6 +74,25 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
 
   const [buttonDisabled, setButtonDisabled] = useState(false);
 
+  useEffect(() => {
+    console.log(location.state.id);
+    if (location.state.editing) {
+      axios.get('/api/experience/' + location.state.id).then((res) => {
+        let { title, street, city, state, postalCode, guestNumber, experienceNumber, maxTimeLength, description, price } = res.data;
+        setTitle(title);
+        setStreet(street);
+        setCity(city);
+        setState(state);
+        setPostalCode(postalCode);
+        setGuestNumber(guestNumber);
+        setExperienceNumber(experienceNumber);
+        setMaxTimeLength(maxTimeLength);
+        setDescription(description);
+        setPrice(price);
+      });
+    }
+  }, [])
+
 
   const [selectedDate, setSelectedDate] = useState<moment.Moment | null>(
     moment().add(2, "days")
@@ -90,21 +110,19 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
   }
   const windowSize = useWindowSize();
 
+  console.log(location.state);
+
   function createNewExperience() {
     if (!buttonDisabled) {
       setButtonDisabled(true);
       let address = city + ", " + state + " " + street + ", " + postalCode;
       axios.post("/api/experience", {title, address, city, state, street, postalCode, guestNumber, experienceNumber, maxTimeLength, description, price, userId: location.state.id, galleryImgs:[], featuredImage:"https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pexels.com%2Fsearch%2Fhouse%2F&psig=AOvVaw3OoYYulNx_0bZGXrfEJJfC&ust=1683319350911000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCMD9tbHD3P4CFQAAAAAdAAAAABAE" })
+      .then((res) => {
+        history.push({pathname: '/add-listing-1', state:{id: location.state.id}})
+      })
     }
 
   }
-
-    useEffect(() => {
-      // SET THE DATA HERE FROM THE API CALL WITH THE ID IN LOCATION
-      if (location.state.id == null) setIsNew(true);
-      console.log(location.state.id);
-      // SET THE REVIEWS HERE AS WELL
-    }, [])
 
   const getDaySize = () => {
     if (windowSize.width <= 375) {
@@ -861,7 +879,7 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
         {/* CONTENT */}
         <div className="w-full lg:w-5/5 xl:w-3/3 space-y-8 lg:pr-10 lg:space-y-10">
         <h2 className="my-20 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
-          Create Experience
+          {location.state.editing ? "Edit Experience" : "Create Experience"}
         </h2>
           {renderSection1()}
           {renderSection2()}
@@ -871,7 +889,8 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
           {/* {renderSection7()} */}
           {renderSection8()}
           {renderSection5()}
-          <ButtonPrimary onClick={createNewExperience} className="float-right">Create Experience</ButtonPrimary>
+          {location.state.editing ? <ButtonPrimary onClick={createNewExperience} className="float-right">Update Experience</ButtonPrimary> :
+          <ButtonPrimary onClick={createNewExperience} className="float-right">Create Experience</ButtonPrimary>}
         </div>
 
         {/* SIDEBAR */}
