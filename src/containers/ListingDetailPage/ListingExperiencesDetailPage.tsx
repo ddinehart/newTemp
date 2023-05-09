@@ -24,11 +24,11 @@ export interface ListingExperiencesDetailPageProps {
 }
 
 const PHOTOS: string[] = [
-  "https://www.zionwildflower.com/wp-content/uploads/2020/06/King-Bungalow-Suite.jpg",
-  "https://www.zionwildflower.com/wp-content/uploads/2020/06/King-Bungalow-Suite.jpg",
-  "https://www.zionwildflower.com/wp-content/uploads/2020/06/King-Bungalow-Suite.jpg",
+  "https://zionwildflower.com/wp-content/uploads/2022/11/Glamping-Wagons-400x284.webp",
+  "https://zionwildflower.com/wp-content/uploads/2022/11/Glamping-Wagons-400x284.webp",
+  "https://zionwildflower.com/wp-content/uploads/2022/11/Glamping-Wagons-400x284.webp",
 
-  "https://www.zionwildflower.com/wp-content/uploads/2020/06/King-Bungalow-Suite.jpg",
+  "https://zionwildflower.com/wp-content/uploads/2022/11/Glamping-Wagons-400x284.webp",
 ];
 
 const includes_demo = [
@@ -116,7 +116,7 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
         <div className="flex items-center justify-between xl:justify-start space-x-8 xl:space-x-12 text-sm text-neutral-700 dark:text-neutral-300">
           <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 text-center sm:text-left sm:space-x-3 ">
             <i className="las la-clock text-2xl"></i>
-            <span className="">3.5 hours</span>
+            <span className="">.5 hours</span>
           </div>
           <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 text-center sm:text-left sm:space-x-3 ">
             <i className="las la-user-friends text-2xl"></i>
@@ -138,10 +138,9 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
         <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
         <div className="text-neutral-6000 dark:text-neutral-300">
           <p>
-            Enjoy Glamping atits finest.
+            Enjoy Glamping at it's finest.
             <br />
-            07:30 – 08:00 – Our guide will meet you at your hotel/stay and start
-            a wonderful morning hike up the hill
+            Complementary smore's kit
             <br />
             <br />
             Campfire in the morning and evening
