@@ -8,6 +8,7 @@ const client = new MongoClient(url);
 const db = client.db(process.env.DATABASENAME);
 const experienceCollection = db.collection(process.env.EXPERIENCECOLLECTION);
 const userCollection = db.collection(process.env.USERCOLLECTION)
+const bookingCollection = db.collection(process.env.BOOKINGCOLLECTION)
 
 
 async function addExperience(experience) {
@@ -53,8 +54,19 @@ async function createUser(userData) {
   return userData;
 }
 
+async function createBooking(booking) {
+  let newBooking = await bookingCollection.insertOne(booking);
+  return newBooking.insertedId.toString();
+}
+async function getBooking(id) {
+  return bookingCollection.findOne({ _id: new ObjectId(id) });
+}
+async function getBookings(id) {
+  return bookingCollection.find({ userId: id }).toArray();
+}
+
 function getUserByToken(token) {
   return userCollection.findOne({ token: token });
 }
 
-module.exports = { addExperience, getExperiences, deleteExperience, getUser, createUser, getUserByToken, getUserExperiences, getExperience };
+module.exports = { addExperience, getExperiences, deleteExperience, getUser, createUser, getUserByToken, getUserExperiences, getExperience, createBooking, getBooking, getBookings };

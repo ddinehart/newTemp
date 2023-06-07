@@ -3,6 +3,15 @@ const bcrypt = require('bcrypt');
 const express = require('express');
 const app = express();
 const DB = require('./experiencesDB.js');
+const AWS = require('aws-sdk');
+const multer = require('multer');
+const s3 = new AWS.S3();
+
+const upload = multer();
+
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+
+const {BUCKET_NAME, IAM_USER_KEY, IAM_USER_SECRET} = process.env;
 
 const authCookieName = '_id';
 
@@ -20,6 +29,45 @@ app.use(express.static('public'));
 // Router for service endpoints
 var apiRouter = express.Router();
 app.use(`/api`, apiRouter);
+
+apiRouter.post('/create-checkout-session', async (req, res) => {
+  console.log(req.body);
+  const session = await stripe.checkout.sessions.create({
+    line_items: [
+      {
+      price_data: {
+        currency: "usd",
+        product_data: {
+          name: req.body.title,
+        },
+        unit_amount: parseInt(req.body.price * 100),
+      },
+      quantity: 1
+    }
+    ],
+
+    mode:"payment",
+    success_url: `${process.env.CLIENT_URL}/pay-done?id=${req.body.id}`,
+    cancel_url: `${process.env.CLIENT_URL}`
+  })
+  res.send({url: session.url});
+})
+
+apiRouter.post('/imageUpload', upload.single('file'), async (req, res) => {
+  await s3
+  .putObject({
+   Body: req.file.buffer,
+   Bucket: "fisexepriences",
+   Key: req.file.originalname
+  })
+  .promise();
+  const url = s3.getSignedUrl('getObject', {
+    Bucket: "fisexepriences",
+    Key: req.file.originalname,
+    Expires: 3600 // Optional: specify the expiration time for the URL
+  });
+  res.send(url);
+})
 
 // GetScores
 apiRouter.get('/experiences/all/:limit', async (req, res) => {
@@ -51,6 +99,20 @@ apiRouter.post('/experience', async (req, res) => {
 apiRouter.delete('/experience/:id', async (req, res) => {
     DB.deleteExperience(req.params.id);
     res.sendStatus(200);
+})
+
+apiRouter.post('/booking', async (req,res) => {
+  let newBooking = await DB.createBooking(req.body);
+  res.send(newBooking);
+})
+
+apiRouter.get('/booking/:id', async (req,res) => {
+  let newBooking = await DB.getBooking(req.params.id);
+  res.send(newBooking);
+})
+apiRouter.get('/bookings/:id', async (req, res) => {
+  let bookings = await DB.getBookings(req.params.id);
+  res.send(bookings);
 })
 
 apiRouter.get('/loggedIn', async (req, res) => {
