@@ -36,7 +36,7 @@ const StaySearchForm: FC<StaySearchFormProps> = ({
     endDate: null,
   });
   const [locationInputValue, setLocationInputValue] = useState("");
-  const [guestValue, setGuestValue] = useState({});
+  const [guestValue, setGuestValue] = useState<GuestsInputProps["defaultValue"]>({});
 
   const [dateFocused, setDateFocused] = useState<FocusedInputShape | null>(
     null
@@ -66,8 +66,10 @@ const StaySearchForm: FC<StaySearchFormProps> = ({
           onChange={(data) => setDateRangeValue(data)}
         />
         <GuestsInput
+        maxQuantity={10}
+          experienceNumber={guestValue.guestAdults}
           defaultValue={guestValue}
-          onChange={(data) => setGuestValue(data)}
+          onChange={(data) => setGuestValue({...guestValue, guestAdults: data})}
         />
         {/* BUTTON SUBMIT OF FORM */}
         <div className="px-4 py-4 lg:py-0 flex items-center justify-center">

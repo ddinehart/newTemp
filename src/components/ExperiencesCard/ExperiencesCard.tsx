@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, MouseEventHandler } from "react";
 import GallerySlider from "components/GallerySlider/GallerySlider";
 import { DEMO_EXPERIENCES_LISTINGS } from "data/listings";
 import { ExperiencesDataType } from "data/types";
@@ -9,6 +9,7 @@ import Badge from "shared/Badge/Badge";
 
 export interface ExperiencesCardProps {
   className?: string;
+  onClick?: MouseEventHandler<HTMLDivElement>;
   ratioClass?: string;
   data?: ExperiencesDataType;
   size?: "default" | "small";
@@ -49,7 +50,8 @@ const ExperiencesCard: FC<ExperiencesCardProps> = ({
   className = "",
   data = DEMO_DATA,
   ratioClass = "aspect-w-3 aspect-h-3",
-  editing
+  editing,
+  onClick
 }) => {
   const {
     galleryImgs,
@@ -58,19 +60,20 @@ const ExperiencesCard: FC<ExperiencesCardProps> = ({
     saleOff,
     isAds,
     price,
-    reviewStart,
-    reviewCount,
-    id,
-    featuredImage
+    featuredImage,
+    starRating,
+    ratingCount,
   } = data;
+
+  console.log(data);
 
   const renderSliderGallery = () => {
     return (
       <div className="relative w-full rounded-2xl overflow-hidden">
         <GallerySlider
-          uniqueID={`ExperiencesCard_${id}`}
+          uniqueID={`ExperiencesCard_${data._id}`}
           ratioClass={ratioClass}
-          galleryImgs={[...galleryImgs, featuredImage]}
+          galleryImgs={[featuredImage, ...galleryImgs ]}
         />
         {/* <BtnLikeIcon isLiked={like} className="absolute right-3 top-3" /> */}
         {saleOff && <SaleOffBadge className="absolute left-3 top-3" />}
@@ -126,25 +129,27 @@ const ExperiencesCard: FC<ExperiencesCardProps> = ({
             {` `}
             {size === "default" && (
               <span className="text-sm text-neutral-500 dark:text-neutral-400 font-normal">
-                /person
+                /experience
               </span>
             )}
           </span>
-          <StartRating reviewCount={reviewCount} point={reviewStart} />
+          <StartRating reviewCount={ratingCount} point={starRating} />
         </div>
       </div>
     );
   };
   return (
     <div
-      className={`nc-ExperiencesCard group relative ${className}`}
+      className={`nc-ExperiencesCard group relative cursor-pointer ${className}`}
       data-nc-id="ExperiencesCard"
+      onClick={onClick}
     >
       {editing ? <>{renderSliderGallery()}
-        {renderContent()}</> : <Link to={{pathname: '/listing-experiences-detail', state: {id:data.id}}}>
+        {renderContent()}</> : <>
         {renderSliderGallery()}
         {renderContent()}
-      </Link>}
+        </>
+      }
     </div>
   );
 };

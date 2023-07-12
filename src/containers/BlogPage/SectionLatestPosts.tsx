@@ -27,7 +27,7 @@ const SectionLatestPosts: FC<SectionLatestPostsProps> = ({
   const renderCard = (post: PostDataType) => {
     switch (postCardName) {
       case "card3":
-        return <Card3 key={post.id} className="" post={post} />;
+        return <Card3 key={post._id} className="" post={post} />;
 
       default:
         return null;

@@ -42,7 +42,8 @@ const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
   const [ profile, setProfile ] = useState<TokenResponseWithoutError[]>([]);
 
   
-
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [signUp, setSignUp] = useState(false);
@@ -50,7 +51,9 @@ const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
   const history = useHistory();
 
   const login = useGoogleLogin({
-      onSuccess: (codeResponse) => setUser(prevState => [...prevState, codeResponse]),
+      onSuccess: (codeResponse) => {
+        setUser(prevState => [...prevState, codeResponse])
+      },
       onError: (error) => console.log('Login Failed:', error)
   });
 
@@ -88,7 +91,6 @@ const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
 
   useEffect(
     () => {
-      console.log(user);
         if (user.length > 0) {
           let access_token = user[0].access_token;
             axios
@@ -99,7 +101,7 @@ const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
                     }
                 })
                 .then((res) => {
-                    axios.get(`/api/oAuth/${res.data.email}`)
+                    axios.post('/api/oAuth', {email:res.data.email, firstName:res.data.given_name, lastName:res.data.family_name})
                     .then((res) => {
                       history.push('/');
                       history.go(0);
@@ -150,6 +152,19 @@ const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
           </div>
           {/* FORM */}
           <form className="grid grid-cols-1 gap-6" onSubmit={normalLogin} action="#" method="post">
+          {signUp && <><label className="block">
+              <span className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">
+                First Name
+              </span>
+              <Input id="password" value={firstName} required type="text" className="mt-1" onChange={(e)=>{setFirstName(e.target.value); const inputElement = document.getElementById("email") as HTMLInputElement; inputElement.setCustomValidity("")}} />
+            </label>
+            <label className="block">
+              <span className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">
+                Last Name
+              </span>
+              <Input id="password" value={lastName} required type="text" className="mt-1" onChange={(e)=>{setLastName(e.target.value); const inputElement = document.getElementById("email") as HTMLInputElement; inputElement.setCustomValidity("")}} />
+            </label>
+            </>}
             <label className="block">
               <span className="text-neutral-800 dark:text-neutral-200">
                 Email address

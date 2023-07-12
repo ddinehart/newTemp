@@ -6,13 +6,13 @@ import NcImage from "shared/NcImage/NcImage";
 
 // <--- NavItemType --->
 export interface MegamenuItem {
-  id: string;
+  _id: string;
   image: string;
   title: string;
   items: NavItemType[];
 }
 export interface NavItemType {
-  id: string;
+  _id: string;
   name: string;
   isNew?: boolean;
   href: string;
@@ -44,21 +44,21 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({
     };
   }, [history]);
 
-  const onMouseEnterMenu = (id: string) => {
-    setMenuCurrentHovers((state) => [...state, id]);
+  const onMouseEnterMenu = (_id: string) => {
+    setMenuCurrentHovers((state) => [...state, _id]);
   };
 
-  const onMouseLeaveMenu = (id: string) => {
+  const onMouseLeaveMenu = (_id: string) => {
     setMenuCurrentHovers((state) => {
       return state.filter((item, index) => {
-        return item !== id && index < state.indexOf(id);
+        return item !== _id && index < state.indexOf(_id);
       });
     });
   };
 
   // ===================== MENU MEGAMENU =====================
   const renderMegaMenu = (menu: NavItemType) => {
-    const isHover = menuCurrentHovers.includes(menu.id);
+    const isHover = menuCurrentHovers.includes(menu._id);
 
     const isFull = menu.megaMenu && menu.megaMenu?.length > 3;
     const classPopover = isFull
@@ -70,8 +70,8 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({
       <Popover
         as="li"
         className={`menu-item menu-megamenu ${classPopover}`}
-        onMouseEnter={() => onMouseEnterMenu(menu.id)}
-        onMouseLeave={() => onMouseLeaveMenu(menu.id)}
+        onMouseEnter={() => onMouseEnterMenu(menu._id)}
+        onMouseLeave={() => onMouseLeaveMenu(menu._id)}
       >
         {() => (
           <>
@@ -97,7 +97,7 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({
                     className={`relative bg-white dark:bg-neutral-900 px-3 py-6 grid gap-1 grid-cols-${menu.megaMenu?.length}`}
                   >
                     {menu.megaMenu?.map((item) => (
-                      <div key={item.id}>
+                      <div key={item._id}>
                         <div className="px-2">
                           <NcImage
                             containerClassName="w-36 h-24 rounded-lg overflow-hidden relative flex"
@@ -123,7 +123,7 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({
   };
   const renderMegaMenuNavlink = (item: NavItemType) => {
     return (
-      <li key={item.id}>
+      <li key={item._id}>
         <NavLink
           exact
           strict
@@ -143,15 +143,15 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({
 
   // ===================== MENU DROPDOW =====================
   const renderDropdownMenu = (menuDropdown: NavItemType) => {
-    const isHover = menuCurrentHovers.includes(menuDropdown.id);
+    const isHover = menuCurrentHovers.includes(menuDropdown._id);
     return (
       <Popover
         as="li"
         className={`menu-item menu-dropdown relative ${
           menuDropdown.isNew ? "menuIsNew_lv1" : ""
         }`}
-        onMouseEnter={() => onMouseEnterMenu(menuDropdown.id)}
-        onMouseLeave={() => onMouseLeaveMenu(menuDropdown.id)}
+        onMouseEnter={() => onMouseEnterMenu(menuDropdown._id)}
+        onMouseLeave={() => onMouseLeaveMenu(menuDropdown._id)}
       >
         {() => (
           <>
@@ -179,7 +179,7 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({
                     } else {
                       return (
                         <li
-                          key={i.id}
+                          key={i._id}
                           className={`px-2 ${i.isNew ? "menuIsNew" : ""}`}
                         >
                           {renderDropdownMenuNavlink(i)}
@@ -197,14 +197,14 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({
   };
 
   const renderDropdownMenuNavlinkHasChild = (item: NavItemType) => {
-    const isHover = menuCurrentHovers.includes(item.id);
+    const isHover = menuCurrentHovers.includes(item._id);
     return (
       <Popover
         as="li"
-        key={item.id}
+        key={item._id}
         className="menu-item menu-dropdown relative px-2"
-        onMouseEnter={() => onMouseEnterMenu(item.id)}
-        onMouseLeave={() => onMouseLeaveMenu(item.id)}
+        onMouseEnter={() => onMouseEnterMenu(item._id)}
+        onMouseLeave={() => onMouseLeaveMenu(item._id)}
       >
         {() => (
           <>
@@ -231,7 +231,7 @@ const NavigationItem: FC<NavigationItemWithRouterProps> = ({
                       return renderDropdownMenuNavlinkHasChild(i);
                     } else {
                       return (
-                        <li key={i.id} className="px-2">
+                        <li key={i._id} className="px-2">
                           {renderDropdownMenuNavlink(i)}
                         </li>
                       );

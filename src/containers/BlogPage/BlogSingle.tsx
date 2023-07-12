@@ -269,7 +269,7 @@ const BlogSingle = () => {
   const renderPostRelated = (post: PostDataType) => {
     return (
       <div
-        key={post.id}
+        key={post._id}
         className="relative aspect-w-3 aspect-h-4 rounded-3xl overflow-hidden group"
       >
         <Link to={post.href} />

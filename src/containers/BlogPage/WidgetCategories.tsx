@@ -29,7 +29,7 @@ const WidgetCategories: FC<WidgetCategoriesProps> = ({
           {categories.map((category) => (
             <CardCategory1
               className="p-4 xl:p-5 hover:bg-neutral-200 dark:hover:bg-neutral-700"
-              key={category.id}
+              key={category._id}
               taxonomy={category}
               size="normal"
             />

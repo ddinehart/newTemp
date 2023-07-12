@@ -25,7 +25,7 @@ const WidgetTags: FC<WidgetTagsProps> = ({
       />
       <div className="flex flex-wrap p-4 xl:p-5">
         {tags.map((tag) => (
-          <Tag className="mr-2 mb-2" key={tag.id} tag={tag} />
+          <Tag className="mr-2 mb-2" key={tag._id} tag={tag} />
         ))}
       </div>
     </div>

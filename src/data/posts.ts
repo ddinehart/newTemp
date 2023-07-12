@@ -7,12 +7,12 @@ import { DEMO_AUTHORS } from "./authors";
 const DEMO_POSTS = __posts.map((post): PostDataType => {
   //  ##########  GET CATEGORY BY CAT ID ######## //
   const categories = post.categoriesId.map(
-    (id) => DEMO_CATEGORIES.filter((taxonomy) => taxonomy.id === id)[0]
+    (_id) => DEMO_CATEGORIES.filter((taxonomy) => taxonomy._id === _id)[0]
   );
 
   return {
     ...post,
-    author: DEMO_AUTHORS.filter((user) => user.id === post.authorId)[0],
+    author: DEMO_AUTHORS.filter((user) => user._id === post.authorId)[0],
     categories: [categories[0]],
   } as PostDataType;
 });

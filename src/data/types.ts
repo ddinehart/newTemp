@@ -7,7 +7,7 @@ export interface CustomLink {
 
 //  ##########  PostDataType ######## //
 export interface TaxonomyType {
-  id: string | number;
+  _id?: string | number;
   name: string;
   href: string;
   count?: number;
@@ -19,7 +19,7 @@ export interface TaxonomyType {
 }
 
 export interface AuthorType {
-  id: string | number;
+  _id?: string | number;
   firstName: string;
   lastName: string;
   displayName: string;
@@ -34,7 +34,7 @@ export interface AuthorType {
 }
 
 export interface PostDataType {
-  id: string | number;
+  _id?: string | number;
   author: AuthorType;
   date: string;
   href: string;
@@ -58,9 +58,17 @@ export type TwMainColor =
   | "purple"
   | "gray";
 
+export interface RatingDataType {
+  name: string;
+  rating: number;
+  date: string;
+  thoughts: string;
+}
 //
 export interface StayDataType {
-  id: string | number;
+  _id: string | number;
+  firstName: string;
+  lastName: string;
   author: AuthorType;
   date: string;
   href: string;
@@ -73,7 +81,7 @@ export interface StayDataType {
   reviewCount: number;
   like: boolean;
   galleryImgs: string[];
-  price: string;
+  price: number;
   listingCategory: TaxonomyType;
   maxGuests: number;
   bedrooms: number;
@@ -95,9 +103,20 @@ export interface LocationType {
 }
 //
 export interface ExperiencesDataType {
-  id: string | number;
+  starRating?: number;
+  _id: string | number;
+  description?: string;
+  quantities?: {};
+  experienceNumber?: number;
+  availableRepeat?: number[];
+  availableSpecificDays?: {};
+  userId?: string;
   author: AuthorType;
+  maxTimeLength?: number;
+  ratingCount?: number;
   date: string;
+  firstName: string;
+  lastName: string;
   href: string;
   title: string;
   featuredImage: string;
@@ -108,7 +127,7 @@ export interface ExperiencesDataType {
   reviewCount: number;
   like: boolean;
   galleryImgs: string[];
-  price: string;
+  price: number;
   listingCategory: TaxonomyType;
   maxGuests: number;
   saleOff?: string | null;
@@ -118,10 +137,22 @@ export interface ExperiencesDataType {
     lng: number;
   };
 }
+export interface BookingsDataType {
+  _id: string | number;
+  userId?: string;
+  quantity?: number;
+  date: string;
+  title: string;
+  featuredImage: string;
+  address: string;
+  reviewCount: number;
+  price: number;
+  maxGuests: number;
+}
 
 //
 export interface CarDataType {
-  id: string | number;
+  _id: string | number;
   author: AuthorType;
   date: string;
   href: string;
@@ -134,7 +165,7 @@ export interface CarDataType {
   reviewCount: number;
   like: boolean;
   galleryImgs: string[];
-  price: string;
+  price: number;
   listingCategory: TaxonomyType;
   seats: number;
   gearshift: string;

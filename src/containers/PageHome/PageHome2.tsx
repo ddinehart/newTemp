@@ -37,7 +37,7 @@ import SectionDowloadApp from "./SectionDowloadApp";
 
 const DEMO_CATS_2: TaxonomyType[] = [
   {
-    id: "1",
+    _id: "1",
     href: "/listing-stay",
     name: "Enjoy the great cold",
     taxonomy: "category",
@@ -46,7 +46,7 @@ const DEMO_CATS_2: TaxonomyType[] = [
       "https://images.pexels.com/photos/5764100/pexels-photo-5764100.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
   },
   {
-    id: "222",
+    _id: "222",
     href: "/listing-stay",
     name: "Sleep in a floating way",
     taxonomy: "category",
@@ -55,7 +55,7 @@ const DEMO_CATS_2: TaxonomyType[] = [
       "https://images.pexels.com/photos/2869499/pexels-photo-2869499.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
   },
   {
-    id: "3",
+    _id: "3",
     href: "/listing-stay",
     name: "In the billionaire's house",
     taxonomy: "category",
@@ -64,7 +64,7 @@ const DEMO_CATS_2: TaxonomyType[] = [
       "https://images.pexels.com/photos/7031413/pexels-photo-7031413.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
   },
   {
-    id: "4",
+    _id: "4",
     href: "/listing-stay",
     name: "Cool in the deep forest",
     taxonomy: "category",
@@ -73,7 +73,7 @@ const DEMO_CATS_2: TaxonomyType[] = [
       "https://images.pexels.com/photos/247532/pexels-photo-247532.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
   },
   {
-    id: "5",
+    _id: "5",
     href: "/listing-stay",
     name: "In the billionaire's house",
     taxonomy: "category",
@@ -136,21 +136,21 @@ function PageHome2() {
         <SectionHowItWork
           data={[
             {
-              id: 1,
+              _id: 1,
               img: HIW1img,
               imgDark: HIW1imgDark,
               title: "Smart search",
               desc: "Name the area or type of home you are looking for the search bar. Our app will find you the perfect match.",
             },
             {
-              id: 2,
+              _id: 2,
               img: HIW2img,
               imgDark: HIW2imgDark,
               title: "Choose property",
               desc: "From the number of options our app will provide, you can select any property that you like to explore.",
             },
             {
-              id: 3,
+              _id: 3,
               img: HIW3img,
               imgDark: HIW3imgDark,
               title: "Book you property",

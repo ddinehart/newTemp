@@ -8,7 +8,7 @@ export interface PageAddListing5Props {}
 const PageAddListing5: FC<PageAddListing5Props> = () => {
   const renderRadio = (
     name: string,
-    id: string,
+    _id: string,
     label: string,
     defaultChecked?: boolean
   ) => {
@@ -16,13 +16,13 @@ const PageAddListing5: FC<PageAddListing5Props> = () => {
       <div className="flex items-center">
         <input
           defaultChecked={defaultChecked}
-          id={id + name}
+          id={_id + name}
           name={name}
           type="radio"
           className="focus:ring-primary-500 h-6 w-6 text-primary-500 border-neutral-300 !checked:bg-primary-500 bg-transparent"
         />
         <label
-          htmlFor={id + name}
+          htmlFor={_id + name}
           className="ml-3 block text-sm font-medium text-neutral-700 dark:text-neutral-300"
         >
           {label}

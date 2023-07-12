@@ -5,18 +5,22 @@ import { FC } from "react";
 import ClearDataButton from "./ClearDataButton";
 
 export interface GuestsInputProps {
+  experienceNumber: number;
+  maxQuantity: number;
   defaultValue: {
     guestAdults?: number;
     guestChildren?: number;
     guestInfants?: number;
   };
-  onChange?: (data: GuestsInputProps["defaultValue"]) => void;
+  onChange?: (experienceNumber: number) => void;
   fieldClassName?: string;
 }
 
 const GuestsInput: FC<GuestsInputProps> = ({
   defaultValue,
   onChange,
+  experienceNumber,
+  maxQuantity,
   fieldClassName = "[ nc-hero-field-padding ]",
 }) => {
   const [guestAdultsInputValue, setGuestAdultsInputValue] = useState(
@@ -35,19 +39,19 @@ const GuestsInput: FC<GuestsInputProps> = ({
     setGuestInfantsInputValue(defaultValue.guestInfants || 0);
   }, [defaultValue]);
 
-  useEffect(() => {
-    if (onChange) {
-      onChange({
-        guestAdults: guestAdultsInputValue,
-        guestChildren: guestChildrenInputValue,
-        guestInfants: guestInfantsInputValue,
-      });
-    }
-  }, [guestAdultsInputValue, guestChildrenInputValue, guestInfantsInputValue]);
+  // useEffect(() => {
+  //   if (onChange) {
+  //     onChange({
+  //       guestAdults: guestAdultsInputValue,
+  //       guestChildren: guestChildrenInputValue,
+  //       guestInfants: guestInfantsInputValue,
+  //     });
+  //   }
+  // }, [guestAdultsInputValue, guestChildrenInputValue, guestInfantsInputValue]);
 
-  const totalGuests =
-    guestChildrenInputValue + guestAdultsInputValue + guestInfantsInputValue;
-
+  // const totalGuests =
+  //   guestChildrenInputValue + guestAdultsInputValue + guestInfantsInputValue;
+  const totalGuests = guestAdultsInputValue;
   return (
     <Popover className="flex relative [ nc-flex-1 ]">
       {({ open }) => (
@@ -74,11 +78,11 @@ const GuestsInput: FC<GuestsInputProps> = ({
               </svg>
             </div>
             <div className="flex-grow">
-              <span className="block xl:text-lg font-semibold">
-                {totalGuests || ""} Guests
+              <span className="block xl:text-sm font-semibold">
+                {experienceNumber || ""} Quantity
               </span>
               <span className="block mt-1 text-sm text-neutral-400 leading-none font-light">
-                {totalGuests ? "Guests" : "Add guests"}
+                {experienceNumber ? "Quantity" : "Add"}
               </span>
               {!!totalGuests && open && (
                 <ClearDataButton
@@ -103,14 +107,14 @@ const GuestsInput: FC<GuestsInputProps> = ({
             <Popover.Panel className="absolute right-0 z-10 w-full sm:min-w-[340px] max-w-sm bg-white dark:bg-neutral-800 top-full mt-3 py-5 sm:py-6 px-4 sm:px-8 rounded-3xl shadow-xl">
               <NcInputNumber
                 className="w-full"
-                defaultValue={guestAdultsInputValue}
-                onChange={(value) => setGuestAdultsInputValue(value)}
-                max={10}
+                defaultValue={experienceNumber}
+                onChange={(value) => {onChange(value);}}
+                max={maxQuantity}
                 min={1}
                 label="Adults"
                 desc="Ages 13 or above"
               />
-              <NcInputNumber
+              {/* <NcInputNumber
                 className="w-full mt-6"
                 defaultValue={guestChildrenInputValue}
                 onChange={(value) => setGuestChildrenInputValue(value)}
@@ -126,7 +130,7 @@ const GuestsInput: FC<GuestsInputProps> = ({
                 max={4}
                 label="Infants"
                 desc="Ages 0–2"
-              />
+              /> */}
             </Popover.Panel>
           </Transition>
         </>

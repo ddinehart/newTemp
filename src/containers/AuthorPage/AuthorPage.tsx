@@ -149,7 +149,7 @@ const AuthorPage: FC<AuthorPageProps> = ({ className = "" }) => {
                 <div className="mt-8 grid grid-cols-1 gap-6 md:gap-7 sm:grid-cols-2">
                   {DEMO_EXPERIENCES_LISTINGS.filter((_, i) => i < 4).map(
                     (stay) => (
-                      <ExperiencesCard key={stay.id} data={stay} />
+                      <ExperiencesCard key={stay._id} data={stay} />
                     )
                   )}
                 </div>

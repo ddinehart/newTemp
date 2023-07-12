@@ -27,7 +27,7 @@ const ExperiencesSearchForm: FC<ExperiencesSearchFormProps> = ({
   const [dateFocused, setDateFocused] = useState<boolean>(false);
   const [date, setDate] = useState<moment.Moment | null>(null);
   const [inputValue, setInputValue] = useState("");
-  const [guest, setGuest] = useState({});
+  const [guest, setGuest] = useState<GuestsInputProps["defaultValue"]>({});
 
   useEffect(() => {
     if (haveDefaultValue) {
@@ -58,8 +58,10 @@ const ExperiencesSearchForm: FC<ExperiencesSearchFormProps> = ({
         />
 
         <GuestsInput
+        maxQuantity={10}
+          experienceNumber={guest.guestAdults}
           defaultValue={guest}
-          onChange={(data) => setGuest(data)}
+          onChange={(data) => setGuest({...guest, guestAdults: data})}
         />
         {/* BUTTON SUBMIT OF FORM */}
         <div onClick={() => submitQuery(date, inputValue, guest)} className="px-4 py-4 lg:py-0 flex items-center justify-center">

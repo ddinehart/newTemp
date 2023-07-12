@@ -43,8 +43,8 @@ const SectionGridHasMap: FC<SectionGridHasMapProps> = () => {
           <div className="grid grid-cols-1 gap-8">
             {DEMO_EXPERIENCES.map((item) => (
               <div
-                key={item.id}
-                onMouseEnter={() => setCurrentHoverID((_) => item.id)}
+                key={item._id}
+                onMouseEnter={() => setCurrentHoverID((_) => item._id)}
                 onMouseLeave={() => setCurrentHoverID((_) => -1)}
               >
                 <ExperiencesCardH data={item} />

@@ -4,22 +4,26 @@ import { BookingsDataType, LocationType } from "data/types";
 import React, { FC, useEffect, useState } from "react";
 import ButtonPrimary from "shared/Button/ButtonPrimary";
 import NcImage from "shared/NcImage/NcImage";
+import {useHistory} from 'react-router-dom';
 
 export interface PayPageProps {
   className?: string;
   location?: LocationType;
 }
 
-const PayPage: FC<PayPageProps> = ({ className = "", location }) => {
+
+const Cancel: FC<PayPageProps> = ({ className = "", location }) => {
+
+    const history = useHistory();
 
   const [data, setData] = useState<BookingsDataType>(null);
 
 
   useEffect(() => {
     const queryParameters = new URLSearchParams(location.search)
-    axios.get('/api/booking/' + queryParameters.get('id'))
+    axios.delete('/api/booking/' + queryParameters.get('id'))
     .then((res) => {
-      setData(res.data);
+        history.push({pathname: '/listing-experiences-detail', state:{_id: queryParameters.get('experienceId'), editing:false}})
     })
   }, [])
 
@@ -95,8 +99,8 @@ const PayPage: FC<PayPageProps> = ({ className = "", location }) => {
               </svg>
 
               <div className="flex flex-col">
-                <span className="text-sm text-neutral-400">Quantity</span>
-                <span className="mt-1.5 text-lg font-semibold">{data?.quantity} Quantity</span>
+                <span className="text-sm text-neutral-400">Guests</span>
+                <span className="mt-1.5 text-lg font-semibold">3 Guests</span>
               </div>
             </div>
           </div>
@@ -148,4 +152,4 @@ const PayPage: FC<PayPageProps> = ({ className = "", location }) => {
   );
 };
 
-export default PayPage;
+export default Cancel;

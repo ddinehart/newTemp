@@ -11,6 +11,7 @@ export interface ExperiencesDateSingleInputProps {
   fieldClassName?: string;
   onFocusChange?: (focused: boolean) => void;
   className?: string;
+  isOutsideRange?: (day: moment.Moment) => boolean;
   anchorDirection?: AnchorDirectionShape;
 }
 
@@ -21,6 +22,7 @@ const ExperiencesDateSingleInput: FC<ExperiencesDateSingleInputProps> = ({
   onFocusChange,
   anchorDirection,
   className = "",
+  isOutsideRange,
   fieldClassName = "[ nc-hero-field-padding ]",
 }) => {
   const [focusedInput, setFocusedInput] = useState(defaultFocus);
@@ -98,6 +100,7 @@ const ExperiencesDateSingleInput: FC<ExperiencesDateSingleInputProps> = ({
           focused={focusedInput}
           daySize={windowSize.width > 425 ? 56 : undefined}
           orientation={"horizontal"}
+          isOutsideRange={isOutsideRange}
           onFocusChange={handleDateFocusChange}
           noBorder
           hideKeyboardShortcutsPanel

@@ -32,7 +32,7 @@ const ExperiencesCardH: FC<ExperiencesCardHProps> = ({
     reviewStart,
     reviewCount,
     author,
-    id,
+    _id,
   } = data;
 
   const renderSliderGallery = () => {
@@ -41,7 +41,7 @@ const ExperiencesCardH: FC<ExperiencesCardHProps> = ({
         <GallerySlider
           ratioClass="aspect-w-12 aspect-h-9 md:aspect-h-11"
           galleryImgs={galleryImgs}
-          uniqueID={`ExperiencesCardH_${id}`}
+          uniqueID={`ExperiencesCardH_${_id}`}
         />
         <BtnLikeIcon isLiked={like} className="absolute right-3 top-3" />
         {saleOff && <SaleOffBadge className="absolute left-3 top-3" />}

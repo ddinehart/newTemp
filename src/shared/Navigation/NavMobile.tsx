@@ -68,7 +68,7 @@ const NavMobile: React.FC<NavMobileProps> = ({
   const _renderItem = (item: NavItemType, index: number) => {
     return (
       <Disclosure
-        key={item.id}
+        key={item._id}
         as="li"
         className="text-neutral-900 dark:text-white"
       >

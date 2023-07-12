@@ -14,8 +14,8 @@ export interface NextPrevProps {
 
 const NextPrev: FC<NextPrevProps> = ({
   className = "",
-  onClickNext = () => {},
-  onClickPrev = () => {},
+  onClickNext = (e) => {e.stopPropagation()},
+  onClickPrev = (e) => {e.stopPropagation()},
   btnClassName = "w-10 h-10",
   onlyNext = false,
   onlyPrev = false,

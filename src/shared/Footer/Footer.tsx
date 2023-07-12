@@ -4,14 +4,14 @@ import { CustomLink } from "data/types";
 import React from "react";
 
 export interface WidgetFooterMenu {
-  id: string;
+  _id: string;
   title: string;
   menus: CustomLink[];
 }
 
 const widgetMenus: WidgetFooterMenu[] = [
   {
-    id: "5",
+    _id: "5",
     title: "Getting started",
     menus: [
       { href: "#", label: "Installation" },
@@ -22,7 +22,7 @@ const widgetMenus: WidgetFooterMenu[] = [
     ],
   },
   {
-    id: "1",
+    _id: "1",
     title: "Explore",
     menus: [
       { href: "#", label: "Design features" },
@@ -33,7 +33,7 @@ const widgetMenus: WidgetFooterMenu[] = [
     ],
   },
   {
-    id: "2",
+    _id: "2",
     title: "Resources",
     menus: [
       { href: "#", label: "Best practices" },
@@ -44,7 +44,7 @@ const widgetMenus: WidgetFooterMenu[] = [
     ],
   },
   {
-    id: "4",
+    _id: "4",
     title: "Community",
     menus: [
       { href: "#", label: "Discussion Forums" },

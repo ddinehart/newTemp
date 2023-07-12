@@ -4,7 +4,7 @@ import { Menu, Transition } from "@headlessui/react";
 import twFocusClass from "utils/twFocusClass";
 
 export interface NcDropDownItem {
-  id: string;
+  _id: string;
   name: string;
   icon: string;
 }
@@ -58,7 +58,7 @@ const NcDropDown: FC<NcDropDownProps> = ({
         >
           <div className="px-1 py-3 text-sm text-neutral-6000 dark:text-neutral-300">
             {data.map((item) => (
-             <Menu.Item key={item.id}>
+             <Menu.Item key={item._id}>
              {({ active }) => (
                <button
                  className={
@@ -66,7 +66,7 @@ const NcDropDown: FC<NcDropDownProps> = ({
                    twFocusClass()
                  }
                  onClick={() => onClick(item)}
-                 data-menu-item-id={item.id}
+                 data-menu-item-id={item._id}
                >
                  {!!item.icon && (
                    <i className={`${item.icon} mr-1 w-7 text-base`}></i>

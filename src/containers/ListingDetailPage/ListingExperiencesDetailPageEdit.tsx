@@ -19,7 +19,7 @@ import { useHistory } from 'react-router-dom';
 import ModalPhotos from "./ModalPhotos";
 
 import ExperiencesDateSingleInput from "components/HeroSearchForm/ExperiencesDateSingleInput";
-import { LocationType } from "data/types";
+import { LocationType, RatingDataType } from "data/types";
 import FormItem from "containers/PageAddListing1/FormItem";
 import Select from "shared/Select/Select";
 import NcInputNumber from "components/NcInputNumber/NcInputNumber";
@@ -29,6 +29,11 @@ import axios from 'axios';
 export interface ListingExperiencesDetailPageEditProps {
   className?: string;
   location?: LocationType;
+}
+
+export interface ImageFile {
+  file: File | null;
+  image: string;
 }
 
 const PHOTOS: string[] = [
@@ -52,11 +57,11 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
   location
 }) => {
   let history = useHistory();
+  let times = ['12:00 AM', '1:00 AM', '2:00 AM', '3:00 AM', '4:00 AM', '5:00 AM', '6:00 AM', '7:00 AM', '8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM', '7:00 PM', '8:00 PM', '9:00 PM', '10:00 PM','11:00 PM']
+  const [addedTimes, setAddedTimes] = useState([]);
+
   const [isOpen, setIsOpen] = useState(false);
-  const [isNew, setIsNew] = useState(false);
   const [openFocusIndex, setOpenFocusIndex] = useState(0);
-
-
   const [title, setTitle] = useState("");
 
   const [street, setStreet] = useState("");
@@ -64,7 +69,7 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
   const [state, setState] = useState("");
   const [postalCode, setPostalCode] = useState("");
 
-  const [guestNumber, setGuestNumber] = useState(4);
+  const [maxGuests, setMaxGuests] = useState(4);
   const [experienceNumber, setExperienceNumber] = useState(4);
   const [maxTimeLength, setMaxTimeLength] = useState(1);
 
@@ -74,29 +79,125 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
 
   const [buttonDisabled, setButtonDisabled] = useState(false);
 
+  const [photo1, setPhoto1] = useState<ImageFile>(null);
+  const [photo2, setPhoto2] = useState<ImageFile>(null);
+  const [photo3, setPhoto3] = useState<ImageFile>(null);
+  const [photo4, setPhoto4] = useState<ImageFile>(null);
+
+  const [monday, setMonday] = useState(false);
+  const [tuesday, setTuesday] = useState(false);
+  const [wednesday, setWednesday] = useState(false);
+  const [thursday, setThursday] = useState(false);
+  const [friday, setFriday] = useState(false);
+  const [saturday, setSaturday] = useState(false);
+  const [sunday, setSunday] = useState(false);
+
+  const [availableRepeat, setAvailableRepeat] = useState([null, null, null, null, null, null, null]);
+  const [availableSpecificDays, setAvailableSpecificDays] = useState({});
+
+  const [ratings, setRatings] = useState<RatingDataType[]>([]);
+
+
   useEffect(() => {
-    console.log(location.state.id);
+    console.log(location.state._id);
     if (location.state.editing) {
-      axios.get('/api/experience/' + location.state.id).then((res) => {
-        let { title, street, city, state, postalCode, guestNumber, experienceNumber, maxTimeLength, description, price } = res.data;
+      axios.get('/api/experience/' + location.state._id).then((res) => {
+        let { title, street, city, state, postalCode, maxGuests, experienceNumber, maxTimeLength, description, price, featuredImage, galleryImgs, availableRepeat, availableSpecificDays} = res.data;
         setTitle(title);
         setStreet(street);
         setCity(city);
         setState(state);
         setPostalCode(postalCode);
-        setGuestNumber(guestNumber);
+        setMaxGuests(maxGuests);
         setExperienceNumber(experienceNumber);
         setMaxTimeLength(maxTimeLength);
         setDescription(description);
         setPrice(price);
+        setAvailableRepeat(availableRepeat);
+        setAvailableSpecificDays(availableSpecificDays);
+        if (featuredImage) setPhoto1({file: null, image:featuredImage});
+        if (galleryImgs){ 
+          setPhoto2({file: null, image:galleryImgs[0]})
+          setPhoto3({file: null, image:galleryImgs[1]})
+          setPhoto4({file: null, image:galleryImgs[2]})
+        }
+        console.log(photo1, photo2, photo3, photo4);
       });
     }
+
+    axios.get('/api/reviews/' + location.state._id).then((res) => {
+      setRatings(res.data.reverse());
+    });
   }, [])
 
+  function addTime(time) {
+    if (addedTimes.includes(time)) {
+      setAddedTimes(addedTimes.filter((thisTime) => thisTime !== time))
+    } else {
+      setAddedTimes([...addedTimes, time]);
+    }
+  }
 
-  const [selectedDate, setSelectedDate] = useState<moment.Moment | null>(
-    moment().add(2, "days")
-  );
+  function addAvailability() {
+    if (selectedDate === null) {
+      let newAvailibility = availableRepeat;
+      for (const date in availableSpecificDays) {
+        if (moment(date).day() === 1 && monday) delete availableSpecificDays[date];
+        if (moment(date).day() === 2 && tuesday) delete availableSpecificDays[date];
+        if (moment(date).day() === 3 && wednesday) delete availableSpecificDays[date];
+        if (moment(date).day() === 4 && thursday) delete availableSpecificDays[date];
+        if (moment(date).day() === 5 && friday) delete availableSpecificDays[date];
+        if (moment(date).day() === 6 && saturday) delete availableSpecificDays[date];
+        if (moment(date).day() === 0 && sunday) delete availableSpecificDays[date];
+      }
+      if (addedTimes.length > 0) {
+        if (monday) newAvailibility = [newAvailibility[0], addedTimes, ...newAvailibility.slice(2)];
+        if (tuesday) newAvailibility = [...newAvailibility.slice(0, 2), addedTimes, ...newAvailibility.slice(3)];
+        if (wednesday) newAvailibility = [...newAvailibility.slice(0, 3), addedTimes, ...newAvailibility.slice(4)];
+        if (thursday) newAvailibility = [...newAvailibility.slice(0, 4), addedTimes, ...newAvailibility.slice(5)];
+        if (friday) newAvailibility = [...newAvailibility.slice(0, 5), addedTimes, ...newAvailibility.slice(6)];
+        if (saturday) newAvailibility = [...newAvailibility.slice(0, 6), addedTimes];
+        if (sunday) newAvailibility = [addedTimes, ...newAvailibility.slice(1)];
+      } else {
+        if (monday) newAvailibility = [newAvailibility[0], null, ...newAvailibility.slice(2)];
+        if (tuesday) newAvailibility = [...newAvailibility.slice(0, 2), null, ...newAvailibility.slice(3)];
+        if (wednesday) newAvailibility = [...newAvailibility.slice(0, 3), null, ...newAvailibility.slice(4)];
+        if (thursday) newAvailibility = [...newAvailibility.slice(0, 4), null, ...newAvailibility.slice(5)];
+        if (friday) newAvailibility = [...newAvailibility.slice(0, 5), null, ...newAvailibility.slice(6)];
+        if (saturday) newAvailibility = [...newAvailibility.slice(0, 6), null];
+        if (sunday) newAvailibility = [null, ...newAvailibility.slice(1)];
+      }
+      setAvailableRepeat(newAvailibility);
+      setMonday(false);
+      setTuesday(false);
+      setWednesday(false);
+      setThursday(false);
+      setFriday(false);
+      setSaturday(false);
+      setSunday(false);
+      setAddedTimes([]);
+    } else {
+      let newAvailibility = availableSpecificDays;
+      if (addedTimes.length > 0) newAvailibility[selectedDate.format('ll')] = addedTimes;
+      else delete newAvailibility[selectedDate.format('ll')];
+      setAvailableSpecificDays(newAvailibility);
+      setSelectedDate(null);
+      setAddedTimes([]);
+    }
+  }
+
+
+  const [selectedDate, setSelectedDate] = useState<moment.Moment | null>(null);
+
+  useEffect(() => {
+    if (selectedDate !== null) {
+      if (availableSpecificDays[selectedDate.format('ll')]) setAddedTimes(availableSpecificDays[selectedDate.format('ll')]);
+      else {
+        if (availableRepeat[selectedDate.day()] !== null) setAddedTimes(availableRepeat[selectedDate.day()])
+        else setAddedTimes([]);
+      }
+    }
+  }, [selectedDate]);
 
   const [dates, setDates] = useState<moment.Moment[]>([]);
 
@@ -110,15 +211,38 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
   }
   const windowSize = useWindowSize();
 
-  console.log(location.state);
 
-  function createNewExperience() {
+  async function createNewExperience() {
+
+    if (photo1?.image?.substring(0, 27) === "blob:http://localhost:3000/") {
+      const formData = new FormData();
+      formData.append('file', photo1.file);
+      let data = await axios.post('/api/imageUpload', formData)
+      photo1.image = data.data;
+    } if (photo2?.image?.substring(0, 27) === "blob:http://localhost:3000/") {
+      const formData = new FormData();
+      formData.append('file', photo2.file);
+      let data = await axios.post('/api/imageUpload', formData)
+      photo2.image = data.data;
+    } if (photo3?.image?.substring(0, 27) === "blob:http://localhost:3000/") {
+      const formData = new FormData();
+      formData.append('file', photo3.file);
+      let data = await axios.post('/api/imageUpload', formData)
+      photo3.image = data.data;
+    } if (photo4?.image?.substring(0, 27) === "blob:http://localhost:3000/") {
+      const formData = new FormData();
+      formData.append('file', photo4.file);
+      let data = await axios.post('/api/imageUpload', formData)
+      photo4.image = data.data;
+    }
+    // } 
     if (!buttonDisabled) {
+      let photos = [photo2?.image, photo3?.image, photo4?.image];
       setButtonDisabled(true);
       let address = city + ", " + state + " " + street + ", " + postalCode;
-      axios.post("/api/experience", {title, address, city, state, street, postalCode, guestNumber, experienceNumber, maxTimeLength, description, price, userId: location.state.id, galleryImgs:[], featuredImage:"https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pexels.com%2Fsearch%2Fhouse%2F&psig=AOvVaw3OoYYulNx_0bZGXrfEJJfC&ust=1683319350911000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCMD9tbHD3P4CFQAAAAAdAAAAABAE" })
+      axios.post("/api/experience", {title, address, city, state, street, postalCode, maxGuests, experienceNumber, maxTimeLength, description, price, userId: location.state._id, galleryImgs:photos, featuredImage:photo1?.image, availableRepeat: availableRepeat, availableSpecificDays: availableSpecificDays, quantities: {}, firstName:location.state.firstName, lastName:location.state.lastName, ratingCount:0, starRating:0, ratings:[]})
       .then((res) => {
-        history.push({pathname: '/add-listing-1', state:{id: location.state.id}})
+        history.push({pathname: '/add-listing-1', state:location.state})
       })
     }
 
@@ -206,7 +330,7 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
   const renderSection2 = () => {
     return (
       <div className="listingSection__wrap">
-        <h2 className="text-2xl font-semibold">Address of Experience</h2>
+        <h2 className="text-2xl font-semibold">Pickup Location</h2>
         <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
         {/* FORM */}
         <div className="space-y-8">
@@ -283,7 +407,7 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
               <option value="500">500</option>
             </Select>
           </FormItem> */}
-          <NcInputNumber label="Max # of guests per experience" defaultValue={guestNumber} onChange={(e) => setGuestNumber(e)} min={1} />
+          <NcInputNumber label="Max # of guests per experience" defaultValue={maxGuests} onChange={(e) => setMaxGuests(e)} min={1} />
           <NcInputNumber label="Number of Experiences per time slot" defaultValue={experienceNumber} onChange={(e) => setExperienceNumber(e)} min={1} />
           <NcInputNumber label="Minimum Length of experience in hours" defaultValue={maxTimeLength} onChange={(e) => setMaxTimeLength(e)} min={1}/>
           {/* <NcInputNumber label="Bedroom" defaultValue={4} />
@@ -456,18 +580,40 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
             it. You can always make changes after you publish. You are responsible for notifying guests if a date gets block after they have booked. 
           </span>
         </div>
+        <div className="availabilityCreator">
 
-        <div className="nc-SetYourAvailabilityData">
-          <DayPickerSingleDateController
-            onDateChange={(e) => e && handleDateChange(e)}
-            focused={false}
-            onFocusChange={console.log}
-            date={null}
-            isDayHighlighted={(day) => dates.some((d) => d.isSame(day, "day"))}
-            keepOpenOnDateSelect
-            daySize={getDaySize()}
-            initialVisibleMonth={null}
-          />
+          <div className="nc-SetYourAvailabilityData">
+            <DayPickerSingleDateController
+              onDateChange={(e) => e && selectedDate !== e ? setSelectedDate(e) : setSelectedDate(null)}
+              focused={false}
+              onFocusChange={console.log}
+              date={null}
+              isDayHighlighted={(day) => (availableRepeat[day.day()] != null || day.isSame(selectedDate, "day") || (day.format("ll") in availableSpecificDays))}
+              isOutsideRange={(day) => day.diff(moment().subtract(1, 'day')) < 0}
+              keepOpenOnDateSelect
+              daySize={getDaySize()}
+              initialVisibleMonth={null}
+            />
+          </div>
+          <div className="pickAvailability">
+            {selectedDate === null ? <div className="pickWeek">
+              <button onClick={() => setMonday(!monday)} className={`weekday ${monday ? 'weekdayHovered' : ''}`}>M</button>
+              <button onClick={() => setTuesday(!tuesday)} className={`weekday ${tuesday ? 'weekdayHovered' : ''}`}>Tu</button>
+              <button onClick={() => setWednesday(!wednesday)} className={`weekday ${wednesday ? 'weekdayHovered' : ''}`}>W</button>
+              <button onClick={() => setThursday(!thursday)} className={`weekday ${thursday ? 'weekdayHovered' : ''}`}>Th</button>
+              <button onClick={() => setFriday(!friday)} className={`weekday ${friday ? 'weekdayHovered' : ''}`}>F</button>
+              <button onClick={() => setSaturday(!saturday)} className={`weekday ${saturday ? 'weekdayHovered' : ''}`}>Sa</button>
+              <button onClick={() => setSunday(!sunday)} className={`weekday ${sunday ? 'weekdayHovered' : ''}`}>Su</button>
+            </div> : <h2 className="text-2xl font-semibold pickWeek">{selectedDate.format('ll')}</h2>}
+            {(monday || tuesday || wednesday || thursday || friday || saturday || sunday || selectedDate !== null) && 
+            <>
+            <div className= "pickTime">
+              {times.map((time) => <button onClick={() => addTime(time)} className={`hour ${addedTimes.includes(time) ? 'hourHovered' : ''}`}>{time}</button>)}
+            </div>
+            <ButtonPrimary onClick={addAvailability} className="add-availability-button">Add Availability</ButtonPrimary>
+            </>
+            }
+          </div>
         </div>
       </div>
     );
@@ -476,6 +622,7 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
   const renderSection6 = () => {
     return (
       <div className="listingSection__wrap">
+        
         {/* HEADING */}
         {/* <h2 className="text-2xl font-semibold">Reviews (23 reviews)</h2>
         <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div> */}
@@ -516,131 +663,143 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
             your property.
           </span>
         </div>
+        <header className="container 2xl:px-14 rounded-md sm:rounded-xl">
+          <div className="relative grid grid-cols-4 gap-1 sm:gap-2">
+            <div
+              className="col-span-3 row-span-3 relative rounded-md sm:rounded-xl overflow-hidden cursor-pointer"
+              onClick={() => handleOpenModal(0)}
+            >
+              <NcImage
+                containerClassName="absolute inset-0"
+                className="object-cover w-full h-full rounded-md sm:rounded-xl"
+                src={photo1 ? photo1.image : null}
+              />
+              <label
+                      htmlFor="file-upload-1"
+                      className="relative cursor-pointer  rounded-md font-medium text-primary-6000 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500 edit-upload"
+                    >
+                      {photo1 ? <></> : <span>Upload a file</span>}
+                      <input
+                        id="file-upload-1"
+                        name="file-upload-1"
+                        type="file"
+                        onChange={(e) => {
+                           setPhoto1({file:(e.target as HTMLInputElement).files[0], image:URL.createObjectURL((e.target as HTMLInputElement).files[0])});
+                          }}
+                        className="sr-only"
+                      />
+                    </label>
+              
+              
+              <div className="absolute inset-0 bg-neutral-900 bg-opacity-20 opacity-0 hover:opacity-100 transition-opacity"></div>
+            </div>
+            {PHOTOS.filter((_, i) => i >= 1 && i < 4).map((item, index) => (
+              <div
+                key={index}
+                className={`relative rounded-md sm:rounded-xl overflow-hidden ${
+                  index >= 2 ? "block" : ""
+                }`}
+              >
+                <NcImage
+                  containerClassName="aspect-w-4 aspect-h-3"
+                  className="object-cover w-full h-full rounded-md sm:rounded-xl "
+                  src={index === 0 ? photo2?.image : index === 1 ? photo3?.image : photo4?.image}
+                />
+                <label
+                      htmlFor={"file-upload-" + index + 2}
+                      className="relative cursor-pointer  rounded-md font-medium text-primary-6000 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500 edit-upload-mini"
+                    >
+                      {photo1 ? <></> : <span>Upload a file</span>}
+                      <input
+                        id={"file-upload-" + index + 2}
+                        name={"file-upload-" + index + 2}
+                        type="file"
+                        onChange={(e) => {
+                            let file = {file:(e.target as HTMLInputElement).files[0], image:URL.createObjectURL((e.target as HTMLInputElement).files[0])};
+                            if (index === 0) {
+                              if (photo1?.image) setPhoto2(file);
+                              else setPhoto1(file);
+                            } else if (index === 1) {
+                              if (photo1?.image && photo2?.image) setPhoto3(file);
+                              else if (photo1?.image) setPhoto2(file);
+                              else setPhoto1(file);
+                            } else {
+                              if (photo1?.image && photo2?.image && photo3?.image) setPhoto4(file);
+                              else if (photo1?.image && photo2?.image) setPhoto3(file);
+                              else if (photo1?.image) setPhoto2(file);
+                              else setPhoto1(file);
+                            }
+                          }}
+                        className="sr-only"
+                      />
+                    </label>
 
-        <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
-        {/* FORM */}
-        <div className="space-y-8">
-          <div>
-            <span className="text-lg font-semibold">Cover image</span>
-            <div className="mt-5 ">
-              <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-neutral-300 dark:border-neutral-6000 border-dashed rounded-md">
-                <div className="space-y-1 text-center">
-                  <svg
-                    className="mx-auto h-12 w-12 text-neutral-400"
-                    stroke="currentColor"
-                    fill="none"
-                    viewBox="0 0 48 48"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    ></path>
-                  </svg>
-                  <div className="flex text-sm text-neutral-6000 dark:text-neutral-300">
-                    <label
-                      htmlFor="file-upload"
-                      className="relative cursor-pointer  rounded-md font-medium text-primary-6000 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500"
-                    >
-                      <span>Upload a file</span>
-                      <input
-                        id="file-upload"
-                        name="file-upload"
-                        type="file"
-                        className="sr-only"
-                      />
-                    </label>
-                    <p className="pl-1">or drag and drop</p>
-                  </div>
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                    PNG, JPG, GIF up to 10MB
-                  </p>
-                </div>
+                {/* OVERLAY */}
+                <div
+                  className="absolute inset-0 bg-neutral-900 bg-opacity-20 opacity-0 hover:opacity-100 transition-opacity cursor-pointer"
+                  onClick={() => handleOpenModal(index + 1)}
+                />
               </div>
-            </div>
+            ))}
           </div>
-          {/* ----------------- */}
-          <div>
-            <span className="text-lg font-semibold">Up to 4 pictures of the place</span>
-            <div className="mt-5 ">
-              <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-neutral-300 dark:border-neutral-6000 border-dashed rounded-md">
-                <div className="space-y-1 text-center">
-                  <svg
-                    className="mx-auto h-12 w-12 text-neutral-400"
-                    stroke="currentColor"
-                    fill="none"
-                    viewBox="0 0 48 48"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    ></path>
-                  </svg>
-                  <div className="flex text-sm text-neutral-6000 dark:text-neutral-300">
-                    <label
-                      htmlFor="file-upload-2"
-                      className="relative cursor-pointer  rounded-md font-medium text-primary-6000 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500"
-                    >
-                      <span>Upload a file</span>
-                      <input
-                        id="file-upload-2"
-                        name="file-upload-2"
-                        type="file"
-                        className="sr-only"
-                      />
-                    </label>
-                    <p className="pl-1">or drag and drop</p>
-                  </div>
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                    PNG, JPG, GIF up to 10MB
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        </header>
+
+
       </div>
     );
   };
 
-  // const renderSection7 = () => {
-  //   return (
-  //     <div className="listingSection__wrap">
-  //       {/* HEADING */}
-  //       <div>
-  //         <h2 className="text-2xl font-semibold">Location</h2>
-  //         <span className="block mt-2 text-neutral-500 dark:text-neutral-400">
-  //           San Diego, CA, United States of America (SAN-San Diego Intl.)
-  //         </span>
-  //       </div>
-  //       <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
+  const renderSection7 = () => {
+    return (
+      // <div className="listingSection__wrap">
+      //   {/* HEADING */}
+      //   <div>
+      //     <h2 className="text-2xl font-semibold">Location</h2>
+      //     <span className="block mt-2 text-neutral-500 dark:text-neutral-400">
+      //       San Diego, CA, United States of America (SAN-San Diego Intl.)
+      //     </span>
+      //   </div>
+      //   <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
 
-  //       {/* MAP */}
-  //       <div className="aspect-w-5 aspect-h-5 sm:aspect-h-3">
-  //         <div className="rounded-xl overflow-hidden">
-  //           <GoogleMapReact
-  //             bootstrapURLKeys={{
-  //               key: "AIzaSyDxJaU8bLdx7sSJ8fcRdhYS1pLk8Jdvnx0",
-  //             }}
-  //             defaultZoom={15}
-  //             yesIWantToUseGoogleMapApiInternals
-  //             defaultCenter={{
-  //               lat: 55.9607277,
-  //               lng: 36.2172614,
-  //             }}
-  //           >
-  //             <LocationMarker lat={55.9607277} lng={36.2172614} />
-  //           </GoogleMapReact>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-  // };
+      //   {/* MAP */}
+      //   <div className="aspect-w-5 aspect-h-5 sm:aspect-h-3">
+      //     <div className="rounded-xl overflow-hidden">
+      //       <GoogleMapReact
+      //         bootstrapURLKeys={{
+      //           key: "AIzaSyDxJaU8bLdx7sSJ8fcRdhYS1pLk8Jdvnx0",
+      //         }}
+      //         defaultZoom={15}
+      //         yesIWantToUseGoogleMapApiInternals
+      //         defaultCenter={{
+      //           lat: 55.9607277,
+      //           lng: 36.2172614,
+      //         }}
+      //       >
+      //         <LocationMarker lat={55.9607277} lng={36.2172614} />
+      //       </GoogleMapReact>
+      //     </div>
+      //   </div>
+      // </div>
+      <div className="listingSection__wrap">
+        {/* HEADING */}
+        <h2 className="text-2xl font-semibold">Reviews ({ratings.length} {ratings.length !== 1 ? "reviews" : "review"})</h2>
+        <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
+
+        {/* comment */}
+        <div className="divide-y divide-neutral-100 dark:divide-neutral-800">
+          {ratings.map((rating) => (
+            <CommentListing data={rating} className="py-8" />
+          ))}
+          {/* <CommentListing className="py-8" />
+          <CommentListing className="py-8" />
+          <CommentListing className="py-8" /> */}
+          {ratings.length === 20 && <div className="pt-8">
+            <ButtonSecondary>View 20 more reviews</ButtonSecondary>
+          </div>}
+        </div>
+      </div>
+    );
+  };
 
   const renderSection8 = () => {
     return (
@@ -765,14 +924,14 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
             />
           </div>
           <div className="flex-1">
-            <GuestsInput
+            {/* <GuestsInput
               fieldClassName="p-5"
               defaultValue={{
                 guestAdults: 1,
-                guestChildren: 2,
+                guestChildren: 0,
                 guestInfants: 0,
               }}
-            />
+            /> */}
           </div>
         </form>
 
@@ -806,64 +965,7 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
     >
       {/* SINGLE HEADER */}
       <>
-        {/* <header className="container 2xl:px-14 rounded-md sm:rounded-xl">
-          <div className="relative grid grid-cols-4 gap-1 sm:gap-2">
-            <div
-              className="col-span-3 row-span-3 relative rounded-md sm:rounded-xl overflow-hidden cursor-pointer"
-              onClick={() => handleOpenModal(0)}
-            >
-              <NcImage
-                containerClassName="absolute inset-0"
-                className="object-cover w-full h-full rounded-md sm:rounded-xl"
-                src={PHOTOS[0]}
-              />
-              <div className="absolute inset-0 bg-neutral-900 bg-opacity-20 opacity-0 hover:opacity-100 transition-opacity"></div>
-            </div>
-            {PHOTOS.filter((_, i) => i >= 1 && i < 4).map((item, index) => (
-              <div
-                key={index}
-                className={`relative rounded-md sm:rounded-xl overflow-hidden ${
-                  index >= 2 ? "block" : ""
-                }`}
-              >
-                <NcImage
-                  containerClassName="aspect-w-4 aspect-h-3"
-                  className="object-cover w-full h-full rounded-md sm:rounded-xl "
-                  src={item || ""}
-                /> */}
-
-                {/* OVERLAY */}
-                {/* <div
-                  className="absolute inset-0 bg-neutral-900 bg-opacity-20 opacity-0 hover:opacity-100 transition-opacity cursor-pointer"
-                  onClick={() => handleOpenModal(index + 1)}
-                />
-              </div>
-            ))}
-
-            <div
-              className="absolute hidden md:flex md:items-center md:justify-center left-3 bottom-3 px-4 py-2 rounded-xl bg-neutral-100 text-neutral-500 cursor-pointer hover:bg-neutral-200 z-10"
-              onClick={() => handleOpenModal(0)}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
-                />
-              </svg>
-              <span className="ml-2 text-neutral-800 text-sm font-medium">
-                Show all photos
-              </span>
-            </div>
-          </div>
-        </header> */}
+        
         {/* MODAL PHOTOS */}
         {/* <ModalPhotos
           imgs={PHOTOS}
@@ -881,14 +983,17 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
         <h2 className="my-20 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
           {location.state.editing ? "Edit Experience" : "Create Experience"}
         </h2>
-          {renderSection1()}
-          {renderSection2()}
-          {renderSection3()}
-          {renderSectionCheckIndate()}
-          {renderSection6()}
+          {renderSection1()} {/* TITLE */}
+          {renderSection6()} {/* IMAGES */}
+          {renderSectionCheckIndate()} {/* DESCRIPTION */}
+          {renderSection2()} {/* LOCATION */}
+          
+          
           {/* {renderSection7()} */}
-          {renderSection8()}
-          {renderSection5()}
+          {renderSection3()} {/* SIZE OF EXPERIENCE */}
+          {renderSection5()} {/* AVAILABILITY */}
+          {renderSection8()} {/* PRICE */}
+          {renderSection7()} {/* REVIEWS */}
           {location.state.editing ? <ButtonPrimary onClick={createNewExperience} className="float-right">Update Experience</ButtonPrimary> :
           <ButtonPrimary onClick={createNewExperience} className="float-right">Create Experience</ButtonPrimary>}
         </div>

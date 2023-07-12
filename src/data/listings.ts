@@ -17,15 +17,17 @@ const DEMO_EXPERIENCES_LISTINGS = __experiencesListing.map(
   (post, index): ExperiencesDataType => {
     //  ##########  GET CATEGORY BY CAT ID ######## //
     const category = DEMO_EXPERIENCES_CATEGORIES.filter(
-      (taxonomy) => taxonomy.id === post.listingCategoryId
+      (taxonomy) => taxonomy._id === post.listingCategoryId
     )[0];
 
     return {
       ...post,
-      id: `experiencesListing_${index}_`,
+      _id: `experiencesListing_${index}_`,
+      firstName: 'random',
+      lastName: 'person',
       saleOff: !index ? "-20% today" : post.saleOff,
       isAds: !index ? true : post.isAds,
-      author: DEMO_AUTHORS.filter((user) => user.id === post.authorId)[0],
+      author: DEMO_AUTHORS.filter((user) => user._id === post.authorId)[0],
       listingCategory: category,
     };
   }

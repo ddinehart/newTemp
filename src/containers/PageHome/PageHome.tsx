@@ -15,7 +15,7 @@ import { Helmet } from "react-helmet";
 
 const DEMO_CATS: TaxonomyType[] = [
   {
-    id: "1",
+    _id: "1",
     href: "/listing-stay",
     name: "New Yourk",
     taxonomy: "category",
@@ -24,7 +24,7 @@ const DEMO_CATS: TaxonomyType[] = [
       "https://images.pexels.com/photos/64271/queen-of-liberty-statue-of-liberty-new-york-liberty-statue-64271.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
   },
   {
-    id: "2",
+    _id: "2",
     href: "/listing-stay",
     name: "Singapore",
     taxonomy: "category",
@@ -33,7 +33,7 @@ const DEMO_CATS: TaxonomyType[] = [
       "https://images.pexels.com/photos/7740160/pexels-photo-7740160.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
   },
   {
-    id: "2",
+    _id: "2",
     href: "/listing-stay",
     name: "Paris",
     taxonomy: "category",
@@ -42,7 +42,7 @@ const DEMO_CATS: TaxonomyType[] = [
       "https://images.pexels.com/photos/739407/pexels-photo-739407.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
   },
   {
-    id: "2",
+    _id: "2",
     href: "/listing-stay",
     name: "London",
     taxonomy: "category",
@@ -51,7 +51,7 @@ const DEMO_CATS: TaxonomyType[] = [
       "https://images.pexels.com/photos/460672/pexels-photo-460672.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
   },
   {
-    id: "2",
+    _id: "2",
     href: "/listing-stay",
     name: "Tokyo",
     taxonomy: "category",
@@ -60,7 +60,7 @@ const DEMO_CATS: TaxonomyType[] = [
       "https://images.pexels.com/photos/4151484/pexels-photo-4151484.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
   },
   {
-    id: "2",
+    _id: "2",
     href: "/listing-stay",
     name: "Maldives",
     taxonomy: "category",
@@ -72,7 +72,7 @@ const DEMO_CATS: TaxonomyType[] = [
 
 const DEMO_CATS_2: TaxonomyType[] = [
   {
-    id: "1",
+    _id: "1",
     href: "/listing-stay",
     name: "Enjoy the great cold",
     taxonomy: "category",
@@ -81,7 +81,7 @@ const DEMO_CATS_2: TaxonomyType[] = [
       "https://images.pexels.com/photos/5764100/pexels-photo-5764100.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
   },
   {
-    id: "222",
+    _id: "222",
     href: "/listing-stay",
     name: "Sleep in a floating way",
     taxonomy: "category",
@@ -90,7 +90,7 @@ const DEMO_CATS_2: TaxonomyType[] = [
       "https://images.pexels.com/photos/2869499/pexels-photo-2869499.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
   },
   {
-    id: "3",
+    _id: "3",
     href: "/listing-stay",
     name: "In the billionaire's house",
     taxonomy: "category",
@@ -99,7 +99,7 @@ const DEMO_CATS_2: TaxonomyType[] = [
       "https://images.pexels.com/photos/7031413/pexels-photo-7031413.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
   },
   {
-    id: "4",
+    _id: "4",
     href: "/listing-stay",
     name: "Cool in the deep forest",
     taxonomy: "category",
@@ -108,7 +108,7 @@ const DEMO_CATS_2: TaxonomyType[] = [
       "https://images.pexels.com/photos/247532/pexels-photo-247532.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
   },
   {
-    id: "5",
+    _id: "5",
     href: "/listing-stay",
     name: "In the billionaire's house",
     taxonomy: "category",

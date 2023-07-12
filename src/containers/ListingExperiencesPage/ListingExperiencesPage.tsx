@@ -24,7 +24,8 @@ const ListingExperiencesPage: FC<ListingExperiencesPageProps> = ({
   useEffect(() => {
     fetch('/api/experiences/all/8')
     .then(response => response.json())
-    .then(data => setData(data))
+    .then(data => {setData(data);
+    console.log(data)})
     .catch(error => console.error(error));
   }, [])
   

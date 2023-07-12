@@ -12,32 +12,32 @@ import { Fragment } from "react";
 
 export const headerCurrency = [
   {
-    id: "EUR",
+    _id: "EUR",
     name: "EUR",
     href: "##",
     icon: CurrencyEuroIcon,
     active: true,
   },
   {
-    id: "USD",
+    _id: "USD",
     name: "USD",
     href: "##",
     icon: CurrencyDollarIcon,
   },
   {
-    id: "GBF",
+    _id: "GBF",
     name: "GBF",
     href: "##",
     icon: CurrencyBangladeshiIcon,
   },
   {
-    id: "SAR",
+    _id: "SAR",
     name: "SAR",
     href: "##",
     icon: CurrencyPoundIcon,
   },
   {
-    id: "QAR",
+    _id: "QAR",
     name: "QAR",
     href: "##",
     icon: CurrencyRupeeIcon,

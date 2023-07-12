@@ -15,15 +15,16 @@ export interface MainNav1Props {
 const MainNav1: FC<MainNav1Props> = ({ isTop }) => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userID, setUserId] = useState("");
+  const [user, setUser] = useState("");
 
   useEffect(() => {
     axios.get('/api/loggedIn')
     .then((res) => {
-      if (res.data.id !== 'invalid') {
-        console.log(res.data.id);
+      console.log(res.data);
+      if (res.data._id !== 'invalid') {
+        console.log(res.data);
         setIsLoggedIn(true);
-        setUserId(res.data.id);
+        setUser(res.data);
       }
     })
     .catch((err) => console.log(err));
@@ -51,7 +52,7 @@ const MainNav1: FC<MainNav1Props> = ({ isTop }) => {
             <SwitchDarkMode />
             <SearchDropdown />
             <div className="px-1" />
-            {!isLoggedIn ? <ButtonPrimary href="/login">Login</ButtonPrimary> : <> <Link to={{pathname: '/add-listing-1', state: {id:userID}}}><ButtonPrimary>My Experiences</ButtonPrimary></Link><Link to={{pathname: '/'}}><ButtonPrimary onClick={logout}>Logout</ButtonPrimary></Link></>}
+            {!isLoggedIn ? <ButtonPrimary href="/login">Login</ButtonPrimary> : <> <Link to={{pathname: '/add-listing-1', state: user}}><ButtonPrimary>My Experiences</ButtonPrimary></Link><Link to={{pathname: '/'}}><ButtonPrimary onClick={logout}>Logout</ButtonPrimary></Link></>}
           </div>
           <div className="flex items-center xl:hidden">
             <SwitchDarkMode />

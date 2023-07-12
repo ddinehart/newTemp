@@ -1,4 +1,6 @@
 import { StarIcon } from "@heroicons/react/solid";
+import { StarIcon as StarIconClear } from "@heroicons/react/outline";
+import { RatingDataType } from "data/types";
 import React, { FC } from "react";
 import Avatar from "shared/Avatar/Avatar";
 
@@ -12,7 +14,7 @@ interface CommentListingDataType {
 
 export interface CommentListingProps {
   className?: string;
-  data?: CommentListingDataType;
+  data?: RatingDataType;
   hasListingTitle?: boolean;
 }
 
@@ -26,7 +28,7 @@ const DEMO_DATA: CommentListingDataType = {
 
 const CommentListing: FC<CommentListingProps> = ({
   className = "",
-  data = DEMO_DATA,
+  data,
   hasListingTitle,
 }) => {
   return (
@@ -34,14 +36,14 @@ const CommentListing: FC<CommentListingProps> = ({
       className={`nc-CommentListing flex space-x-4 ${className}`}
       data-nc-id="CommentListing"
     >
-      <div className="pt-0.5">
+      {/* <div className="pt-0.5">
         <Avatar
           sizeClass="h-10 w-10 text-lg"
           radius="rounded-full"
           userName={data.name}
           imgUrl={data.avatar}
         />
-      </div>
+      </div> */}
       <div className="flex-grow">
         <div className="flex justify-between space-x-3">
           <div className="flex flex-col">
@@ -62,14 +64,14 @@ const CommentListing: FC<CommentListingProps> = ({
           </div>
           <div className="flex text-yellow-500">
             <StarIcon className="w-4 h-4" />
-            <StarIcon className="w-4 h-4" />
-            <StarIcon className="w-4 h-4" />
-            <StarIcon className="w-4 h-4" />
-            <StarIcon className="w-4 h-4" />
+            {data.rating > 1 ? <StarIcon className="w-4 h-4" /> : <StarIconClear className="w-4 h-4" />}
+            {data.rating > 2 ? <StarIcon className="w-4 h-4" /> : <StarIconClear className="w-4 h-4" />}
+            {data.rating > 3 ? <StarIcon className="w-4 h-4" /> : <StarIconClear className="w-4 h-4" />}
+            {data.rating > 4 ? <StarIcon className="w-4 h-4" /> : <StarIconClear className="w-4 h-4" />}
           </div>
         </div>
         <span className="block mt-3 text-neutral-6000 dark:text-neutral-300">
-          {data.comment}
+          {data.thoughts}
         </span>
       </div>
     </div>

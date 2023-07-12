@@ -9,7 +9,7 @@ import VectorImg from "images/VectorHIW.svg";
 export interface SectionHowItWorkProps {
   className?: string;
   data?: {
-    id: number;
+    _id: number;
     title: string;
     desc: string;
     img: string;
@@ -19,19 +19,19 @@ export interface SectionHowItWorkProps {
 
 const DEMO_DATA: SectionHowItWorkProps["data"] = [
   {
-    id: 1,
+    _id: 1,
     img: HIW1img,
     title: "Book & relax",
     desc: "Let each trip be an inspirational journey, each room a peaceful space",
   },
   {
-    id: 2,
+    _id: 2,
     img: HIW2img,
     title: "Smart checklist",
     desc: "Let each trip be an inspirational journey, each room a peaceful space",
   },
   {
-    id: 3,
+    _id: 3,
     img: HIW3img,
     title: "Save more",
     desc: "Let each trip be an inspirational journey, each room a peaceful space",
@@ -58,7 +58,7 @@ const SectionHowItWork: FC<SectionHowItWorkProps> = ({
         />
         {data.map((item) => (
           <div
-            key={item.id}
+            key={item._id}
             className="relative flex flex-col items-center max-w-xs mx-auto"
           >
             {item.imgDark ? (

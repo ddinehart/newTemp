@@ -5,7 +5,7 @@ import NcPlayIcon2 from "shared/NcPlayIcon2/NcPlayIcon2";
 import React, { FC, useState } from "react";
 
 export interface VideoType {
-  id: string;
+  _id: string;
   title: string;
   thumbnail: string;
 }
@@ -17,31 +17,31 @@ export interface SectionVideosProps {
 
 const VIDEOS_DEMO: VideoType[] = [
   {
-    id: "NcRifDitRnU",
+    _id: "NcRifDitRnU",
     title: "Magical Scotland - 4K Scenic Relaxation Film with Calming Music",
     thumbnail:
       "https://images.pexels.com/photos/131423/pexels-photo-131423.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
   },
   {
-    id: "a5V6gdu5ih8",
+    _id: "a5V6gdu5ih8",
     title: "Magical Scotland - 4K Scenic Relaxation Film with Calming Music",
     thumbnail:
       "https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
   },
   {
-    id: "MuB7HHeuNbc",
+    _id: "MuB7HHeuNbc",
     title: "Magical Scotland - 4K Scenic Relaxation Film with Calming Music",
     thumbnail:
       "https://images.pexels.com/photos/1660995/pexels-photo-1660995.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
   },
   {
-    id: "eEaZvEZye84",
+    _id: "eEaZvEZye84",
     title: "Magical Scotland - 4K Scenic Relaxation Film with Calming Music",
     thumbnail:
       "https://images.pexels.com/photos/4983184/pexels-photo-4983184.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
   },
   {
-    id: "EuDJZDaSP0Q",
+    _id: "EuDJZDaSP0Q",
     title: "Magical Scotland - 4K Scenic Relaxation Film with Calming Music",
     thumbnail:
       "https://images.pexels.com/photos/2549018/pexels-photo-2549018.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
@@ -64,7 +64,7 @@ const SectionVideos: FC<SectionVideosProps> = ({
       >
         {isPlay ? (
           <iframe
-            src={`https://www.youtube.com/embed/${video.id}?autoplay=1`}
+            src={`https://www.youtube.com/embed/${video._id}?autoplay=1`}
             title={video.title}
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

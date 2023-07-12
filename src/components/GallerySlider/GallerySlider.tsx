@@ -77,7 +77,7 @@ const GallerySlider: FC<GallerySliderProps> = ({
   };
 
   return (
-    <div className={`nc-GallerySlider ${className}`} data-nc-id="GallerySlider">
+    <div className={`nc-GallerySlider ${className}`} onClick={() => console.log("CLICKED")} data-nc-id="GallerySlider">
       {renderSliderGallery()}
     </div>
   );

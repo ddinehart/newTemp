@@ -31,11 +31,11 @@ const SectionGridAuthorBox: FC<SectionGridAuthorBoxProps> = ({
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-8 ">
         {authors.map((author, index) =>
           boxCard === "box2" ? (
-            <CardAuthorBox2 key={author.id} author={author} />
+            <CardAuthorBox2 key={author._id} author={author} />
           ) : (
             <CardAuthorBox
               index={index < 3 ? index + 1 : undefined}
-              key={author.id}
+              key={author._id}
               author={author}
             />
           )
