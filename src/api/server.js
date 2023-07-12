@@ -3,15 +3,25 @@ const bcrypt = require('bcrypt');
 const express = require('express');
 const app = express();
 const DB = require('./experiencesDB.js');
-const AWS = require('aws-sdk');
+const bodyParser = require('body-parser');
+const {S3Client , PutObjectCommand} = require('@aws-sdk/client-s3');
 const multer = require('multer');
-const s3 = new AWS.S3();
 
 const upload = multer();
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-const {BUCKET_NAME, IAM_USER_KEY, IAM_USER_SECRET} = process.env;
+const {IAM_USER_KEY, IAM_USER_SECRET, REGION, BUCKET} = process.env;
+console.log(BUCKET);
+
+const s3 = new S3Client({
+  region:REGION,
+  credentials: {
+    accessKeyId:IAM_USER_KEY,
+    secretAccessKey: IAM_USER_SECRET,
+  },
+});
+
 
 const authCookieName = '_id';
 
@@ -31,7 +41,6 @@ var apiRouter = express.Router();
 app.use(`/api`, apiRouter);
 
 apiRouter.post('/create-checkout-session', async (req, res) => {
-  console.log(req.body);
   const session = await stripe.checkout.sessions.create({
     line_items: [
       {
@@ -42,31 +51,68 @@ apiRouter.post('/create-checkout-session', async (req, res) => {
         },
         unit_amount: parseInt(req.body.price * 100),
       },
-      quantity: 1
+      quantity: req.body.quantity
     }
     ],
 
     mode:"payment",
-    success_url: `${process.env.CLIENT_URL}/pay-done?id=${req.body.id}`,
-    cancel_url: `${process.env.CLIENT_URL}`
+    success_url: `${process.env.CLIENT_URL}/pay-done?id=${req.body._id}`,
+    cancel_url: `${process.env.CLIENT_URL}/cancel?id=${req.body._id}?experienceId=${req.body.experienceId}`
   })
+  console.log(session);
   res.send({url: session.url});
 })
 
+// const fulfillOrder = (lineItems) => {
+//   // TODO: fill me in
+//   console.log("Fulfilling order", lineItems);
+// }
+
+// app.post('/webhook', bodyParser.raw({type: 'application/json'}), async (request, response) => {
+//   const payload = request.body;
+//   const sig = request.headers['stripe-signature'];
+
+//   let event;
+
+//   try {
+//     event = stripe.webhooks.constructEvent(payload, sig, endpointSecret);
+//   } catch (err) {
+//     return response.status(400).send(`Webhook Error: ${err.message}`);
+//   }
+
+//   // Handle the checkout.session.completed event
+//   if (event.type === 'checkout.session.completed') {
+//     console.log("IT HAS BEEN COMPLETED");
+//     // Retrieve the session. If you require line items in the response, you may include them by expanding line_items.
+//     const sessionWithLineItems = await stripe.checkout.sessions.retrieve(
+//       event.data.object.id,
+//       {
+//         expand: ['line_items'],
+//       }
+//     );
+//     const lineItems = sessionWithLineItems.line_items;
+
+//     // Fulfill the purchase...
+//     fulfillOrder(lineItems);
+//   }
+
+//   response.status(200).end();
+// });
+
 apiRouter.post('/imageUpload', upload.single('file'), async (req, res) => {
-  await s3
-  .putObject({
-   Body: req.file.buffer,
-   Bucket: "fisexepriences",
-   Key: req.file.originalname
-  })
-  .promise();
-  const url = s3.getSignedUrl('getObject', {
-    Bucket: "fisexepriences",
-    Key: req.file.originalname,
-    Expires: 3600 // Optional: specify the expiration time for the URL
-  });
-  res.send(url);
+  
+  const params = {
+    Bucket: BUCKET,
+    Key: req.cookies._id + req.file.originalname,
+    Body: req.file.buffer,
+    ContentType: req.file.mimetype,
+  }
+
+  const command = new PutObjectCommand(params);
+
+  await s3.send(command);
+  
+    res.send(`https://${BUCKET}.s3.${REGION}.amazonaws.com/${req.cookies._id + req.file.originalname}`);
 })
 
 // GetScores
@@ -76,65 +122,69 @@ apiRouter.get('/experiences/all/:limit', async (req, res) => {
   res.send(scores);
 });
 
-apiRouter.get('/experiences/:id', async (req, res) => {
-  const experiences = await DB.getUserExperiences(req.params.id);
+apiRouter.get('/experiences/:_id', async (req, res) => {
+  const experiences = await DB.getUserExperiences(req.params._id);
   res.send(experiences);
 })
 
-apiRouter.get('/experience/:id', async (req, res) => {
-  const experiences = await DB.getExperience(req.params.id);
+apiRouter.get('/experience/:_id', async (req, res) => {
+  const experiences = await DB.getExperience(req.params._id);
   res.send(experiences);
 })
 
-apiRouter.put('/experience/:id', async (req, res) => {
+apiRouter.put('/experience/:_id', async (req, res) => {
   DB.updateExpereince(req.body);
 })
 
 // SubmitScore
 apiRouter.post('/experience', async (req, res) => {
+  console.log(req.body);
   DB.addExperience(req.body);
   res.sendStatus(200);
 });
 
-apiRouter.delete('/experience/:id', async (req, res) => {
-    DB.deleteExperience(req.params.id);
+apiRouter.delete('/experience/:_id', async (req, res) => {
+    DB.deleteExperience(req.params._id);
     res.sendStatus(200);
 })
 
 apiRouter.post('/booking', async (req,res) => {
+  await DB.updateQuantities(req.body.experienceId, req.body.newQuantities);
+  req.body.price *= req.body.quantity;
   let newBooking = await DB.createBooking(req.body);
   res.send(newBooking);
 })
 
-apiRouter.get('/booking/:id', async (req,res) => {
-  let newBooking = await DB.getBooking(req.params.id);
+apiRouter.get('/booking/:_id', async (req,res) => {
+  let newBooking = await DB.getBooking(req.params._id);
   res.send(newBooking);
 })
-apiRouter.get('/bookings/:id', async (req, res) => {
-  let bookings = await DB.getBookings(req.params.id);
+apiRouter.get('/bookings/:_id', async (req, res) => {
+  let bookings = await DB.getBookings(req.params._id);
   res.send(bookings);
 })
 
 apiRouter.get('/loggedIn', async (req, res) => {
   const token = req?.cookies._id
-  if (token) res.send({loggedIn: true, id:req.cookies._id});
+  const user = await DB.getUserByToken(token);
+  if (token) res.send({loggedIn: true, ...user});
   else res.send({loggedIn: false});
 });
 
-apiRouter.get('/oAuth/:email', async (req, res) => {
-  const user = await DB.getUser(req.params.email);
+apiRouter.post('/oAuth', async (req, res) => {
+  const user = await DB.getUser(req.body.email);
   if (user) {
-    setAuthCookie(res, user._id);
-    res.send({ id: user._id });
+    setAuthCookie(res, {id: user._id, name:req.body.firstName + " " + req.body.lastName});
+    res.send({ _id: user._id });
     return;
   } else {
-    const user = await DB.createUser(req.params);
+    const user = await DB.createUser(req.body);
 
     // Set the cookie
     setAuthCookie(res, user._id.toString());
 
     res.send({
-      id: user._id,
+      _id: user._id,
     });
   }
 })
@@ -144,7 +194,7 @@ apiRouter.post('/login', async (req, res) => {
   if (user) {
     if (await bcrypt.compare(req.body.password, user.password)) {
       setAuthCookie(res, user._id.toString());
-      res.send({ id: user._id });
+      res.send({ _id: user._id });
       return;
     }
   }
@@ -161,7 +211,7 @@ apiRouter.post('/register', async (req, res) => {
     setAuthCookie(res, user._id.toString());
 
     res.send({
-      id: user._id,
+      _id: user._id,
     });
   }
 });
@@ -171,6 +221,10 @@ apiRouter.delete('/logout', (_req, res) => {
   res.status(204).end();
 });
 
+apiRouter.post('/review/:_id/:ratingCount/:starRating', async (req, res) => {
+  let reviewId = await DB.addReview(req.body, req.params._id, req.params.ratingCount, req.params.starRating);
+  res.send(reviewId);
+})
 // Return the application's default page if the path is unknown
 app.use((req, res) => {
   res.sendFile('index.html', {root: 'public'});

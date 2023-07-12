@@ -69,7 +69,7 @@
 
 //     try {
 //         const result = await db.collection('experiences').insertOne(newExperience)
-//         newExperience.id = result.insertedId
+//         newExperience._id = result.insertedId
 //     }catch (error) {
 //         client.close();
 //         res.status(500).json({message: 'storing failed'})
@@ -115,7 +115,7 @@ experienceRoutes.route("/experience").get(function (req, res) {
 // This section will help you get a single experience by id
 experienceRoutes.route("/experience/:id").get(function (req, res) {
   let db_connect = dbo.getDb();
-  let myquery = { _id: ObjectId(req.params.id) };
+  let myquery = { _id: ObjectId(req.params._id) };
   db_connect.collection("experiences").findOne(myquery, function (err, result) {
     if (err) throw err;
     res.json(result);
@@ -126,7 +126,7 @@ experienceRoutes.route("/experience/:id").get(function (req, res) {
 experienceRoutes.route("/experience/add").post(function (req, response) {
   let db_connect = dbo.getDb();
   let myobj = {
-    id: "da39f21a-8af8-401a-93dd-4371c518f9cf",
+    _id: "da39f21a-8af8-401a-93dd-4371c518f9cf",
     authorId: 4,
     date: "May 20, 2022",
     href: "/listing-experiences-detail",
@@ -160,7 +160,7 @@ experienceRoutes.route("/experience/add").post(function (req, response) {
 // This section will help you update a experience by id.
 experienceRoutes.route("/update/:id").post(function (req, response) {
   let db_connect = dbo.getDb();
-  let myquery = { _id: ObjectId(req.params.id) };
+  let myquery = { _id: ObjectId(req.params._id) };
   let newvalues = {
     $set: {
       name: req.body.name,
@@ -180,7 +180,7 @@ experienceRoutes.route("/update/:id").post(function (req, response) {
 // This section will help you delete a experience
 experienceRoutes.route("/:id").delete((req, response) => {
   let db_connect = dbo.getDb();
-  let myquery = { _id: ObjectId(req.params.id) };
+  let myquery = { _id: ObjectId(req.params._id) };
   db_connect.collection("experiences").deleteOne(myquery, function (err, obj) {
     if (err) throw err;
     console.log("1 document deleted");
