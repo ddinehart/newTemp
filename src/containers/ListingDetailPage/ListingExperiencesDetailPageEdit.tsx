@@ -124,10 +124,11 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
         console.log(photo1, photo2, photo3, photo4);
       });
     }
-
-    axios.get('/api/reviews/' + location.state._id).then((res) => {
-      setRatings(res.data.reverse());
-    });
+    if (location.state.editing === true) {
+      axios.get('/api/reviews/' + location.state._id).then((res) => {
+        setRatings(res.data.reverse());
+      });
+    }
   }, [])
 
   function addTime(time) {
@@ -993,7 +994,7 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
           {renderSection3()} {/* SIZE OF EXPERIENCE */}
           {renderSection5()} {/* AVAILABILITY */}
           {renderSection8()} {/* PRICE */}
-          {renderSection7()} {/* REVIEWS */}
+          {location.state.editing && renderSection7()} {/* REVIEWS */}
           {location.state.editing ? <ButtonPrimary onClick={createNewExperience} className="float-right">Update Experience</ButtonPrimary> :
           <ButtonPrimary onClick={createNewExperience} className="float-right">Create Experience</ButtonPrimary>}
         </div>

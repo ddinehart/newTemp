@@ -21,7 +21,7 @@ const MainNav1: FC<MainNav1Props> = ({ isTop }) => {
     axios.get('/api/loggedIn')
     .then((res) => {
       console.log(res.data);
-      if (res.data._id !== 'invalid') {
+      if (res.data.loggedIn) {
         console.log(res.data);
         setIsLoggedIn(true);
         setUser(res.data);
