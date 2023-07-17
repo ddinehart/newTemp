@@ -72,6 +72,7 @@ async function getBookings(_id) {
 }
 
 function getUserByToken(token) {
+  console.log(token);
   return userCollection.findOne({ _id: new ObjectId(token) });
 }
 
@@ -82,5 +83,9 @@ async function addReview(review, _id, ratingCount, starRating) {
   else await experienceCollection.updateOne({ _id: new ObjectId(_id) }, { $push: { ratings: review }, $set: { ratingCount: ratingCount + 1, starRating: (((starRating * ratingCount) + review.rating) / (ratingCount + 1)).toFixed(1)}});
 }
 
+async function getReviews(_id) {
+  let experience = await experienceCollection.findOne({ _id: new ObjectId(_id) });
+  return experience.ratings;
+}
 
-module.exports = { addExperience, getExperiences, deleteExperience, getUser, createUser, getUserByToken, getUserExperiences, getExperience, createBooking, getBooking, getBookings, addReview, updateQuantities };
+module.exports = { addExperience, getExperiences, deleteExperience, getUser, createUser, getUserByToken, getUserExperiences, getExperience, createBooking, getBooking, getBookings, addReview, updateQuantities, getReviews };

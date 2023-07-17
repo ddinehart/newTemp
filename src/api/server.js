@@ -166,8 +166,10 @@ apiRouter.get('/bookings/:_id', async (req, res) => {
 
 apiRouter.get('/loggedIn', async (req, res) => {
   const token = req?.cookies._id
-  const user = await DB.getUserByToken(token);
-  if (token) res.send({loggedIn: true, ...user});
+  if (token !== "invalid") {
+    const user = await DB.getUserByToken(token);
+    res.send({loggedIn: true, ...user});
+  }
   else res.send({loggedIn: false});
 });
 
@@ -225,6 +227,11 @@ apiRouter.post('/review/:_id/:ratingCount/:starRating', async (req, res) => {
   let reviewId = await DB.addReview(req.body, req.params._id, req.params.ratingCount, req.params.starRating);
   res.send(reviewId);
 })
+
+apiRouter.get('/reviews/:_id', async (req, res) => {
+  let reviews = await DB.getReviews(req.params._id);
+  res.send(reviews);
+});
 // Return the application's default page if the path is unknown
 app.use((req, res) => {
   res.sendFile('index.html', {root: 'public'});
