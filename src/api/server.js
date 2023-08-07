@@ -6,13 +6,13 @@ const DB = require('./experiencesDB.js');
 const bodyParser = require('body-parser');
 const {S3Client , PutObjectCommand} = require('@aws-sdk/client-s3');
 const multer = require('multer');
+const uuid = require('uuid');
 
 const upload = multer();
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-const {IAM_USER_KEY, IAM_USER_SECRET, REGION, BUCKET} = process.env;
-console.log(BUCKET);
+const {IAM_USER_KEY, IAM_USER_SECRET, REGION, BUCKET, WEBHOOK_KEY} = process.env;
 
 const s3 = new S3Client({
   region:REGION,
@@ -27,8 +27,50 @@ const authCookieName = '_id';
 
 // The service port. In production the application is statically hosted by the service on the same port.
 const port = process.argv.length > 2 ? process.argv[2] : 8080;
-
+var apiRouter = express.Router();
 // JSON body parsing using built-in middleware
+
+apiRouter.post('/webhook', bodyParser.raw({type: 'application/json'}), async (request, response) => {
+  console.log("WEBHOOK");
+  const sig = request.headers['stripe-signature'];
+
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(request.rawBody, sig, WEBHOOK_KEY);
+  } catch (err) {
+    console.log(err.message)
+    response.status(400).send(`Webhook Error: ${err.message}`);
+    return;
+  }
+  console.log(event);
+
+  // Handle the event
+  switch (event.type) {
+    case 'checkout.session.completed':
+      const theBooking = JSON.parse(event.data.object.metadata.booking);
+      // Then define and call a function to handle the event payment_intent.succeeded
+      await DB.updateQuantities(theBooking.experienceId, theBooking.newQuantities);
+      theBooking.price *= theBooking.quantity;
+      await DB.createBooking(theBooking);
+      break;
+    // ... handle other event types
+    default:
+      console.log(`Unhandled event type ${event.type}`);
+  }
+
+  // Return a 200 response to acknowledge receipt of the event
+  response.send();
+});
+
+app.use(
+  bodyParser.json({
+      verify: function(req, res, buf) {
+          req.rawBody = buf;
+      }
+  })
+);
+
+
 app.use(express.json());
 
 app.use(cookieParser());
@@ -37,30 +79,39 @@ app.use(cookieParser());
 app.use(express.static('public'));
 
 // Router for service endpoints
-var apiRouter = express.Router();
 app.use(`/api`, apiRouter);
 
-apiRouter.post('/create-checkout-session', async (req, res) => {
-  const session = await stripe.checkout.sessions.create({
-    line_items: [
-      {
-      price_data: {
-        currency: "usd",
-        product_data: {
-          name: req.body.title,
-        },
-        unit_amount: parseInt(req.body.price * 100),
-      },
-      quantity: req.body.quantity
-    }
-    ],
 
-    mode:"payment",
-    success_url: `${process.env.CLIENT_URL}/pay-done?id=${req.body._id}`,
-    cancel_url: `${process.env.CLIENT_URL}/cancel?id=${req.body._id}?experienceId=${req.body.experienceId}`
-  })
-  console.log(session);
-  res.send({url: session.url});
+apiRouter.post('/create-checkout-session', async (req, res) => {
+  try {
+
+    let bookingId = uuid.v4();
+    const session = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: req.body.title,
+          },
+          unit_amount: parseInt(req.body.price * 100),
+        },
+        quantity: req.body.quantity
+      }
+      ],
+
+      mode:"payment",
+      metadata: {
+        booking: JSON.stringify({...req.body, _id:bookingId})
+      },
+      success_url: `${process.env.CLIENT_URL}/pay-done?id=${bookingId}`,
+      cancel_url: `${process.env.CLIENT_URL}/cancel?id=${req.body._id}?experienceId=${req.body.experienceId}`
+    })
+    res.send({url: session.url});
+  } catch (error) {
+    console.log(error);
+    res.send({url: "/"});
+  }
 })
 
 // const fulfillOrder = (lineItems) => {
@@ -100,10 +151,9 @@ apiRouter.post('/create-checkout-session', async (req, res) => {
 // });
 
 apiRouter.post('/imageUpload', upload.single('file'), async (req, res) => {
-  
-  const params = {
+  try {const params = {
     Bucket: BUCKET,
-    Key: req.cookies._id + req.file.originalname,
+    Key: req.cookies._id.id + req.file.originalname,
     Body: req.file.buffer,
     ContentType: req.file.mimetype,
   }
@@ -112,7 +162,10 @@ apiRouter.post('/imageUpload', upload.single('file'), async (req, res) => {
 
   await s3.send(command);
   
-    res.send(`https://${BUCKET}.s3.${REGION}.amazonaws.com/${req.cookies._id + req.file.originalname}`);
+    res.send(`https://${BUCKET}.s3.${REGION}.amazonaws.com/${req.cookies._id.id + req.file.originalname}`);
+} catch (err) {
+  res.send("error");
+}
 })
 
 // GetScores
@@ -128,8 +181,8 @@ apiRouter.get('/experiences/:_id', async (req, res) => {
 })
 
 apiRouter.get('/experience/:_id', async (req, res) => {
-  const experiences = await DB.getExperience(req.params._id);
-  res.send(experiences);
+  const experience = await DB.getExperience(req.params._id);
+  res.send(experience);
 })
 
 apiRouter.put('/experience/:_id', async (req, res) => {
@@ -138,7 +191,6 @@ apiRouter.put('/experience/:_id', async (req, res) => {
 
 // SubmitScore
 apiRouter.post('/experience', async (req, res) => {
-  console.log(req.body);
   DB.addExperience(req.body);
   res.sendStatus(200);
 });
@@ -165,7 +217,7 @@ apiRouter.get('/bookings/:_id', async (req, res) => {
 })
 
 apiRouter.get('/loggedIn', async (req, res) => {
-  const token = req?.cookies._id
+  const token = req?.cookies._id.id
   if (token !== "invalid") {
     const user = await DB.getUserByToken(token);
     res.send({loggedIn: true, ...user});

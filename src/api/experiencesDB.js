@@ -21,71 +21,123 @@ async function updateExperience(experience) {
 }
 
 function getExperiences(limit) {
-  const query = { };
-  const options = {
-    limit: limit,
-  };
-  const cursor = experienceCollection.find(query, options);
-  return cursor.toArray();
+  try {
+    const query = { };
+    const options = {
+      limit: limit,
+    };
+    const cursor = experienceCollection.find(query, options);
+    return cursor.toArray();
+  } catch (e) {
+    return [];
+  }
 }
 function getExperience(_id) {
-  return experienceCollection.findOne({_id: new ObjectId(_id)});
+  try {
+    return experienceCollection.findOne({_id: new ObjectId(_id)});
+  } catch (e) {
+    return {};
+  }
 }
 function getUserExperiences(_id) {
-  const query = { userId: _id };
-  const cursor = experienceCollection.find(query);
-  return cursor.toArray();
+  try {
+    const query = { userId: _id };
+    const cursor = experienceCollection.find(query);
+    return cursor.toArray();
+  } catch (e) {
+    return [];
+  }
 }
 
 async function deleteExperience(_id) {
-  await experienceCollection.deleteOne({_id: new ObjectId(_id)});
+  try {
+    await experienceCollection.deleteOne({_id: new ObjectId(_id)});
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 function getUser(email) {
-  return userCollection.findOne({ email: email });
+  try {
+    return userCollection.findOne({ email: email });
+  } catch (e) {
+    return {};
+  }
 }
 
 async function updateQuantities(_id, quantities) {
-  await experienceCollection.updateOne({ _id: new ObjectId(_id) }, { $set: { quantities: quantities } });
+  try {
+    await experienceCollection.updateOne({ _id: new ObjectId(_id) }, { $set: { quantities: quantities } });
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 async function createUser(userData) {
-  console.log(userData);
-  // Hash the password before we insert it into the database
+  try {
   if (userData.password) userData.password = await bcrypt.hash(userData.password, 10);
   userData.token = uuid.v4();
 
   await userCollection.insertOne(userData);
 
   return userData;
+  } catch (e) {
+    return {};
+  }
 }
 
 async function createBooking(booking) {
-  let newBooking = await bookingCollection.insertOne(booking);
-  return newBooking.insertedId.toString();
+  try {
+    let newBooking = await bookingCollection.insertOne(booking);
+    return newBooking.insertedId.toString();
+  } catch (e) {
+    console.log(e);
+    return "";
+  }
 }
 async function getBooking(_id) {
-  return bookingCollection.findOne({ _id: new ObjectId(_id) });
+  try {
+    return bookingCollection.findOne({ _id: _id });
+  } catch (e) {
+    console.log(e);
+    return {};
+  }
 }
 async function getBookings(_id) {
-  return bookingCollection.find({ userId: _id }).toArray();
+  try {
+    return bookingCollection.find({ userId: _id }).toArray();
+  } catch (e) {
+    return [];
+  }
 }
 
 function getUserByToken(token) {
   console.log(token);
-  return userCollection.findOne({ _id: new ObjectId(token) });
+  try {
+    return userCollection.findOne({ _id: new ObjectId(token) });
+  } catch (e) {
+    return {};
+  }
 }
 
 async function addReview(review, _id, ratingCount, starRating) {
-  ratingCount = parseInt(ratingCount);
-  starRating = parseFloat(starRating);
-  if (ratingCount === 0) await experienceCollection.updateOne({ _id: new ObjectId(_id) }, { $push: { ratings: review }, $set: { ratingCount: 1, starRating: review.rating } });
-  else await experienceCollection.updateOne({ _id: new ObjectId(_id) }, { $push: { ratings: review }, $set: { ratingCount: ratingCount + 1, starRating: (((starRating * ratingCount) + review.rating) / (ratingCount + 1)).toFixed(1)}});
+  try {
+    ratingCount = parseInt(ratingCount);
+    starRating = parseFloat(starRating);
+    if (ratingCount === 0) await experienceCollection.updateOne({ _id: new ObjectId(_id) }, { $push: { ratings: review }, $set: { ratingCount: 1, starRating: review.rating } });
+    else await experienceCollection.updateOne({ _id: new ObjectId(_id) }, { $push: { ratings: review }, $set: { ratingCount: ratingCount + 1, starRating: (((starRating * ratingCount) + review.rating) / (ratingCount + 1)).toFixed(1)}});
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 async function getReviews(_id) {
-  let experience = await experienceCollection.findOne({ _id: new ObjectId(_id) });
-  return experience.ratings;
+  try {
+    let experience = await experienceCollection.findOne({ _id: new ObjectId(_id) });
+    return experience.ratings;
+  } catch (e) {
+    return [];
+  }
 }
 
 module.exports = { addExperience, getExperiences, deleteExperience, getUser, createUser, getUserByToken, getUserExperiences, getExperience, createBooking, getBooking, getBookings, addReview, updateQuantities, getReviews };
