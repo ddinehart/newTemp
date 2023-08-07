@@ -50,8 +50,6 @@ const PayPage: FC<PayPageProps> = ({ className = "", location }) => {
                   {data?.title}
                 </span>
               </div>
-              <div className="w-10 border-b border-neutral-200  dark:border-neutral-700"></div>
-              <StartRating />
             </div>
           </div>
           <div className="mt-6 border border-neutral-200 dark:border-neutral-700 rounded-3xl flex flex-col sm:flex-row divide-y sm:divide-x sm:divide-y-0 divide-neutral-200 dark:divide-neutral-700">

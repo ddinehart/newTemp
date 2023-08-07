@@ -135,14 +135,11 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
     }
     if (selectedDate && selectedTime) {
       let fullBooking = {title, featuredImage, address, date: selectedDate.format('ll') + " " + selectedTime, price, userId, newQuantities, experienceId: data._id, quantity: experienceNumber};
-      axios.post('/api/booking', fullBooking)
-      .then(async (res) => {
-        let thisURL = await axios.post('/api/create-checkout-session', {...fullBooking,_id:res.data, newQuantities});
-        window.location.replace(thisURL.data.url);
-        // console.log(thisURL.data.url);
-        // history.push(thisURL.data.url);
-        // history.push({pathname: '/pay-done', state:{id: res.data}})
-      })
+
+      let thisURL = await axios.post('/api/create-checkout-session', {...fullBooking, newQuantities});
+      console.log(thisURL);
+      if (thisURL.data.url !== "/") window.location.replace(thisURL.data.url);
+
     } else {
       toast.error('Select a date and time');
     }
@@ -487,7 +484,7 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
         <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
 
         {/* CONTENT */}
-        <div>
+        {data?.cancellation && <> <div>
           <h4 className="text-lg font-semibold">Cancellation policy</h4>
           <span className="block mt-3 text-neutral-500 dark:text-neutral-400">
             Any experience can be canceled and fully refunded within 24 hours of
@@ -495,8 +492,10 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
           </span>
         </div>
         <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
-
+        </>
+        }
         {/* CONTENT */}
+        {data?.requirements && <>
         <div>
           <h4 className="text-lg font-semibold">Guest requirements</h4>
           <span className="block mt-3 text-neutral-500 dark:text-neutral-400">
@@ -505,8 +504,9 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
           </span>
         </div>
         <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
-
+        </>}
         {/* CONTENT */}
+        {data?.toBring && <>
         <div>
           <h4 className="text-lg font-semibold">What to bring</h4>
           <div className="prose sm:prose">
@@ -518,11 +518,14 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
             </ul>
           </div>
         </div>
+        </>
+        }
       </div>
     );
   };
   console.log(maxQuantity);
   const renderSidebar = () => {
+    let hours = [];
     return (
       <div className="listingSectionSidebar__wrap shadow-xl">
         {/* PRICE */}
@@ -563,6 +566,20 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
             />
           </div>
         </form>
+        <div className="pickAvailability">
+            {selectedTime && <p className="text-md font-semibold selectedTime less-margin">{selectedTime} - {moment(selectedDate.format('ll') + " " + selectedTime).add(data?.maxTimeLength, "hours").format("LT")}</p>}
+            
+            {selectedDate !== null && 
+            <div className= "pickTime">
+              {(data?.availableSpecificDays[selectedDate.format('ll')] ? data?.availableSpecificDays[selectedDate.format('ll')] : data?.availableRepeat[selectedDate.day()]).filter((time) => {
+                let formattedDate = selectedDate.format('ll') + " " + time;
+                let maxHours = checkAvailability(formattedDate);
+                if (maxHours > 0) hours.push(maxHours);
+                return maxHours;
+                }).map((time, i) => <div className="times-available"><button onClick={() => {setSelectedTime(time); setMaxQuantity(hours[i]); if (experienceNumber > hours[i]) setExperienceNumber(hours[i])}} className={`hour ${selectedTime === time ? 'hourHovered' : ''}`}>{time}</button><span className="available">({hours[i]} available)</span></div>)}
+            </div>
+            }
+          </div>
         {/* SUM */}
         <div className="flex flex-col space-y-4">
           <div className="flex justify-between text-neutral-6000 dark:text-neutral-300">
@@ -673,7 +690,7 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
           {/* {renderSection5()} */}
           {renderSection6()}
           {/* {renderSection7()} */}
-          {renderSection8()}
+          {(data?.cancellation || data?.toBring || data?.requirements) && renderSection8()}
         </div>
 
         {/* SIDEBAR */}

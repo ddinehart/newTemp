@@ -74,6 +74,9 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
   const [maxTimeLength, setMaxTimeLength] = useState(1);
 
   const [description, setDescription] = useState("");
+  const [cancellation, setCancellation] = useState(``);
+  const [requirements, setRequirements] = useState("");
+  const [toBring, setToBring] = useState("");
 
   const [price, setPrice] = useState("");
 
@@ -96,6 +99,8 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
   const [availableSpecificDays, setAvailableSpecificDays] = useState({});
 
   const [ratings, setRatings] = useState<RatingDataType[]>([]);
+
+  console.log(location.state._id);
 
 
   useEffect(() => {
@@ -241,7 +246,7 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
       let photos = [photo2?.image, photo3?.image, photo4?.image];
       setButtonDisabled(true);
       let address = city + ", " + state + " " + street + ", " + postalCode;
-      axios.post("/api/experience", {title, address, city, state, street, postalCode, maxGuests, experienceNumber, maxTimeLength, description, price, userId: location.state._id, galleryImgs:photos, featuredImage:photo1?.image, availableRepeat: availableRepeat, availableSpecificDays: availableSpecificDays, quantities: {}, firstName:location.state.firstName, lastName:location.state.lastName, ratingCount:0, starRating:0, ratings:[]})
+      axios.post("/api/experience", {title, address, city, state, street, postalCode, maxGuests, experienceNumber, maxTimeLength, description, price, userId: location.state._id, galleryImgs:photos, featuredImage:photo1?.image, availableRepeat: availableRepeat, availableSpecificDays: availableSpecificDays, quantities: {}, firstName:location.state.firstName, lastName:location.state.lastName, ratingCount:0, starRating:0, ratings:[], toBring, cancellation, requirements})
       .then((res) => {
         history.push({pathname: '/add-listing-1', state:location.state})
       })
@@ -802,6 +807,38 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
     );
   };
 
+  const renderSection4 = () => {
+    return (
+    <div className="listingSection__wrap">
+        {/* HEADING */}
+        <h2 className="text-2xl font-semibold">Things to know</h2>
+        <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
+
+          {/* CONTENT */}
+          <div>
+            <h4 className="text-lg font-semibold">Cancellation policy</h4>
+            <Textarea value={cancellation} onChange={(e) => setCancellation(e.target.value)} placeholder="Set cancellation policy" rows={10} />
+
+          </div>
+          <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
+
+          {/* CONTENT */}
+          <div>
+            <h4 className="text-lg font-semibold">Guest requirements</h4>
+            <Textarea value={requirements} onChange={(e) => setRequirements(e.target.value)} placeholder="Set guest requirements" rows={10} />
+          </div>
+          <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
+
+          {/* CONTENT */}
+          <div>
+            <h4 className="text-lg font-semibold">What to bring</h4>
+            <Textarea value={toBring} onChange={(e) => setToBring(e.target.value)} placeholder="Set items to bring" rows={10} />
+          </div>
+
+      </div>
+    );
+  }
+
   const renderSection8 = () => {
     return (
       <div className="listingSection__wrap">
@@ -994,6 +1031,7 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
           {renderSection3()} {/* SIZE OF EXPERIENCE */}
           {renderSection5()} {/* AVAILABILITY */}
           {renderSection8()} {/* PRICE */}
+          {renderSection4()} {/* THINGS YOU SHOULD KNOW */}
           {location.state.editing && renderSection7()} {/* REVIEWS */}
           {location.state.editing ? <ButtonPrimary onClick={createNewExperience} className="float-right">Update Experience</ButtonPrimary> :
           <ButtonPrimary onClick={createNewExperience} className="float-right">Create Experience</ButtonPrimary>}

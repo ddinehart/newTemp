@@ -106,6 +106,9 @@ export interface ExperiencesDataType {
   starRating?: number;
   _id: string | number;
   description?: string;
+  toBring?: string;
+  requirements?: string;
+  cancellation?: string;
   quantities?: {};
   experienceNumber?: number;
   availableRepeat?: number[];

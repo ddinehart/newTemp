@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import ButtonClose from "shared/ButtonClose/ButtonClose";
 import Logo from "shared/Logo/Logo";
 import { Disclosure } from "@headlessui/react";
@@ -9,6 +9,9 @@ import ButtonPrimary from "shared/Button/ButtonPrimary";
 import SocialsList from "shared/SocialsList/SocialsList";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import SwitchDarkMode from "shared/SwitchDarkMode/SwitchDarkMode";
+import SearchDropdown from "shared/Header/SearchDropdown";
+import axios from 'axios';
+import {Link} from "react-router-dom";
 
 export interface NavMobileProps {
   data?: NavItemType[];
@@ -19,6 +22,27 @@ const NavMobile: React.FC<NavMobileProps> = ({
   data = NAVIGATION_DEMO,
   onClickClose,
 }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState("");
+
+  useEffect(() => {
+    axios.get('/api/loggedIn')
+    .then((res) => {
+      console.log(res.data);
+      if (res.data.loggedIn) {
+        console.log(res.data);
+        setIsLoggedIn(true);
+        setUser(res.data);
+      }
+    })
+    .catch((err) => console.log(err));
+  }, []);
+
+  function logout() {
+    axios.delete('/api/logout').then(() => {
+      setIsLoggedIn(false);
+    })
+  }
   const _renderMenuChild = (item: NavItemType) => {
     return (
       <ul className="nav-mobile-sub-menu pl-6 pb-1 text-base">
@@ -117,8 +141,7 @@ const NavMobile: React.FC<NavMobileProps> = ({
         <Logo />
         <div className="flex flex-col mt-5 text-neutral-700 dark:text-neutral-300 text-sm">
           <span>
-            Discover the most outstanding articles on all topics of life. Write
-            your stories and share them
+            Enjoy your community by renting from those within!
           </span>
 
           <div className="flex justify-between items-center mt-4">
@@ -132,13 +155,19 @@ const NavMobile: React.FC<NavMobileProps> = ({
           <ButtonClose onClick={onClickClose} />
         </span>
       </div>
-      <ul className="flex flex-col py-6 px-2 space-y-1">
+      {/* <ul className="flex flex-col py-6 px-2 space-y-1">
         {data.map(_renderItem)}
-      </ul>
+      </ul> */}
       <div className="flex items-center justify-between py-6 px-5 space-x-4">
-        <a href="/#" target="_blank" rel="noopener noreferrer">
+        {/* <a href="/#" target="_blank" rel="noopener noreferrer">
           <ButtonPrimary>Get Template</ButtonPrimary>
-        </a>
+        </a> */}
+         {/* <div className="hidden items-center xl:flex space-x-1"> */}
+            {/* <SwitchDarkMode />
+            <SearchDropdown /> */}
+            {/* <div className="px-1" /> */}
+            {!isLoggedIn ? <ButtonPrimary href="/login">Login</ButtonPrimary> : <> <Link to={{pathname: '/add-listing-1', state: user}}><ButtonPrimary>My Experiences</ButtonPrimary></Link><Link to={{pathname: '/'}}><ButtonPrimary onClick={logout}>Logout</ButtonPrimary></Link></>}
+          {/* </div> */}
       </div>
     </div>
   );

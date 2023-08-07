@@ -15,21 +15,20 @@ export interface MainNav1Props {
 const MainNav1: FC<MainNav1Props> = ({ isTop }) => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState({});
 
   useEffect(() => {
     axios.get('/api/loggedIn')
     .then((res) => {
       console.log(res.data);
       if (res.data.loggedIn) {
-        console.log(res.data);
         setIsLoggedIn(true);
         setUser(res.data);
       }
     })
     .catch((err) => console.log(err));
   }, []);
-
+  console.log(user);
   function logout() {
     axios.delete('/api/logout').then(() => {
       setIsLoggedIn(false);

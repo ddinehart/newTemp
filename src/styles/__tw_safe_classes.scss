@@ -153,3 +153,16 @@
   flex-direction: column;
   margin-top: 10px;
 }
+
+.listingSectionSidebar__wrap {
+  max-height: 80vh;
+  overflow-y: scroll;
+  overflow-x: auto;
+}
+
+body:-webkit-scrollbar {
+  display: none;
+}
+.less-margin {
+  margin: 0 0;
+}
