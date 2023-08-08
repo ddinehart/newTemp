@@ -217,7 +217,7 @@ apiRouter.get('/bookings/:_id', async (req, res) => {
 })
 
 apiRouter.get('/loggedIn', async (req, res) => {
-  const token = req?.cookies?._id.id
+  const token = req?.cookies?._id?.id
   if (token !== undefined && token !== "invalid") {
     console.log("LOGGED IN");
     const user = await DB.getUserByToken(token);
