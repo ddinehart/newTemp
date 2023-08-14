@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import ButtonClose from "shared/ButtonClose/ButtonClose";
 import Logo from "shared/Logo/Logo";
 import { Disclosure } from "@headlessui/react";
@@ -10,8 +10,8 @@ import SocialsList from "shared/SocialsList/SocialsList";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import SwitchDarkMode from "shared/SwitchDarkMode/SwitchDarkMode";
 import SearchDropdown from "shared/Header/SearchDropdown";
-import axios from 'axios';
-import {Link} from "react-router-dom";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 export interface NavMobileProps {
   data?: NavItemType[];
@@ -26,22 +26,23 @@ const NavMobile: React.FC<NavMobileProps> = ({
   const [user, setUser] = useState("");
 
   useEffect(() => {
-    axios.get('/api/loggedIn')
-    .then((res) => {
-      console.log(res.data);
-      if (res.data.loggedIn) {
+    axios
+      .get("/api/loggedIn")
+      .then((res) => {
         console.log(res.data);
-        setIsLoggedIn(true);
-        setUser(res.data);
-      }
-    })
-    .catch((err) => console.log(err));
+        if (res.data.loggedIn) {
+          console.log(res.data);
+          setIsLoggedIn(true);
+          setUser(res.data);
+        }
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   function logout() {
-    axios.delete('/api/logout').then(() => {
+    axios.delete("/api/logout").then(() => {
       setIsLoggedIn(false);
-    })
+    });
   }
   const _renderMenuChild = (item: NavItemType) => {
     return (
@@ -140,9 +141,7 @@ const NavMobile: React.FC<NavMobileProps> = ({
       <div className="py-6 px-5">
         <Logo />
         <div className="flex flex-col mt-5 text-neutral-700 dark:text-neutral-300 text-sm">
-          <span>
-            Enjoy your community by renting from those within!
-          </span>
+          <span>Enjoy your community by renting from those within!</span>
 
           <div className="flex justify-between items-center mt-4">
             <SocialsList itemClass="w-9 h-9 flex items-center justify-center rounded-full bg-neutral-100 text-xl dark:bg-neutral-800 dark:text-neutral-300" />
@@ -160,14 +159,26 @@ const NavMobile: React.FC<NavMobileProps> = ({
       </ul> */}
       <div className="flex items-center justify-between py-6 px-5 space-x-4">
         {/* <a href="/#" target="_blank" rel="noopener noreferrer">
-          <ButtonPrimary>Get Template</ButtonPrimary>
+          <ButtonPrimary>Get ZVC </ButtonPrimary>
         </a> */}
-         {/* <div className="hidden items-center xl:flex space-x-1"> */}
-            {/* <SwitchDarkMode />
+        {/* <div className="hidden items-center xl:flex space-x-1"> */}
+        {/* <SwitchDarkMode />
             <SearchDropdown /> */}
-            {/* <div className="px-1" /> */}
-            {!isLoggedIn ? <ButtonPrimary href="/login">Login</ButtonPrimary> : <> <Link to={{pathname: '/add-listing-1', state: user}}><ButtonPrimary>My Experiences</ButtonPrimary></Link><Link to={{pathname: '/'}}><ButtonPrimary onClick={logout}>Logout</ButtonPrimary></Link></>}
-          {/* </div> */}
+        {/* <div className="px-1" /> */}
+        {!isLoggedIn ? (
+          <ButtonPrimary href="/login">Login</ButtonPrimary>
+        ) : (
+          <>
+            {" "}
+            <Link to={{ pathname: "/add-listing-1", state: user }}>
+              <ButtonPrimary>My Experiences</ButtonPrimary>
+            </Link>
+            <Link to={{ pathname: "/" }}>
+              <ButtonPrimary onClick={logout}>Logout</ButtonPrimary>
+            </Link>
+          </>
+        )}
+        {/* </div> */}
       </div>
     </div>
   );
