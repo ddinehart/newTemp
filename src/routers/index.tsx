@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Page } from "./types";
 import ScrollToTop from "./ScrollToTop";
 import Footer from "shared/Footer/Footer";
@@ -114,25 +114,25 @@ export const pages: Page[] = [
 ];
 
 const Routes = () => {
-  console.log(process.env.REACT_APP_CLIENT_ID)
+  console.log(process.env.REACT_APP_CLIENT_ID);
   return (
-    <BrowserRouter basename="/dylan">
+    <BrowserRouter>
       <ScrollToTop />
       <SiteHeader />
       <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENT_ID}>
-      <Switch>
-        {pages.map(({ component, path, exact }) => {
-          return (
-            <Route
-              key={path}
-              component={component}
-              exact={!!exact}
-              path={path}
-            />
-          );
-        })}
-        <Route component={Page404} />
-      </Switch>
+        <Switch>
+          {pages.map(({ component, path, exact }) => {
+            return (
+              <Route
+                key={path}
+                component={component}
+                exact={!!exact}
+                path={path}
+              />
+            );
+          })}
+          <Route component={Page404} />
+        </Switch>
       </GoogleOAuthProvider>
       <Footer />
     </BrowserRouter>
