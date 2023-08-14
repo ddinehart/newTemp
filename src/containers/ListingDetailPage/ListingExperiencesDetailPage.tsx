@@ -279,7 +279,7 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
                 let maxHours = checkAvailability(formattedDate);
                 if (maxHours > 0) hours.push(maxHours);
                 return maxHours;
-                }).map((time, i) => <div className="times-available"><button onClick={() => {setSelectedTime(time); setMaxQuantity(hours[i]); if (experienceNumber > hours[i]) setExperienceNumber(hours[i])}} className={`hour ${selectedTime === time ? 'hourHovered' : ''}`}>{time}</button><span className="available">({hours[i]} available)</span></div>)}
+                }).sort((a, b) => moment(a) < moment(b)).map((time, i) => <div className="times-available"><button onClick={() => {setSelectedTime(time); setMaxQuantity(hours[i]); if (experienceNumber > hours[i]) setExperienceNumber(hours[i])}} className={`hour ${selectedTime === time ? 'hourHovered' : ''}`}>{time}</button><span className="available">({hours[i]} available)</span></div>)}
             </div>
             }
           </div>
@@ -576,7 +576,7 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
                 let maxHours = checkAvailability(formattedDate);
                 if (maxHours > 0) hours.push(maxHours);
                 return maxHours;
-                }).map((time, i) => <div className="times-available"><button onClick={() => {setSelectedTime(time); setMaxQuantity(hours[i]); if (experienceNumber > hours[i]) setExperienceNumber(hours[i])}} className={`hour ${selectedTime === time ? 'hourHovered' : ''}`}>{time}</button><span className="available">({hours[i]} available)</span></div>)}
+                }).sort((a, b) => moment(a) < moment(b)).map((time, i) => <div className="times-available"><button onClick={() => {setSelectedTime(time); setMaxQuantity(hours[i]); if (experienceNumber > hours[i]) setExperienceNumber(hours[i])}} className={`hour ${selectedTime === time ? 'hourHovered' : ''}`}>{time}</button><span className="available">({hours[i]} available)</span></div>)}
             </div>
             }
           </div>
