@@ -85,12 +85,15 @@ const CommonLayout: FC<CommonLayoutProps> = ({
           </ButtonPrimary>
           </Link>
           </div>
-        {data.map((stay) => (
+        {data.map((stay) => {
+          console.log(stay);
+          return (
           <div className="edit" onClick={() => console.log({id:stay._id, editing:true})}>
             <button onClick={() => deleteExperience(stay._id)} className='deleteButton'>x</button>
             <ExperiencesCard onClick={() => history.push({pathname: '/listing-experiences-detail-edit', state:{_id:stay._id, editing:true}})} key={stay._id} editing={true} data={stay} />
+            {/* <ExperiencesCard key={stay._id} editing={true} data={stay} /> */}
           </div>
-        ))}
+        )})}
       </div>
       <Heading2
         heading="My Bookings"

@@ -80,6 +80,8 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
 
   const [price, setPrice] = useState("");
 
+  const [userId, setUserId] = useState("");
+
   const [buttonDisabled, setButtonDisabled] = useState(false);
 
   const [photo1, setPhoto1] = useState<ImageFile>(null);
@@ -100,14 +102,18 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
 
   const [ratings, setRatings] = useState<RatingDataType[]>([]);
 
-  console.log(location.state._id);
+  console.log(location.state);
 
 
   useEffect(() => {
     console.log(location.state._id);
     if (location.state.editing) {
       axios.get('/api/experience/' + location.state._id).then((res) => {
-        let { title, street, city, state, postalCode, maxGuests, experienceNumber, maxTimeLength, description, price, featuredImage, galleryImgs, availableRepeat, availableSpecificDays} = res.data;
+        let { title, street, city, state, postalCode, maxGuests, experienceNumber, maxTimeLength, description, price, featuredImage, galleryImgs, availableRepeat, availableSpecificDays, userId, cancellation, requirements, toBring} = res.data;
+        setCancellation(cancellation);
+        setRequirements(requirements);
+        setToBring(toBring);
+        setUserId(userId);
         setTitle(title);
         setStreet(street);
         setCity(city);
@@ -246,8 +252,13 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
       let photos = [photo2?.image, photo3?.image, photo4?.image];
       setButtonDisabled(true);
       let address = city + ", " + state + " " + street + ", " + postalCode;
-      axios.post("/api/experience", {title, address, city, state, street, postalCode, maxGuests, experienceNumber, maxTimeLength, description, price, userId: location.state._id, galleryImgs:photos, featuredImage:photo1?.image, availableRepeat: availableRepeat, availableSpecificDays: availableSpecificDays, quantities: {}, firstName:location.state.firstName, lastName:location.state.lastName, ratingCount:0, starRating:0, ratings:[], toBring, cancellation, requirements})
+      let experience = {title, address, city, state, street, postalCode, maxGuests, experienceNumber, maxTimeLength, description, price, userId: location.state._id, galleryImgs:photos, featuredImage:photo1?.image, availableRepeat: availableRepeat, availableSpecificDays: availableSpecificDays, quantities: {}, firstName:location.state.firstName, lastName:location.state.lastName, ratingCount:0, starRating:0, ratings:[], toBring, cancellation, requirements};
+      let extra = location.state.editing ? {_id:location.state._id, userId} : {}
+      console.log(location.state._id);
+      console.log({...experience, ...extra})
+      axios.post("/api/experience", {...experience, ...extra})
       .then((res) => {
+        if (location.state.editing) location.state._id = userId;
         history.push({pathname: '/add-listing-1', state:location.state})
       })
     }

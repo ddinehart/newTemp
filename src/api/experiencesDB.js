@@ -13,7 +13,12 @@ const bookingCollection = db.collection(process.env.BOOKINGCOLLECTION)
 
 
 async function addExperience(experience) {
-  await experienceCollection.insertOne(experience);
+  if (experience._id) {
+    experience._id = new ObjectId(experience._id);
+    await experienceCollection.replaceOne({_id: experience._id}, experience);
+  } else {
+    await experienceCollection.insertOne(experience);
+  }
 }
 
 async function updateExperience(experience) {
