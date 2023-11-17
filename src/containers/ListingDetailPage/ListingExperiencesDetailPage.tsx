@@ -586,7 +586,6 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
               <div className="prose sm:prose">
                 <ul className="mt-3 text-neutral-500 dark:text-neutral-400 space-y-2">
                   <li>{data.toBring}</li>
-                  <li>We will pick up from 07.30 to 08.00 AM</li>
                 </ul>
               </div>
             </div>
