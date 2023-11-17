@@ -5,7 +5,7 @@ import { ExperiencesDataType, StayDataType } from "data/types";
 import { FC } from "react";
 import SectionGridFilterCard from "./SectionGridFilterCard";
 import { Helmet } from "react-helmet";
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 const DEMO_DATA: ExperiencesDataType[] = DEMO_EXPERIENCES_LISTINGS.filter(
   (_, i) => i < 8
@@ -18,21 +18,22 @@ export interface ListingExperiencesPageProps {
 const ListingExperiencesPage: FC<ListingExperiencesPageProps> = ({
   className = "",
 }) => {
-
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch('/api/experiences/all/8')
-    .then(response => response.json())
-    .then(data => {setData(data);
-    console.log(data)})
-    .catch(error => console.error(error));
-  }, [])
-  
+    fetch("/api/experiences/all/8")
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data);
+        console.log(data);
+      })
+      .catch((error) => console.error(error));
+  }, []);
+
   const submitQuery = (dateValue, locationInputValue, guestValue) => {
     //FILTERRESULTS
     console.log(dateValue, locationInputValue, guestValue);
-  }
+  };
 
   return (
     <div

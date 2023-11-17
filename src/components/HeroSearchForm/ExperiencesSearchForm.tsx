@@ -7,7 +7,7 @@ import moment from "moment";
 import { FC } from "react";
 
 // DEFAULT DATA FOR ARCHIVE PAGE
-const defaultLocationValue = "ST George, Utah";
+const defaultLocationValue = "Southern Utah";
 const defaultDate = moment();
 const defaultGuestValue: GuestsInputProps["defaultValue"] = {
   guestAdults: 2,
@@ -22,7 +22,7 @@ export interface ExperiencesSearchFormProps {
 
 const ExperiencesSearchForm: FC<ExperiencesSearchFormProps> = ({
   haveDefaultValue,
-  submitQuery
+  submitQuery,
 }) => {
   const [dateFocused, setDateFocused] = useState<boolean>(false);
   const [date, setDate] = useState<moment.Moment | null>(null);
@@ -58,13 +58,16 @@ const ExperiencesSearchForm: FC<ExperiencesSearchFormProps> = ({
         />
 
         <GuestsInput
-        maxQuantity={10}
+          maxQuantity={10}
           experienceNumber={guest.guestAdults}
           defaultValue={guest}
-          onChange={(data) => setGuest({...guest, guestAdults: data})}
+          onChange={(data) => setGuest({ ...guest, guestAdults: data })}
         />
         {/* BUTTON SUBMIT OF FORM */}
-        <div onClick={() => submitQuery(date, inputValue, guest)} className="px-4 py-4 lg:py-0 flex items-center justify-center">
+        <div
+          onClick={() => submitQuery(date, inputValue, guest)}
+          className="px-4 py-4 lg:py-0 flex items-center justify-center"
+        >
           <ButtonSubmit />
         </div>
       </form>

@@ -16,8 +16,8 @@ import Input from "shared/Input/Input";
 import NcImage from "shared/NcImage/NcImage";
 import LikeSaveBtns from "./LikeSaveBtns";
 import ModalPhotos from "./ModalPhotos";
-import axios from 'axios';
-import toast, {Toaster} from 'react-hot-toast';
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 import ExperiencesDateSingleInput from "components/HeroSearchForm/ExperiencesDateSingleInput";
 import { LocationType, ExperiencesDataType, RatingDataType } from "data/types";
@@ -27,7 +27,6 @@ export interface ListingExperiencesDetailPageProps {
   className?: string;
   location?: LocationType;
 }
-
 
 const PHOTOS: string[] = [
   "https://www.zionwildflower.com/wp-content/uploads/2020/06/King-Bungalow-Suite.jpg",
@@ -47,12 +46,12 @@ const includes_demo = [
 
 const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
   className = "",
-  location
+  location,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState<ExperiencesDataType>(null);
   const [openFocusIndex, setOpenFocusIndex] = useState(0);
-  const [selectedTime, setSelectedTime] = useState('');
+  const [selectedTime, setSelectedTime] = useState("");
   const [selectedDate, setSelectedDate] = useState<moment.Moment | null>(null);
   const windowSize = useWindowSize();
 
@@ -65,15 +64,14 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
 
   const [experienceNumber, setExperienceNumber] = useState(1);
 
-    useEffect(() => {
-      axios.get('/api/experience/' + location.state._id).then((res) => {
-        console.log(res.data);
-        setData(res.data);
-        setMaxQuantity(res.data.experienceNumber);
-        setRatings(res.data.ratings.reverse());
-      });
-    }, [])
-
+  useEffect(() => {
+    axios.get("/api/experience/" + location.state._id).then((res) => {
+      console.log(res.data);
+      setData(res.data);
+      setMaxQuantity(res.data.experienceNumber);
+      setRatings(res.data.ratings.reverse());
+    });
+  }, []);
 
   const getDaySize = () => {
     if (windowSize.width <= 375) {
@@ -92,10 +90,11 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
     let date = moment(time);
     let maxHours = data.experienceNumber;
     for (let i = 0; i < data.maxTimeLength; i++) {
-      console.log(data.quantities[date.format('lll')]);
-      if (data.quantities[date.format('lll')] < maxHours) maxHours = data.quantities[date.format('lll')];
+      console.log(data.quantities[date.format("lll")]);
+      if (data.quantities[date.format("lll")] < maxHours)
+        maxHours = data.quantities[date.format("lll")];
       console.log("Max Hours:", maxHours);
-      date.add(1, 'hours');
+      date.add(1, "hours");
     }
     return maxHours;
   };
@@ -109,11 +108,20 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
     e.preventDefault();
     if (ratingEnabled) {
       setRatingEnabled(false);
-      const newRating = {rating, name, thoughts, date:moment().format('ll')};
-      axios.post('/api/review/' + data._id + "/" + data.ratingCount + "/" + data.starRating, newRating)
-      .then((res) => {
-        setRatings([newRating, ...ratings]);
-      });
+      const newRating = { rating, name, thoughts, date: moment().format("ll") };
+      axios
+        .post(
+          "/api/review/" +
+            data._id +
+            "/" +
+            data.ratingCount +
+            "/" +
+            data.starRating,
+          newRating
+        )
+        .then((res) => {
+          setRatings([newRating, ...ratings]);
+        });
     }
   };
 
@@ -124,26 +132,41 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
   const handleCloseModal = () => setIsOpen(false);
 
   const createBooking = async () => {
-    const {title, featuredImage, address, price, userId} = data;
+    const { title, featuredImage, address, price, userId } = data;
     console.log(experienceNumber);
-    let newQuantities = data.quantities
-    let date = moment(selectedDate.format('ll') + " " + selectedTime);
+    let newQuantities = data.quantities;
+    let date = moment(selectedDate.format("ll") + " " + selectedTime);
     for (let i = 0; i < data.maxTimeLength; i++) {
-      if (newQuantities[date.format('lll')]) newQuantities[date.format('lll')] -= experienceNumber;
-      else newQuantities[date.format('lll')] = data.experienceNumber - experienceNumber;
-      date.add(1, 'hours');
+      if (newQuantities[date.format("lll")])
+        newQuantities[date.format("lll")] -= experienceNumber;
+      else
+        newQuantities[date.format("lll")] =
+          data.experienceNumber - experienceNumber;
+      date.add(1, "hours");
     }
     if (selectedDate && selectedTime) {
-      let fullBooking = {title, featuredImage, address, date: selectedDate.format('ll') + " " + selectedTime, price, userId, newQuantities, experienceId: data._id, quantity: experienceNumber};
+      let fullBooking = {
+        title,
+        featuredImage,
+        address,
+        date: selectedDate.format("ll") + " " + selectedTime,
+        price,
+        userId,
+        newQuantities,
+        experienceId: data._id,
+        quantity: experienceNumber,
+      };
 
-      let thisURL = await axios.post('/api/create-checkout-session', {...fullBooking, newQuantities});
+      let thisURL = await axios.post("/api/create-checkout-session", {
+        ...fullBooking,
+        newQuantities,
+      });
       console.log(thisURL);
       if (thisURL.data.url !== "/") window.location.replace(thisURL.data.url);
-
     } else {
-      toast.error('Select a date and time');
+      toast.error("Select a date and time");
     }
-  }
+  };
 
   const renderSection1 = () => {
     return (
@@ -187,7 +210,10 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
         <div className="flex items-center justify-between xl:justify-start space-x-8 xl:space-x-12 text-sm text-neutral-700 dark:text-neutral-300">
           <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 text-center sm:text-left sm:space-x-3 ">
             <i className="las la-clock text-2xl"></i>
-            <span className="">{data?.maxTimeLength} {data?.maxTimeLength == 1 ? "hour" : "hours"}</span>
+            <span className="">
+              {data?.maxTimeLength}{" "}
+              {data?.maxTimeLength === 1 ? "hour" : "hours"}
+            </span>
           </div>
           <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 text-center sm:text-left sm:space-x-3 ">
             <i className="las la-user-friends text-2xl"></i>
@@ -208,9 +234,7 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
         <h2 className="text-2xl font-semibold">Experience description</h2>
         <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
         <div className="text-neutral-6000 dark:text-neutral-300">
-          <p>
-            {data?.description}
-          </p>
+          <p>{data?.description}</p>
         </div>
       </div>
     );
@@ -259,30 +283,70 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
           <div className="-mx-4 sm:mx-auto xl:mx-[-22px]">
             <DayPickerSingleDateController
               date={selectedDate}
-              onDateChange={(date) => {setSelectedDate(date); setSelectedTime('')}}
+              onDateChange={(date) => {
+                setSelectedDate(date);
+                setSelectedTime("");
+              }}
               onFocusChange={() => {}}
               focused
               // (availableRepeat[day.day()] != null || day.isSame(selectedDate, "day") || (day.format("ll") in availableSpecificDays))}
-              isOutsideRange={(day) => day.diff(moment().subtract(1, 'day')) < 0 || (data?.availableRepeat[day.day()] === null && !(day.format("ll") in data?.availableSpecificDays))}
+              isOutsideRange={(day) =>
+                day.diff(moment().subtract(1, "day")) < 0 ||
+                (data?.availableRepeat[day.day()] === null &&
+                  !(day.format("ll") in data?.availableSpecificDays))
+              }
               initialVisibleMonth={null}
               numberOfMonths={windowSize.width < 1280 ? 1 : 2}
               daySize={getDaySize()}
               hideKeyboardShortcutsPanel
             />
             <div className="pickAvailability">
-            {selectedTime && <h2 className="text-2xl font-semibold selectedTime">{selectedTime} - {moment(selectedDate.format('ll') + " " + selectedTime).add(data?.maxTimeLength, "hours").format("LT")}</h2>}
-            
-            {selectedDate !== null && 
-            <div className= "pickTime">
-              {(data?.availableSpecificDays[selectedDate.format('ll')] ? data?.availableSpecificDays[selectedDate.format('ll')] : data?.availableRepeat[selectedDate.day()]).filter((time) => {
-                let formattedDate = selectedDate.format('ll') + " " + time;
-                let maxHours = checkAvailability(formattedDate);
-                if (maxHours > 0) hours.push(maxHours);
-                return maxHours;
-                }).sort((a, b) => moment(a) < moment(b)).map((time, i) => <div className="times-available"><button onClick={() => {setSelectedTime(time); setMaxQuantity(hours[i]); if (experienceNumber > hours[i]) setExperienceNumber(hours[i])}} className={`hour ${selectedTime === time ? 'hourHovered' : ''}`}>{time}</button><span className="available">({hours[i]} available)</span></div>)}
+              {selectedTime && (
+                <h2 className="text-2xl font-semibold selectedTime">
+                  {selectedTime} -{" "}
+                  {moment(selectedDate.format("ll") + " " + selectedTime)
+                    .add(data?.maxTimeLength, "hours")
+                    .format("LT")}
+                </h2>
+              )}
+
+              {selectedDate !== null && (
+                <div className="pickTime">
+                  {(data?.availableSpecificDays[selectedDate.format("ll")]
+                    ? data?.availableSpecificDays[selectedDate.format("ll")]
+                    : data?.availableRepeat[selectedDate.day()]
+                  )
+                    .filter((time) => {
+                      let formattedDate =
+                        selectedDate.format("ll") + " " + time;
+                      let maxHours = checkAvailability(formattedDate);
+                      if (maxHours > 0) hours.push(maxHours);
+                      return maxHours;
+                    })
+                    .sort((a, b) => moment(a) < moment(b))
+                    .map((time, i) => (
+                      <div className="times-available">
+                        <button
+                          onClick={() => {
+                            setSelectedTime(time);
+                            setMaxQuantity(hours[i]);
+                            if (experienceNumber > hours[i])
+                              setExperienceNumber(hours[i]);
+                          }}
+                          className={`hour ${
+                            selectedTime === time ? "hourHovered" : ""
+                          }`}
+                        >
+                          {time}
+                        </button>
+                        <span className="available">
+                          ({hours[i]} available)
+                        </span>
+                      </div>
+                    ))}
+                </div>
+              )}
             </div>
-            }
-          </div>
           </div>
         </div>
       </div>
@@ -392,21 +456,27 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
     return (
       <div className="listingSection__wrap">
         {/* HEADING */}
-        <h2 className="text-2xl font-semibold">Reviews ({ratings.length} {ratings.length !== 1 ? "reviews" : "review"})</h2>
+        <h2 className="text-2xl font-semibold">
+          Reviews ({ratings.length}{" "}
+          {ratings.length !== 1 ? "reviews" : "review"})
+        </h2>
         <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
 
         {/* Content */}
         <form onSubmit={(e) => submitRating(e)} className="space-y-5">
-          <FiveStartIconForRate setRating={setRating} iconClass="w-6 h-6" className="space-x-0.5" />
+          <FiveStartIconForRate
+            setRating={setRating}
+            iconClass="w-6 h-6"
+            className="space-x-0.5"
+          />
           <Input
-              
-              fontClass=""
-              sizeClass="h-16 px-4 py-3"
-              rounded="rounded-3xl"
-              placeholder="Name ..."
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
+            fontClass=""
+            sizeClass="h-16 px-4 py-3"
+            rounded="rounded-3xl"
+            placeholder="Name ..."
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
           <div className="relative">
             <Input
               required
@@ -434,9 +504,11 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
           {/* <CommentListing className="py-8" />
           <CommentListing className="py-8" />
           <CommentListing className="py-8" /> */}
-          {ratings.length === 20 && <div className="pt-8">
-            <ButtonSecondary>View 20 more reviews</ButtonSecondary>
-          </div>}
+          {ratings.length === 20 && (
+            <div className="pt-8">
+              <ButtonSecondary>View 20 more reviews</ButtonSecondary>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -484,42 +556,42 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
         <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
 
         {/* CONTENT */}
-        {data?.cancellation && <> <div>
-          <h4 className="text-lg font-semibold">Cancellation policy</h4>
-          <span className="block mt-3 text-neutral-500 dark:text-neutral-400">
-            Any experience can be canceled and fully refunded within 24 hours of
-            purchase, or at least 7 days before the experience starts.
-          </span>
-        </div>
-        <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
-        </>
-        }
+        {data?.cancellation && (
+          <>
+            {" "}
+            <div>
+              <h4 className="text-lg font-semibold">Cancellation policy</h4>
+              <span className="block mt-3 text-neutral-500 dark:text-neutral-400">
+                {data.cancellation}
+              </span>
+            </div>
+            <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
+          </>
+        )}
         {/* CONTENT */}
-        {data?.requirements && <>
-        <div>
-          <h4 className="text-lg font-semibold">Guest requirements</h4>
-          <span className="block mt-3 text-neutral-500 dark:text-neutral-400">
-            Up to 10 guests ages 4 and up can attend. Parents may also bring
-            children under 2 years of age.
-          </span>
-        </div>
-        <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
-        </>}
+        {data?.requirements && (
+          <>
+            <div>
+              <h4 className="text-lg font-semibold">Guest requirements</h4>
+              <span>{data.requirements}</span>
+            </div>
+            <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
+          </>
+        )}
         {/* CONTENT */}
-        {data?.toBring && <>
-        <div>
-          <h4 className="text-lg font-semibold">What to bring</h4>
-          <div className="prose sm:prose">
-            <ul className="mt-3 text-neutral-500 dark:text-neutral-400 space-y-2">
-              <li>
-                Formal Wear To Visit Bai Dinh Pagoda Be ready before 7.30 Am.
-              </li>
-              <li>We will pick up from 07.30 to 08.00 AM</li>
-            </ul>
-          </div>
-        </div>
-        </>
-        }
+        {data.toBring && (
+          <>
+            <div>
+              <h4 className="text-lg font-semibold">What to bring</h4>
+              <div className="prose sm:prose">
+                <ul className="mt-3 text-neutral-500 dark:text-neutral-400 space-y-2">
+                  <li>{data.toBring}</li>
+                  <li>We will pick up from 07.30 to 08.00 AM</li>
+                </ul>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     );
   };
@@ -536,7 +608,10 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
               /experience
             </span>
           </span>
-          <StartRating reviewCount={data?.ratingCount} point={data?.starRating} />
+          <StartRating
+            reviewCount={data?.ratingCount}
+            point={data?.starRating}
+          />
         </div>
 
         {/* FORM */}
@@ -544,19 +619,28 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
           <div className="flex-1">
             <ExperiencesDateSingleInput
               defaultValue={selectedDate}
-              isOutsideRange={(day) => day.diff(moment().subtract(1, 'day')) < 0 || (data?.availableRepeat[day.day()] === null && !(day.format("ll") in data?.availableSpecificDays))}
-              onChange={(date) => {setSelectedDate(date); setSelectedTime('')}}
+              isOutsideRange={(day) =>
+                day.diff(moment().subtract(1, "day")) < 0 ||
+                (data?.availableRepeat[day.day()] === null &&
+                  !(day.format("ll") in data?.availableSpecificDays))
+              }
+              onChange={(date) => {
+                setSelectedDate(date);
+                setSelectedTime("");
+              }}
               anchorDirection={windowSize.width > 1400 ? "left" : "right"}
               fieldClassName="p-5"
               className="h-full"
             />
           </div>
           <div className="flex-1">
-            
             <GuestsInput
               fieldClassName="p-5"
               experienceNumber={experienceNumber}
-              onChange={(value) => {setExperienceNumber(value); console.log("working")}}
+              onChange={(value) => {
+                setExperienceNumber(value);
+                console.log("working");
+              }}
               maxQuantity={maxQuantity}
               defaultValue={{
                 guestAdults: 1,
@@ -567,23 +651,55 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
           </div>
         </form>
         <div className="pickAvailability">
-            {selectedTime && <p className="text-md font-semibold selectedTime less-margin">{selectedTime} - {moment(selectedDate.format('ll') + " " + selectedTime).add(data?.maxTimeLength, "hours").format("LT")}</p>}
-            
-            {selectedDate !== null && 
-            <div className= "pickTime">
-              {(data?.availableSpecificDays[selectedDate.format('ll')] ? data?.availableSpecificDays[selectedDate.format('ll')] : data?.availableRepeat[selectedDate.day()]).filter((time) => {
-                let formattedDate = selectedDate.format('ll') + " " + time;
-                let maxHours = checkAvailability(formattedDate);
-                if (maxHours > 0) hours.push(maxHours);
-                return maxHours;
-                }).sort((a, b) => moment(a) < moment(b)).map((time, i) => <div className="times-available"><button onClick={() => {setSelectedTime(time); setMaxQuantity(hours[i]); if (experienceNumber > hours[i]) setExperienceNumber(hours[i])}} className={`hour ${selectedTime === time ? 'hourHovered' : ''}`}>{time}</button><span className="available">({hours[i]} available)</span></div>)}
+          {selectedTime && (
+            <p className="text-md font-semibold selectedTime less-margin">
+              {selectedTime} -{" "}
+              {moment(selectedDate.format("ll") + " " + selectedTime)
+                .add(data?.maxTimeLength, "hours")
+                .format("LT")}
+            </p>
+          )}
+
+          {selectedDate !== null && (
+            <div className="pickTime">
+              {(data?.availableSpecificDays[selectedDate.format("ll")]
+                ? data?.availableSpecificDays[selectedDate.format("ll")]
+                : data?.availableRepeat[selectedDate.day()]
+              )
+                .filter((time) => {
+                  let formattedDate = selectedDate.format("ll") + " " + time;
+                  let maxHours = checkAvailability(formattedDate);
+                  if (maxHours > 0) hours.push(maxHours);
+                  return maxHours;
+                })
+                .sort((a, b) => moment(a) < moment(b))
+                .map((time, i) => (
+                  <div className="times-available">
+                    <button
+                      onClick={() => {
+                        setSelectedTime(time);
+                        setMaxQuantity(hours[i]);
+                        if (experienceNumber > hours[i])
+                          setExperienceNumber(hours[i]);
+                      }}
+                      className={`hour ${
+                        selectedTime === time ? "hourHovered" : ""
+                      }`}
+                    >
+                      {time}
+                    </button>
+                    <span className="available">({hours[i]} available)</span>
+                  </div>
+                ))}
             </div>
-            }
-          </div>
+          )}
+        </div>
         {/* SUM */}
         <div className="flex flex-col space-y-4">
           <div className="flex justify-between text-neutral-6000 dark:text-neutral-300">
-            <span>${data?.price} x {experienceNumber} experience</span>
+            <span>
+              ${data?.price} x {experienceNumber} experience
+            </span>
             <span>${data?.price * experienceNumber}</span>
           </div>
           {/* <div className="flex justify-between text-neutral-6000 dark:text-neutral-300">
@@ -608,7 +724,9 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
       className={`nc-ListingExperiencesDetailPage  ${className}`}
       data-nc-id="ListingExperiencesDetailPage"
     >
-      <div><Toaster/></div>
+      <div>
+        <Toaster />
+      </div>
       {/* SINGLE HEADER */}
       <>
         <header className="container 2xl:px-14 rounded-md sm:rounded-xl">
@@ -671,7 +789,7 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
         </header>
         {/* MODAL PHOTOS */}
         <ModalPhotos
-          imgs={[data?.featuredImage, ...data?.galleryImgs ?? [] ]}
+          imgs={[data?.featuredImage, ...(data?.galleryImgs ?? [])]}
           isOpen={isOpen}
           onClose={handleCloseModal}
           initFocus={openFocusIndex}
@@ -690,7 +808,8 @@ const ListingExperiencesDetailPage: FC<ListingExperiencesDetailPageProps> = ({
           {/* {renderSection5()} */}
           {renderSection6()}
           {/* {renderSection7()} */}
-          {(data?.cancellation || data?.toBring || data?.requirements) && renderSection8()}
+          {(data?.cancellation || data?.toBring || data?.requirements) &&
+            renderSection8()}
         </div>
 
         {/* SIDEBAR */}
