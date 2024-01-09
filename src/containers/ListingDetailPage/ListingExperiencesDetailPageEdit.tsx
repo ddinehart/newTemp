@@ -15,7 +15,7 @@ import ButtonSecondary from "shared/Button/ButtonSecondary";
 import Input from "shared/Input/Input";
 import NcImage from "shared/NcImage/NcImage";
 import LikeSaveBtns from "./LikeSaveBtns";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 import ModalPhotos from "./ModalPhotos";
 
 import ExperiencesDateSingleInput from "components/HeroSearchForm/ExperiencesDateSingleInput";
@@ -24,7 +24,7 @@ import FormItem from "containers/PageAddListing1/FormItem";
 import Select from "shared/Select/Select";
 import NcInputNumber from "components/NcInputNumber/NcInputNumber";
 import Textarea from "shared/Textarea/Textarea";
-import axios from 'axios';
+import axios from "axios";
 
 export interface ListingExperiencesDetailPageEditProps {
   className?: string;
@@ -52,12 +52,36 @@ const includes_demo = [
   { name: "Halong Bay Entrance Ticket" },
 ];
 
-const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps> = ({
-  className = "",
-  location
-}) => {
+const ListingExperiencesDetailPageEdit: FC<
+  ListingExperiencesDetailPageEditProps
+> = ({ className = "", location }) => {
   let history = useHistory();
-  let times = ['12:00 AM', '1:00 AM', '2:00 AM', '3:00 AM', '4:00 AM', '5:00 AM', '6:00 AM', '7:00 AM', '8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM', '7:00 PM', '8:00 PM', '9:00 PM', '10:00 PM','11:00 PM']
+  let times = [
+    "12:00 AM",
+    "1:00 AM",
+    "2:00 AM",
+    "3:00 AM",
+    "4:00 AM",
+    "5:00 AM",
+    "6:00 AM",
+    "7:00 AM",
+    "8:00 AM",
+    "9:00 AM",
+    "10:00 AM",
+    "11:00 AM",
+    "12:00 PM",
+    "1:00 PM",
+    "2:00 PM",
+    "3:00 PM",
+    "4:00 PM",
+    "5:00 PM",
+    "6:00 PM",
+    "7:00 PM",
+    "8:00 PM",
+    "9:00 PM",
+    "10:00 PM",
+    "11:00 PM",
+  ];
   const [addedTimes, setAddedTimes] = useState([]);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -97,19 +121,45 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
   const [saturday, setSaturday] = useState(false);
   const [sunday, setSunday] = useState(false);
 
-  const [availableRepeat, setAvailableRepeat] = useState([null, null, null, null, null, null, null]);
+  const [availableRepeat, setAvailableRepeat] = useState([
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+  ]);
   const [availableSpecificDays, setAvailableSpecificDays] = useState({});
 
   const [ratings, setRatings] = useState<RatingDataType[]>([]);
 
   console.log(location.state);
 
-
   useEffect(() => {
     console.log(location.state._id);
     if (location.state.editing) {
-      axios.get('/api/experience/' + location.state._id).then((res) => {
-        let { title, street, city, state, postalCode, maxGuests, experienceNumber, maxTimeLength, description, price, featuredImage, galleryImgs, availableRepeat, availableSpecificDays, userId, cancellation, requirements, toBring} = res.data;
+      axios.get("/api/experience/" + location.state._id).then((res) => {
+        let {
+          title,
+          street,
+          city,
+          state,
+          postalCode,
+          maxGuests,
+          experienceNumber,
+          maxTimeLength,
+          description,
+          price,
+          featuredImage,
+          galleryImgs,
+          availableRepeat,
+          availableSpecificDays,
+          userId,
+          cancellation,
+          requirements,
+          toBring,
+        } = res.data;
         setCancellation(cancellation);
         setRequirements(requirements);
         setToBring(toBring);
@@ -126,25 +176,25 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
         setPrice(price);
         setAvailableRepeat(availableRepeat);
         setAvailableSpecificDays(availableSpecificDays);
-        if (featuredImage) setPhoto1({file: null, image:featuredImage});
-        if (galleryImgs){ 
-          setPhoto2({file: null, image:galleryImgs[0]})
-          setPhoto3({file: null, image:galleryImgs[1]})
-          setPhoto4({file: null, image:galleryImgs[2]})
+        if (featuredImage) setPhoto1({ file: null, image: featuredImage });
+        if (galleryImgs) {
+          setPhoto2({ file: null, image: galleryImgs[0] });
+          setPhoto3({ file: null, image: galleryImgs[1] });
+          setPhoto4({ file: null, image: galleryImgs[2] });
         }
         console.log(photo1, photo2, photo3, photo4);
       });
     }
     if (location.state.editing === true) {
-      axios.get('/api/reviews/' + location.state._id).then((res) => {
+      axios.get("/api/reviews/" + location.state._id).then((res) => {
         setRatings(res.data.reverse());
       });
     }
-  }, [])
+  }, []);
 
   function addTime(time) {
     if (addedTimes.includes(time)) {
-      setAddedTimes(addedTimes.filter((thisTime) => thisTime !== time))
+      setAddedTimes(addedTimes.filter((thisTime) => thisTime !== time));
     } else {
       setAddedTimes([...addedTimes, time]);
     }
@@ -154,28 +204,86 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
     if (selectedDate === null) {
       let newAvailibility = availableRepeat;
       for (const date in availableSpecificDays) {
-        if (moment(date).day() === 1 && monday) delete availableSpecificDays[date];
-        if (moment(date).day() === 2 && tuesday) delete availableSpecificDays[date];
-        if (moment(date).day() === 3 && wednesday) delete availableSpecificDays[date];
-        if (moment(date).day() === 4 && thursday) delete availableSpecificDays[date];
-        if (moment(date).day() === 5 && friday) delete availableSpecificDays[date];
-        if (moment(date).day() === 6 && saturday) delete availableSpecificDays[date];
-        if (moment(date).day() === 0 && sunday) delete availableSpecificDays[date];
+        if (moment(date).day() === 1 && monday)
+          delete availableSpecificDays[date];
+        if (moment(date).day() === 2 && tuesday)
+          delete availableSpecificDays[date];
+        if (moment(date).day() === 3 && wednesday)
+          delete availableSpecificDays[date];
+        if (moment(date).day() === 4 && thursday)
+          delete availableSpecificDays[date];
+        if (moment(date).day() === 5 && friday)
+          delete availableSpecificDays[date];
+        if (moment(date).day() === 6 && saturday)
+          delete availableSpecificDays[date];
+        if (moment(date).day() === 0 && sunday)
+          delete availableSpecificDays[date];
       }
       if (addedTimes.length > 0) {
-        if (monday) newAvailibility = [newAvailibility[0], addedTimes, ...newAvailibility.slice(2)];
-        if (tuesday) newAvailibility = [...newAvailibility.slice(0, 2), addedTimes, ...newAvailibility.slice(3)];
-        if (wednesday) newAvailibility = [...newAvailibility.slice(0, 3), addedTimes, ...newAvailibility.slice(4)];
-        if (thursday) newAvailibility = [...newAvailibility.slice(0, 4), addedTimes, ...newAvailibility.slice(5)];
-        if (friday) newAvailibility = [...newAvailibility.slice(0, 5), addedTimes, ...newAvailibility.slice(6)];
-        if (saturday) newAvailibility = [...newAvailibility.slice(0, 6), addedTimes];
+        if (monday)
+          newAvailibility = [
+            newAvailibility[0],
+            addedTimes,
+            ...newAvailibility.slice(2),
+          ];
+        if (tuesday)
+          newAvailibility = [
+            ...newAvailibility.slice(0, 2),
+            addedTimes,
+            ...newAvailibility.slice(3),
+          ];
+        if (wednesday)
+          newAvailibility = [
+            ...newAvailibility.slice(0, 3),
+            addedTimes,
+            ...newAvailibility.slice(4),
+          ];
+        if (thursday)
+          newAvailibility = [
+            ...newAvailibility.slice(0, 4),
+            addedTimes,
+            ...newAvailibility.slice(5),
+          ];
+        if (friday)
+          newAvailibility = [
+            ...newAvailibility.slice(0, 5),
+            addedTimes,
+            ...newAvailibility.slice(6),
+          ];
+        if (saturday)
+          newAvailibility = [...newAvailibility.slice(0, 6), addedTimes];
         if (sunday) newAvailibility = [addedTimes, ...newAvailibility.slice(1)];
       } else {
-        if (monday) newAvailibility = [newAvailibility[0], null, ...newAvailibility.slice(2)];
-        if (tuesday) newAvailibility = [...newAvailibility.slice(0, 2), null, ...newAvailibility.slice(3)];
-        if (wednesday) newAvailibility = [...newAvailibility.slice(0, 3), null, ...newAvailibility.slice(4)];
-        if (thursday) newAvailibility = [...newAvailibility.slice(0, 4), null, ...newAvailibility.slice(5)];
-        if (friday) newAvailibility = [...newAvailibility.slice(0, 5), null, ...newAvailibility.slice(6)];
+        if (monday)
+          newAvailibility = [
+            newAvailibility[0],
+            null,
+            ...newAvailibility.slice(2),
+          ];
+        if (tuesday)
+          newAvailibility = [
+            ...newAvailibility.slice(0, 2),
+            null,
+            ...newAvailibility.slice(3),
+          ];
+        if (wednesday)
+          newAvailibility = [
+            ...newAvailibility.slice(0, 3),
+            null,
+            ...newAvailibility.slice(4),
+          ];
+        if (thursday)
+          newAvailibility = [
+            ...newAvailibility.slice(0, 4),
+            null,
+            ...newAvailibility.slice(5),
+          ];
+        if (friday)
+          newAvailibility = [
+            ...newAvailibility.slice(0, 5),
+            null,
+            ...newAvailibility.slice(6),
+          ];
         if (saturday) newAvailibility = [...newAvailibility.slice(0, 6), null];
         if (sunday) newAvailibility = [null, ...newAvailibility.slice(1)];
       }
@@ -190,22 +298,24 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
       setAddedTimes([]);
     } else {
       let newAvailibility = availableSpecificDays;
-      if (addedTimes.length > 0) newAvailibility[selectedDate.format('ll')] = addedTimes;
-      else delete newAvailibility[selectedDate.format('ll')];
+      if (addedTimes.length > 0)
+        newAvailibility[selectedDate.format("ll")] = addedTimes;
+      else delete newAvailibility[selectedDate.format("ll")];
       setAvailableSpecificDays(newAvailibility);
       setSelectedDate(null);
       setAddedTimes([]);
     }
   }
 
-
   const [selectedDate, setSelectedDate] = useState<moment.Moment | null>(null);
 
   useEffect(() => {
     if (selectedDate !== null) {
-      if (availableSpecificDays[selectedDate.format('ll')]) setAddedTimes(availableSpecificDays[selectedDate.format('ll')]);
+      if (availableSpecificDays[selectedDate.format("ll")])
+        setAddedTimes(availableSpecificDays[selectedDate.format("ll")]);
       else {
-        if (availableRepeat[selectedDate.day()] !== null) setAddedTimes(availableRepeat[selectedDate.day()])
+        if (availableRepeat[selectedDate.day()] !== null)
+          setAddedTimes(availableRepeat[selectedDate.day()]);
         else setAddedTimes([]);
       }
     }
@@ -223,46 +333,73 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
   }
   const windowSize = useWindowSize();
 
-
   async function createNewExperience() {
-
     if (photo1?.image?.substring(0, 27) === "blob:http://localhost:3000/") {
       const formData = new FormData();
-      formData.append('file', photo1.file);
-      let data = await axios.post('/api/imageUpload', formData)
+      formData.append("file", photo1.file);
+      let data = await axios.post("/api/imageUpload", formData);
       photo1.image = data.data;
-    } if (photo2?.image?.substring(0, 27) === "blob:http://localhost:3000/") {
+    }
+    if (photo2?.image?.substring(0, 27) === "blob:http://localhost:3000/") {
       const formData = new FormData();
-      formData.append('file', photo2.file);
-      let data = await axios.post('/api/imageUpload', formData)
+      formData.append("file", photo2.file);
+      let data = await axios.post("/api/imageUpload", formData);
       photo2.image = data.data;
-    } if (photo3?.image?.substring(0, 27) === "blob:http://localhost:3000/") {
+    }
+    if (photo3?.image?.substring(0, 27) === "blob:http://localhost:3000/") {
       const formData = new FormData();
-      formData.append('file', photo3.file);
-      let data = await axios.post('/api/imageUpload', formData)
+      formData.append("file", photo3.file);
+      let data = await axios.post("/api/imageUpload", formData);
       photo3.image = data.data;
-    } if (photo4?.image?.substring(0, 27) === "blob:http://localhost:3000/") {
+    }
+    if (photo4?.image?.substring(0, 27) === "blob:http://localhost:3000/") {
       const formData = new FormData();
-      formData.append('file', photo4.file);
-      let data = await axios.post('/api/imageUpload', formData)
+      formData.append("file", photo4.file);
+      let data = await axios.post("/api/imageUpload", formData);
       photo4.image = data.data;
     }
-    // } 
+    // }
     if (!buttonDisabled) {
       let photos = [photo2?.image, photo3?.image, photo4?.image];
       setButtonDisabled(true);
       let address = city + ", " + state + " " + street + ", " + postalCode;
-      let experience = {title, address, city, state, street, postalCode, maxGuests, experienceNumber, maxTimeLength, description, price, userId: location.state._id, galleryImgs:photos, featuredImage:photo1?.image, availableRepeat: availableRepeat, availableSpecificDays: availableSpecificDays, quantities: {}, firstName:location.state.firstName, lastName:location.state.lastName, ratingCount:0, starRating:0, ratings:[], toBring, cancellation, requirements};
-      let extra = location.state.editing ? {_id:location.state._id, userId} : {}
+      let experience = {
+        title,
+        address,
+        city,
+        state,
+        street,
+        postalCode,
+        maxGuests,
+        experienceNumber,
+        maxTimeLength,
+        description,
+        price,
+        userId: location.state._id,
+        galleryImgs: photos,
+        featuredImage: photo1?.image,
+        availableRepeat: availableRepeat,
+        availableSpecificDays: availableSpecificDays,
+        quantities: {},
+        firstName: location.state.firstName,
+        lastName: location.state.lastName,
+        ratingCount: 0,
+        starRating: 0,
+        ratings: [],
+        toBring,
+        cancellation,
+        requirements,
+      };
+      let extra = location.state.editing
+        ? { _id: location.state._id, userId }
+        : {};
       console.log(location.state._id);
-      console.log({...experience, ...extra})
-      axios.post("/api/experience", {...experience, ...extra})
-      .then((res) => {
+      console.log({ ...experience, ...extra });
+      axios.post("/api/experience", { ...experience, ...extra }).then((res) => {
         if (location.state.editing) location.state._id = userId;
-        history.push({pathname: '/add-listing-1', state:location.state})
-      })
+        history.push({ pathname: "/add-listing-1", state: location.state });
+      });
     }
-
   }
 
   const getDaySize = () => {
@@ -293,13 +430,16 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
     return (
       <div className="listingSection__wrap !space-y-6">
         {/* 1 */}
- 
 
         {/* 2 */}
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold">
           Experience Title
         </h2>
-        <Input onChange={(e) => setTitle(e.target.value)} value={title} type="text"></Input>
+        <Input
+          onChange={(e) => setTitle(e.target.value)}
+          value={title}
+          type="text"
+        ></Input>
 
         {/* 3 */}
         {/* <div className="flex items-center space-x-4">
@@ -357,7 +497,7 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
           </ButtonSecondary> */}
           {/* ITEM */}
           {/* <FormItem label="Country/Region"> */}
-            {/* <Select disabled>
+          {/* <Select disabled>
               <option value="United States">United States</option>
               {/* <option value="Thailand">Thailand</option>
               <option value="France">France</option>
@@ -365,26 +505,33 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
               <option value="Jappan">Jappan</option>
               <option value="Korea">Korea</option>
               <option value="...">...</option> */}
-            {/* </Select> */} 
+          {/* </Select> */}
           {/* </FormItem> */}
           <FormItem label="Street">
-            <Input placeholder="83 N 500 E Mary Street" onChange={(e) => setStreet(e.target.value)} value={street}/>
+            <Input
+              placeholder="83 N 500 E Mary Street"
+              onChange={(e) => setStreet(e.target.value)}
+              value={street}
+            />
           </FormItem>
           {/* <FormItem label="Room number (optional)">
             <Input />
           </FormItem> */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-5">
             <FormItem label="City">
-              <Input onChange={(e) => setCity(e.target.value)} value={city}/>
+              <Input onChange={(e) => setCity(e.target.value)} value={city} />
             </FormItem>
             <FormItem label="State">
               <Input onChange={(e) => setState(e.target.value)} value={state} />
             </FormItem>
             <FormItem label="Postal code">
-              <Input onChange={(e) => setPostalCode(e.target.value)} value={postalCode}/>
+              <Input
+                onChange={(e) => setPostalCode(e.target.value)}
+                value={postalCode}
+              />
             </FormItem>
           </div>
-      </div>
+        </div>
       </div>
     );
   };
@@ -424,9 +571,24 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
               <option value="500">500</option>
             </Select>
           </FormItem> */}
-          <NcInputNumber label="Max # of guests per experience" defaultValue={maxGuests} onChange={(e) => setMaxGuests(e)} min={1} />
-          <NcInputNumber label="Number of Experiences per time slot" defaultValue={experienceNumber} onChange={(e) => setExperienceNumber(e)} min={1} />
-          <NcInputNumber label="Minimum Length of experience in hours" defaultValue={maxTimeLength} onChange={(e) => setMaxTimeLength(e)} min={1}/>
+          <NcInputNumber
+            label="Max # of guests per experience"
+            defaultValue={maxGuests}
+            onChange={(e) => setMaxGuests(e)}
+            min={1}
+          />
+          <NcInputNumber
+            label="Number of Experiences per time slot"
+            defaultValue={experienceNumber}
+            onChange={(e) => setExperienceNumber(e)}
+            min={1}
+          />
+          <NcInputNumber
+            label="Minimum Length of experience in hours"
+            defaultValue={maxTimeLength}
+            onChange={(e) => setMaxTimeLength(e)}
+            min={1}
+          />
           {/* <NcInputNumber label="Bedroom" defaultValue={4} />
           <NcInputNumber label="Beds" defaultValue={4} />
           <NcInputNumber label="Bathroom" defaultValue={2} />
@@ -468,13 +630,18 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
             Your place description for client
           </h2>
           <span className="block mt-2 text-neutral-500 dark:text-neutral-400">
-            Mention the best features of your experience, any special
-            amenities like free breath mints or awesome parking, as well as things you like
-            about the experience.
+            Mention the best features of your experience, any special amenities
+            like free breath mints or awesome parking, as well as things you
+            like about the experience.
           </span>
         </div>
 
-        <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Description of Experience" rows={14} />
+        <Textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Description of Experience"
+          rows={14}
+        />
       </div>
     );
   };
@@ -574,9 +741,9 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
         <div>
           <ButtonSecondary href="##">See host profile</ButtonSecondary>
         </div> */}
-         {/* <div> */}
-          {/* <h2 className="text-2xl font-semibold">How long is your experience?</h2> */}
-          {/* <span className="block mt-2 text-neutral-500 dark:text-neutral-400">
+        {/* <div> */}
+        {/* <h2 className="text-2xl font-semibold">How long is your experience?</h2> */}
+        {/* <span className="block mt-2 text-neutral-500 dark:text-neutral-400">
             Shorter trips can mean more reservations, but you'll turn over your
             space more often.
           </span> */}
@@ -584,8 +751,8 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
         {/* <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div> */}
         {/* FORM */}
         {/* <div className="space-y-7"> */}
-          {/* ITEM */}
-          {/* <NcInputNumber label="Hours min" defaultValue={1} />
+        {/* ITEM */}
+        {/* <NcInputNumber label="Hours min" defaultValue={1} />
           <NcInputNumber label="Hours max" defaultValue={99} />
         </div> */}
 
@@ -594,42 +761,115 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
           <h2 className="text-2xl font-semibold">Set your availability</h2>
           <span className="block mt-2 text-neutral-500 dark:text-neutral-400">
             Editing your calendar is easy—just select a date to block or unblock
-            it. You can always make changes after you publish. You are responsible for notifying guests if a date gets block after they have booked. 
+            it. You can always make changes after you publish. You are
+            responsible for notifying guests if a date gets block after they
+            have booked.
           </span>
         </div>
         <div className="availabilityCreator">
-
           <div className="nc-SetYourAvailabilityData">
             <DayPickerSingleDateController
-              onDateChange={(e) => e && selectedDate !== e ? setSelectedDate(e) : setSelectedDate(null)}
+              onDateChange={(e) =>
+                e && selectedDate !== e
+                  ? setSelectedDate(e)
+                  : setSelectedDate(null)
+              }
               focused={false}
               onFocusChange={console.log}
               date={null}
-              isDayHighlighted={(day) => (availableRepeat[day.day()] != null || day.isSame(selectedDate, "day") || (day.format("ll") in availableSpecificDays))}
-              isOutsideRange={(day) => day.diff(moment().subtract(1, 'day')) < 0}
+              isDayHighlighted={(day) =>
+                availableRepeat[day.day()] != null ||
+                day.isSame(selectedDate, "day") ||
+                day.format("ll") in availableSpecificDays
+              }
+              isOutsideRange={(day) =>
+                day.diff(moment().subtract(1, "day")) < 0
+              }
               keepOpenOnDateSelect
               daySize={getDaySize()}
               initialVisibleMonth={null}
             />
           </div>
           <div className="pickAvailability">
-            {selectedDate === null ? <div className="pickWeek">
-              <button onClick={() => setMonday(!monday)} className={`weekday ${monday ? 'weekdayHovered' : ''}`}>M</button>
-              <button onClick={() => setTuesday(!tuesday)} className={`weekday ${tuesday ? 'weekdayHovered' : ''}`}>Tu</button>
-              <button onClick={() => setWednesday(!wednesday)} className={`weekday ${wednesday ? 'weekdayHovered' : ''}`}>W</button>
-              <button onClick={() => setThursday(!thursday)} className={`weekday ${thursday ? 'weekdayHovered' : ''}`}>Th</button>
-              <button onClick={() => setFriday(!friday)} className={`weekday ${friday ? 'weekdayHovered' : ''}`}>F</button>
-              <button onClick={() => setSaturday(!saturday)} className={`weekday ${saturday ? 'weekdayHovered' : ''}`}>Sa</button>
-              <button onClick={() => setSunday(!sunday)} className={`weekday ${sunday ? 'weekdayHovered' : ''}`}>Su</button>
-            </div> : <h2 className="text-2xl font-semibold pickWeek">{selectedDate.format('ll')}</h2>}
-            {(monday || tuesday || wednesday || thursday || friday || saturday || sunday || selectedDate !== null) && 
-            <>
-            <div className= "pickTime">
-              {times.map((time) => <button onClick={() => addTime(time)} className={`hour ${addedTimes.includes(time) ? 'hourHovered' : ''}`}>{time}</button>)}
-            </div>
-            <ButtonPrimary onClick={addAvailability} className="add-availability-button">Add Availability</ButtonPrimary>
-            </>
-            }
+            {selectedDate === null ? (
+              <div className="pickWeek">
+                <button
+                  onClick={() => setMonday(!monday)}
+                  className={`weekday ${monday ? "weekdayHovered" : ""}`}
+                >
+                  M
+                </button>
+                <button
+                  onClick={() => setTuesday(!tuesday)}
+                  className={`weekday ${tuesday ? "weekdayHovered" : ""}`}
+                >
+                  Tu
+                </button>
+                <button
+                  onClick={() => setWednesday(!wednesday)}
+                  className={`weekday ${wednesday ? "weekdayHovered" : ""}`}
+                >
+                  W
+                </button>
+                <button
+                  onClick={() => setThursday(!thursday)}
+                  className={`weekday ${thursday ? "weekdayHovered" : ""}`}
+                >
+                  Th
+                </button>
+                <button
+                  onClick={() => setFriday(!friday)}
+                  className={`weekday ${friday ? "weekdayHovered" : ""}`}
+                >
+                  F
+                </button>
+                <button
+                  onClick={() => setSaturday(!saturday)}
+                  className={`weekday ${saturday ? "weekdayHovered" : ""}`}
+                >
+                  Sa
+                </button>
+                <button
+                  onClick={() => setSunday(!sunday)}
+                  className={`weekday ${sunday ? "weekdayHovered" : ""}`}
+                >
+                  Su
+                </button>
+              </div>
+            ) : (
+              <h2 className="text-2xl font-semibold pickWeek">
+                {selectedDate.format("ll")}
+              </h2>
+            )}
+            {(monday ||
+              tuesday ||
+              wednesday ||
+              thursday ||
+              friday ||
+              saturday ||
+              sunday ||
+              selectedDate !== null) && (
+              <>
+                <div className="pickTime">
+                  {times.map((time) => (
+                    <button
+                      onClick={() => addTime(time)}
+                      className={`hour ${
+                        addedTimes.includes(time) ? "hourHovered" : ""
+                      }`}
+                    >
+                      {time}
+                    </button>
+                  ))}
+                </div>
+                <ButtonPrimary
+                  onClick={addAvailability}
+                  className="add-availability-button"
+                >
+                  Add Availability
+                </ButtonPrimary>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -639,7 +879,6 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
   const renderSection6 = () => {
     return (
       <div className="listingSection__wrap">
-        
         {/* HEADING */}
         {/* <h2 className="text-2xl font-semibold">Reviews (23 reviews)</h2>
         <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div> */}
@@ -692,22 +931,26 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
                 src={photo1 ? photo1.image : null}
               />
               <label
-                      htmlFor="file-upload-1"
-                      className="relative cursor-pointer  rounded-md font-medium text-primary-6000 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500 edit-upload"
-                    >
-                      {photo1 ? <></> : <span>Upload a file</span>}
-                      <input
-                        id="file-upload-1"
-                        name="file-upload-1"
-                        type="file"
-                        onChange={(e) => {
-                           setPhoto1({file:(e.target as HTMLInputElement).files[0], image:URL.createObjectURL((e.target as HTMLInputElement).files[0])});
-                          }}
-                        className="sr-only"
-                      />
-                    </label>
-              
-              
+                htmlFor="file-upload-1"
+                className="relative cursor-pointer  rounded-md font-medium text-primary-6000 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500 edit-upload"
+              >
+                {photo1 ? <></> : <span>Upload a file</span>}
+                <input
+                  id="file-upload-1"
+                  name="file-upload-1"
+                  type="file"
+                  onChange={(e) => {
+                    setPhoto1({
+                      file: (e.target as HTMLInputElement).files[0],
+                      image: URL.createObjectURL(
+                        (e.target as HTMLInputElement).files[0]
+                      ),
+                    });
+                  }}
+                  className="sr-only"
+                />
+              </label>
+
               <div className="absolute inset-0 bg-neutral-900 bg-opacity-20 opacity-0 hover:opacity-100 transition-opacity"></div>
             </div>
             {PHOTOS.filter((_, i) => i >= 1 && i < 4).map((item, index) => (
@@ -720,36 +963,49 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
                 <NcImage
                   containerClassName="aspect-w-4 aspect-h-3"
                   className="object-cover w-full h-full rounded-md sm:rounded-xl "
-                  src={index === 0 ? photo2?.image : index === 1 ? photo3?.image : photo4?.image}
+                  src={
+                    index === 0
+                      ? photo2?.image
+                      : index === 1
+                      ? photo3?.image
+                      : photo4?.image
+                  }
                 />
                 <label
-                      htmlFor={"file-upload-" + index + 2}
-                      className="relative cursor-pointer  rounded-md font-medium text-primary-6000 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500 edit-upload-mini"
-                    >
-                      {photo1 ? <></> : <span>Upload a file</span>}
-                      <input
-                        id={"file-upload-" + index + 2}
-                        name={"file-upload-" + index + 2}
-                        type="file"
-                        onChange={(e) => {
-                            let file = {file:(e.target as HTMLInputElement).files[0], image:URL.createObjectURL((e.target as HTMLInputElement).files[0])};
-                            if (index === 0) {
-                              if (photo1?.image) setPhoto2(file);
-                              else setPhoto1(file);
-                            } else if (index === 1) {
-                              if (photo1?.image && photo2?.image) setPhoto3(file);
-                              else if (photo1?.image) setPhoto2(file);
-                              else setPhoto1(file);
-                            } else {
-                              if (photo1?.image && photo2?.image && photo3?.image) setPhoto4(file);
-                              else if (photo1?.image && photo2?.image) setPhoto3(file);
-                              else if (photo1?.image) setPhoto2(file);
-                              else setPhoto1(file);
-                            }
-                          }}
-                        className="sr-only"
-                      />
-                    </label>
+                  htmlFor={"file-upload-" + index + 2}
+                  className="relative cursor-pointer  rounded-md font-medium text-primary-6000 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500 edit-upload-mini"
+                >
+                  {photo1 ? <></> : <span>Upload a file</span>}
+                  <input
+                    id={"file-upload-" + index + 2}
+                    name={"file-upload-" + index + 2}
+                    type="file"
+                    onChange={(e) => {
+                      let file = {
+                        file: (e.target as HTMLInputElement).files[0],
+                        image: URL.createObjectURL(
+                          (e.target as HTMLInputElement).files[0]
+                        ),
+                      };
+                      if (index === 0) {
+                        if (photo1?.image) setPhoto2(file);
+                        else setPhoto1(file);
+                      } else if (index === 1) {
+                        if (photo1?.image && photo2?.image) setPhoto3(file);
+                        else if (photo1?.image) setPhoto2(file);
+                        else setPhoto1(file);
+                      } else {
+                        if (photo1?.image && photo2?.image && photo3?.image)
+                          setPhoto4(file);
+                        else if (photo1?.image && photo2?.image)
+                          setPhoto3(file);
+                        else if (photo1?.image) setPhoto2(file);
+                        else setPhoto1(file);
+                      }
+                    }}
+                    className="sr-only"
+                  />
+                </label>
 
                 {/* OVERLAY */}
                 <div
@@ -760,8 +1016,6 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
             ))}
           </div>
         </header>
-
-
       </div>
     );
   };
@@ -799,7 +1053,10 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
       // </div>
       <div className="listingSection__wrap">
         {/* HEADING */}
-        <h2 className="text-2xl font-semibold">Reviews ({ratings.length} {ratings.length !== 1 ? "reviews" : "review"})</h2>
+        <h2 className="text-2xl font-semibold">
+          Reviews ({ratings.length}{" "}
+          {ratings.length !== 1 ? "reviews" : "review"})
+        </h2>
         <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
 
         {/* comment */}
@@ -810,9 +1067,11 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
           {/* <CommentListing className="py-8" />
           <CommentListing className="py-8" />
           <CommentListing className="py-8" /> */}
-          {ratings.length === 20 && <div className="pt-8">
-            <ButtonSecondary>View 20 more reviews</ButtonSecondary>
-          </div>}
+          {ratings.length === 20 && (
+            <div className="pt-8">
+              <ButtonSecondary>View 20 more reviews</ButtonSecondary>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -820,35 +1079,48 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
 
   const renderSection4 = () => {
     return (
-    <div className="listingSection__wrap">
+      <div className="listingSection__wrap">
         {/* HEADING */}
         <h2 className="text-2xl font-semibold">Things to know</h2>
         <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
 
-          {/* CONTENT */}
-          <div>
-            <h4 className="text-lg font-semibold">Cancellation policy</h4>
-            <Textarea value={cancellation} onChange={(e) => setCancellation(e.target.value)} placeholder="Set cancellation policy" rows={10} />
+        {/* CONTENT */}
+        <div>
+          <h4 className="text-lg font-semibold">Cancellation policy</h4>
+          <Textarea
+            value={cancellation}
+            onChange={(e) => setCancellation(e.target.value)}
+            placeholder="Set cancellation policy"
+            rows={10}
+          />
+        </div>
+        <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
 
-          </div>
-          <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
+        {/* CONTENT */}
+        <div>
+          <h4 className="text-lg font-semibold">Guest requirements</h4>
+          <Textarea
+            value={requirements}
+            onChange={(e) => setRequirements(e.target.value)}
+            placeholder="Set guest requirements"
+            rows={10}
+          ></Textarea>
+        </div>
+        <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
 
-          {/* CONTENT */}
-          <div>
-            <h4 className="text-lg font-semibold">Guest requirements</h4>
-            <Textarea value={requirements} onChange={(e) => setRequirements(e.target.value)} placeholder="Set guest requirements" rows={10} />
-          </div>
-          <div className="w-14 border-b border-neutral-200 dark:border-neutral-700" />
-
-          {/* CONTENT */}
-          <div>
-            <h4 className="text-lg font-semibold">What to bring</h4>
-            <Textarea value={toBring} onChange={(e) => setToBring(e.target.value)} placeholder="Set items to bring" rows={10} />
-          </div>
-
+        {/* CONTENT */}
+        <div>
+          <h4 className="text-lg font-semibold">What to bring</h4>
+          <Textarea
+            value={toBring}
+            onChange={(e) => setToBring(e.target.value)}
+            placeholder="Set items to bring"
+            rows={10}
+          />
+        </div>
       </div>
     );
-  }
+  };
 
   const renderSection8 = () => {
     return (
@@ -913,7 +1185,12 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <span className="text-gray-500">$</span>
               </div>
-              <Input className="!pl-8 !pr-10" placeholder="0.00" value={price} onChange={(e) => setPrice(e.target.value)} />
+              <Input
+                className="!pl-8 !pr-10"
+                placeholder="0.00"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+              />
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                 <span className="text-gray-500">USD</span>
               </div>
@@ -1014,7 +1291,6 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
     >
       {/* SINGLE HEADER */}
       <>
-        
         {/* MODAL PHOTOS */}
         {/* <ModalPhotos
           imgs={PHOTOS}
@@ -1029,23 +1305,34 @@ const ListingExperiencesDetailPageEdit: FC<ListingExperiencesDetailPageEditProps
       <main className="container relative z-10 mt-11 flex flex-col lg:flex-row ">
         {/* CONTENT */}
         <div className="w-full lg:w-5/5 xl:w-3/3 space-y-8 lg:pr-10 lg:space-y-10">
-        <h2 className="my-20 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
-          {location.state.editing ? "Edit Experience" : "Create Experience"}
-        </h2>
+          <h2 className="my-20 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
+            {location.state.editing ? "Edit Experience" : "Create Experience"}
+          </h2>
           {renderSection1()} {/* TITLE */}
           {renderSection6()} {/* IMAGES */}
           {renderSectionCheckIndate()} {/* DESCRIPTION */}
           {renderSection2()} {/* LOCATION */}
-          
-          
           {/* {renderSection7()} */}
           {renderSection3()} {/* SIZE OF EXPERIENCE */}
           {renderSection5()} {/* AVAILABILITY */}
           {renderSection8()} {/* PRICE */}
           {renderSection4()} {/* THINGS YOU SHOULD KNOW */}
           {location.state.editing && renderSection7()} {/* REVIEWS */}
-          {location.state.editing ? <ButtonPrimary onClick={createNewExperience} className="float-right">Update Experience</ButtonPrimary> :
-          <ButtonPrimary onClick={createNewExperience} className="float-right">Create Experience</ButtonPrimary>}
+          {location.state.editing ? (
+            <ButtonPrimary
+              onClick={createNewExperience}
+              className="float-right"
+            >
+              Update Experience
+            </ButtonPrimary>
+          ) : (
+            <ButtonPrimary
+              onClick={createNewExperience}
+              className="float-right"
+            >
+              Create Experience
+            </ButtonPrimary>
+          )}
         </div>
 
         {/* SIDEBAR */}
